@@ -8,6 +8,7 @@ import ChatPage from './pages/ChatPage';
 import ProfilePage from './pages/ProfilePage';
 import MainLayout from './components/layouts/MainLayout';
 import './index.css';
+import CampaignPage from './pages/Campaign';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/chat" element={<ChatPage />} />
                 <Route path="/chat/:threadId" element={<ChatPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/campaigns" element={<CampaignPage />} />
               </Route>
 
               {/* Default Route */}

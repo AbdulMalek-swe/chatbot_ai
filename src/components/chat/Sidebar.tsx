@@ -1,6 +1,6 @@
 import { useChat } from '../../contexts/ChatContext';
 import { Plus, Trash2, PanelLeftClose, PanelLeftOpen, Megaphone, LayoutGrid, MessageCircle, MoreVertical, LogOut, User as UserIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 
@@ -92,7 +92,7 @@ const Sidebar = () => {
                     className={`nav-tab group ${isCollapsed ? 'justify-center px-0' : 'px-4'} h-10 hover:bg-slate-50 transition-colors rounded-lg mb-1`}
                 >
                     <Megaphone size={18} className="text-slate-400 group-hover:text-slate-900 transition-colors" />
-                    {!isCollapsed && <span className="text-sm font-medium text-slate-500 group-hover:text-slate-900">Campaigns</span>}
+                    {!isCollapsed && <Link to="/campaigns" className="text-sm font-medium text-slate-500 group-hover:text-slate-900">Campaigns</Link>}
                 </button>
                 <button
                     onClick={() => navigate('/creative')}
