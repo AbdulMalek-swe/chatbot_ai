@@ -1,25 +1,25 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useChat } from '../contexts/ChatContext';
 import Sidebar from '../components/chat/Sidebar';
 import MessageList from '../components/chat/MessageList';
-import ChatInput from '../components/chat/ChatInput';
+// import ChatInput from '../components/chat/ChatInput';
 import api from '../api/client';
-import { Loader2, Code, X, Zap, Database, Cpu } from 'lucide-react';
-import AgentStateView from '../components/chat/AgentStateView';
+import { Loader2, Code, } from 'lucide-react';
+// import AgentStateView from '../components/chat/AgentStateView';
 import { chat_data } from '../constant/data';
 
 const ChatPage = () => {
     const { threadId: paramsThreadId } = useParams<{ threadId: string }>();
-    const navigate = useNavigate();
-    const { messages, loading, streaming, sendMessage, setActiveThread, activeThreadId, resetChat } = useChat();
+    // const navigate = useNavigate();
+    const { messages, loading, streaming, setActiveThread, activeThreadId, resetChat } = useChat();
     const [mounted, setMounted] = useState(false);
     const [campaignJson, setCampaignJson] = useState<any>(null);
     const [showDebug, setShowDebug] = useState(false);
     const [debugLoading, setDebugLoading] = useState(false);
-    const [isRawView, setIsRawView] = useState(false);
+    // const [isRawView, setIsRawView] = useState(false);
     const lastThreadId = useRef<string | undefined>(paramsThreadId);
-
+    console.log(campaignJson, showDebug)
     useEffect(() => {
         setMounted(true);
         const urlChanged = paramsThreadId !== lastThreadId.current;
@@ -38,12 +38,12 @@ const ChatPage = () => {
         }
     }, [paramsThreadId, activeThreadId, setActiveThread, resetChat]);
 
-    const handleSendMessage = async (content: string) => {
-        const threadId = await sendMessage(content);
-        if (threadId && !paramsThreadId) {
-            navigate(`/chat/${threadId}`);
-        }
-    };
+    // const handleSendMessage = async (content: string) => {
+    //     const threadId = await sendMessage(content);
+    //     if (threadId && !paramsThreadId) {
+    //         navigate(`/chat/${threadId}`);
+    //     }
+    // };
 
     const fetchCampaignStatus = async () => {
         if (!activeThreadId) return;

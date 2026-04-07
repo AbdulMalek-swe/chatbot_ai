@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 role: 'admin',
                 profile_image: 'https://i.pravatar.cc/150?u=1'
             })
-            const token = localStorage.getItem('access_token');
+            // const token = localStorage.getItem('access_token');
             // if (token) {
             //     try {
             //         const response = await api.get('/auth/me');
@@ -50,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         fetchMe();
     }, []);
 
-    const login = async (email: string, password: string) => {
+    const login = async (email: string) => {
         // const response = await api.post('/auth/login', { email, password });
         // const { access_token, refresh_token } = response.data;
         const access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZW1vQGV4YW1wbGUuY29tIiwidHlwZSI6ImFjY2VzcyIsImV4cCI6MTc0NDY1OTQ5Nn0.0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";

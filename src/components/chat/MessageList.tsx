@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react';
-import { type ChatMessage, useChat } from '../../contexts/ChatContext';
+import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
 import MessageBubble from './MessageBubble';
 
 interface MessageListProps {
-    messages: ChatMessage[];
+    messages: any[];
     streaming: boolean;
 }
 
