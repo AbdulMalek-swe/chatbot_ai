@@ -8,6 +8,7 @@ import api from '../api/client';
 import { Loader2, Code, } from 'lucide-react';
 // import AgentStateView from '../components/chat/AgentStateView';
 import { chat_data } from '../constant/data';
+import ChatInput from '../components/chat/ChatInput';
 
 const ChatPage = () => {
     const { threadId: paramsThreadId } = useParams<{ threadId: string }>();
@@ -38,12 +39,12 @@ const ChatPage = () => {
         }
     }, [paramsThreadId, activeThreadId, setActiveThread, resetChat]);
 
-    // const handleSendMessage = async (content: string) => {
-    //     const threadId = await sendMessage(content);
-    //     if (threadId && !paramsThreadId) {
-    //         navigate(`/chat/${threadId}`);
-    //     }
-    // };
+    const handleSendMessage = async () => {
+        // const threadId = await sendMessage(content);
+        // if (threadId && !paramsThreadId) {
+        //     navigate(`/chat/${threadId}`);
+        // }
+    };
 
     const fetchCampaignStatus = async () => {
         if (!activeThreadId) return;
@@ -105,6 +106,7 @@ const ChatPage = () => {
 
                             </div> */}``
                             <MessageList messages={chat_data[paramsThreadId ? Number(paramsThreadId) - 1 : 0].chat} streaming={true} />
+                            <ChatInput onSendMessage={handleSendMessage} disabled={streaming} />
                             {/* <div className="w-full max-w-2xl mt-12">
                                 <h2 className="text-sm font-bold text-slate-800 mb-4">Trending prompts:</h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
