@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Play, TrendingUp, BarChart, ChevronDown, Plus, ExternalLink, Image } from 'lucide-react';
+import { useState } from 'react';
+import { Play, ChevronDown, Plus, Image } from 'lucide-react';
 
 const CampaignList = () => {
     const tabs = ["All", "Running Campaigns", "Past Campaigns"];

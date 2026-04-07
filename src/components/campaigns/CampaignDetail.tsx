@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowLeft, Edit, ExternalLink, Activity, ArrowUpRight } from 'lucide-react';
+
+import { ArrowLeft, Edit, Activity, ArrowUpRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 
 const CampaignDetail = () => {
@@ -48,7 +48,7 @@ const CampaignDetail = () => {
 
             {/* Metrics Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-12 bg-slate-50/50 pt-8 border-t border-slate-100/50">
-                
+
                 {/* 1. Impressions Line/Bar */}
                 <div className="bg-white rounded-xl p-5 border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
                     <div className="flex justify-between items-start mb-4">
@@ -59,7 +59,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-end mb-6">
                         <div>
                             <p className="text-xs text-slate-400 mb-1">Total impressions in selected period</p>
@@ -72,13 +72,13 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={14} /> 6.2%
                         </div>
                     </div>
-                    
+
                     <div className="h-40 w-full mt-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData1} margin={{top: 15, right: 0, left: -25, bottom: 0}}>
+                            <BarChart data={barData1} margin={{ top: 15, right: 0, left: -25, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
                                 <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
                                     {barData1.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.name === 'Apr' ? '#111111' : '#F1F5F9'} />
@@ -99,7 +99,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-end mb-6">
                         <div>
                             <p className="text-xs text-slate-400 mb-1">Viewer progression across the video</p>
@@ -120,7 +120,7 @@ const CampaignDetail = () => {
                             {/* Inner slices */}
                             <rect x="0" y="35" width="60" height="70" rx="4" fill="#84876b" />
                             <text x="30" y="75" fill="white" fontSize="11" fontWeight="bold" textAnchor="middle">100%</text>
-                            
+
                             <rect x="80" y="45" width="60" height="50" rx="4" fill="#84876b" opacity="0.9" />
                             <text x="110" y="75" fill="white" fontSize="11" fontWeight="bold" textAnchor="middle">81%</text>
 
@@ -140,7 +140,7 @@ const CampaignDetail = () => {
                                 <text x="190" y="34">5,095</text>
                                 <text x="270" y="42">5,041</text>
                                 <text x="355" y="45">4,998</text>
-                                
+
                                 <text x="30" y="155">Views</text>
                                 <text x="110" y="155">25% Watched</text>
                                 <text x="190" y="155">50% Watched</text>
@@ -161,7 +161,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 mb-6">
                         <div className="flex items-center gap-1.5">
                             <div className="w-3 h-3 rounded-sm bg-slate-200"></div>
@@ -175,11 +175,11 @@ const CampaignDetail = () => {
 
                     <div className="h-48 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart layout="vertical" data={horizontalData} margin={{top: 0, right: 0, left: -20, bottom: 0}}>
+                            <BarChart layout="vertical" data={horizontalData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#E2E8F0" />
-                                <XAxis type="number" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} ticks={[0, 1000, 2000, 3000, 4000, 5000]} tickFormatter={(val) => val === 0 ? '0' : `${val/1000}k`} />
-                                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#475569', fontWeight: 600}} />
-                                <Tooltip cursor={{fill: 'transparent'}} />
+                                <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} ticks={[0, 1000, 2000, 3000, 4000, 5000]} tickFormatter={(val) => val === 0 ? '0' : `${val / 1000}k`} />
+                                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#475569', fontWeight: 600 }} />
+                                <Tooltip cursor={{ fill: 'transparent' }} />
                                 <Bar dataKey="views" stackId="a" fill="#84876b" radius={[4, 0, 0, 4]} barSize={16} />
                                 <Bar dataKey="impressions" stackId="a" fill="#e2e8f0" radius={[0, 4, 4, 0]} barSize={16} />
                             </BarChart>
@@ -197,7 +197,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-end mb-6">
                         <div>
                             <p className="text-xs text-slate-400 mb-1">Total impressions in selected period</p>
@@ -210,13 +210,13 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={14} /> 6.2%
                         </div>
                     </div>
-                    
+
                     <div className="h-40 w-full mt-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData1} margin={{top: 15, right: 0, left: -25, bottom: 0}}>
+                            <BarChart data={barData1} margin={{ top: 15, right: 0, left: -25, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
                                 <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
                                     {barData1.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.name === 'Apr' ? '#84876b' : '#F1F5F9'} />
@@ -237,7 +237,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-end mb-6">
                         <div>
                             <p className="text-xs text-slate-400 mb-1">Total impressions in selected period</p>
@@ -250,13 +250,13 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={14} /> 6.2%
                         </div>
                     </div>
-                    
+
                     <div className="h-40 w-full mt-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData1} margin={{top: 15, right: 0, left: -25, bottom: 0}}>
+                            <BarChart data={barData1} margin={{ top: 15, right: 0, left: -25, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
                                 <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
                                     {barData1.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.name === 'Apr' ? '#84876b' : '#F1F5F9'} />
@@ -277,7 +277,7 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={16} />
                         </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-end mb-6">
                         <div>
                             <p className="text-xs text-slate-400 mb-1">Total impressions in selected period</p>
@@ -290,13 +290,13 @@ const CampaignDetail = () => {
                             <ArrowUpRight size={14} /> 6.2%
                         </div>
                     </div>
-                    
+
                     <div className="h-40 w-full mt-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={barData1} margin={{top: 15, right: 0, left: -25, bottom: 0}}>
+                            <BarChart data={barData1} margin={{ top: 15, right: 0, left: -25, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fontSize: 10, fill: '#94A3B8'}} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} domain={[0, 1200]} ticks={[400, 600, 800, 1000, 1200]} />
                                 <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
                                     {barData1.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.name === 'Apr' ? '#111111' : '#F1F5F9'} />
