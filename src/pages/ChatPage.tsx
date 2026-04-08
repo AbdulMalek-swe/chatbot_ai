@@ -21,6 +21,13 @@ const ChatPage = () => {
     // const [isRawView, setIsRawView] = useState(false);
     const lastThreadId = useRef<string | undefined>(paramsThreadId);
     console.log(campaignJson, showDebug)
+    const [newMessage, setNewMessage] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setNewMessage(chat_data[paramsThreadId ? Number(paramsThreadId) - 1 : 0].chat)
+    }, [paramsThreadId])
+
     useEffect(() => {
         setMounted(true);
         const urlChanged = paramsThreadId !== lastThreadId.current;
@@ -38,12 +45,71 @@ const ChatPage = () => {
             lastThreadId.current = paramsThreadId;
         }
     }, [paramsThreadId, activeThreadId, setActiveThread, resetChat]);
+    // const [streamingArr, setStreamingArr] = useState<any>([])
+    // const handleSendMessage = async (value: any) => {
+    //     // console.log(value)
+    //     // console.log(newMessage)
+    //     let cnt = 0;
+    //     const find = newMessage.map((item: any) => {
+    //         if (item.content == value) {
+    //             ++cnt;
+    //         }
+    //         if (cnt == 1 || cnt == 2) {
+    //             cnt++;
+    //             return item;
+    //         }
+    //     }).filter((items: any) => items !== undefined)
+    //     console.log(find)
+    //     const first = [find[0]];
+    //     const sec = [find[1]]
+    //     setNewMessage(
+    //         [
+    //             ...newMessage,
+    //             ...first
+    //         ]
+    //     )
+    //     setIsLoading(true)
+    //     setTimeout(() => {
+    //         setNewMessage([
+    //             ...newMessage,
+    //             ...first,
+    //             ...sec
+    //         ])
+    //         setIsLoading(false)
+    //     }, 1000);
+    //     // setStreamingArr(sec);
 
-    const handleSendMessage = async () => {
-        // const threadId = await sendMessage(content);
-        // if (threadId && !paramsThreadId) {
-        //     navigate(`/chat/${threadId}`);
-        // }
+    //     // const threadId = await sendMessage(content);
+    //     // if (threadId && !paramsThreadId) {
+    //     //     navigate(`/chat/${threadId}`);
+    //     // }
+    // };
+
+    const handleSendMessage = (value: string) => {
+        if (!value) return;
+
+        // Find index of the question
+        const index = newMessage.findIndex(
+            (item: any) => item.content === value
+        );
+
+        if (index === -1) return;
+
+        const question = newMessage[index];
+        const answer = newMessage[index + 1];
+
+        // Add question immediately
+        setNewMessage((prev: any) => [...prev, question]);
+
+        // Show bot typing
+        setIsLoading(true);
+
+        setTimeout(() => {
+            if (answer) {
+                setNewMessage((prev: any) => [...prev, answer]);
+            }
+            setIsLoading(false);
+        }, 800);
     };
 
     const fetchCampaignStatus = async () => {
@@ -60,7 +126,13 @@ const ChatPage = () => {
             setDebugLoading(false);
         }
     };
-    console.log(paramsThreadId)
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         setNewMessage([...newMessage, ...streamingArr])
+    //     }, 200)
+
+    // }, [])
     return (
         <div className={`font-body flex w-full h-screen overflow-hidden bg-[#CCCBC0] text-slate-900 relative transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
             <Sidebar />
@@ -105,7 +177,7 @@ const ChatPage = () => {
                                 <ChatInput onSendMessage={handleSendMessage} disabled={streaming} />
 
                             </div> */}``
-                            <MessageList messages={chat_data[paramsThreadId ? Number(paramsThreadId) - 1 : 0].chat} streaming={true} />
+                            <MessageList messages={newMessage} streaming={isLoading} />
                             <ChatInput onSendMessage={handleSendMessage} disabled={streaming} />
                             {/* <div className="w-full max-w-2xl mt-12">
                                 <h2 className="text-sm font-bold text-slate-800 mb-4">Trending prompts:</h2>
