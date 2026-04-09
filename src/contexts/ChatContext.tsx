@@ -17,6 +17,8 @@ export interface ChatMessage {
     };
     requires_approval?: boolean;
     created_at: string;
+    widget?: string;
+    points?: any[]
 }
 
 export interface ChatThread {

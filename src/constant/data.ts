@@ -1,4 +1,4 @@
-const swarma: { id: string, role: string, content: string, created_at: string }[] = [
+const swarma: { id: string, role: string, content: string, created_at: string, widget?: string, points?: any[] }[] = [
   {
     id: "1",
     role: "user",
@@ -10,6 +10,27 @@ const swarma: { id: string, role: string, content: string, created_at: string }[
     id: "2",
     role: "assistant",
     content: "Yes, I can definitely help you find those people. Let’s build this campaign to hit exactly the shawarma lovers who are already going to your competitors. We have three main ways to do this on Meta: Pin Point, Category, Target by Location. Which one feels right for you?",
+    widget: "pin_point",
+    points: [
+      {
+        id: "1",
+        type: "Pin Point",
+        content: "Targets people at specific shops you choose",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: "2",
+        type: "Target by Location",
+        content: "Finds frequent visitors across all tattoo shops in the city (Best for '3+ days a week' artists)",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: "3",
+        type: "Location",
+        content: "Broader area targeting",
+        created_at: new Date().toISOString()
+      }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -46,6 +67,7 @@ const swarma: { id: string, role: string, content: string, created_at: string }[
     id: "8",
     role: "assistant",
     content: "Location locked. Is this correct?",
+    widget: "normal_map",
     created_at: new Date().toISOString()
   },
   {

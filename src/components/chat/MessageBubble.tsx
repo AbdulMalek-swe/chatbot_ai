@@ -3,6 +3,7 @@ import remarkGfm from 'remark-gfm';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
 import { User, Cpu } from 'lucide-react';
 import MessageMap from './MessageMap';
+import CampaignDirection from './WidgetPinPoint';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -140,7 +141,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                                         }}
                                     >
                                         {message.content}
+
                                     </ReactMarkdown>
+                                    {message.widget === "pin_point" && <CampaignDirection widget={message.points} />}
+                                    {/* {message.widget === "normal_map" && <CampaignDirection widget={message.points} />} */}
                                 </div>
                             ) : (
                                 <div className="whitespace-pre-wrap">{message.content}</div>
