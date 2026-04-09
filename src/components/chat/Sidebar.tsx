@@ -30,9 +30,8 @@ const Sidebar = () => {
         navigate('/login');
     };
 
-    const handleNewChat = async () => {
-        const threadId = await createNewChat();
-        navigate(`/chat/${threadId}`);
+    const handleNewChat = () => {
+        navigate('/new-chat');
     };
 
     const handleSelectThread = (threadId: string) => {

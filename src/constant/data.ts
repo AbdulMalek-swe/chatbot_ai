@@ -1173,7 +1173,7 @@ const ai: { id: string, role: string, content: string, created_at: string }[] = 
     created_at: new Date().toISOString()
   }
 ];
-export const chat_data: { chat: { id: string, role: string, content: string }[], id: number, title: string }[] = [
+export const chat_data: { chat: { id: string, role: string, content: string, widget?: string, points?: any[] }[], id: number, title: string }[] = [
   {
     chat: swarma,
     id: 1,
@@ -1214,4 +1214,19 @@ export const chat_data: { chat: { id: string, role: string, content: string }[],
     id: 8,
     title: "AI"
   }
-]
+];
+
+export const findMockResponse = (content: string) => {
+  for (const item of chat_data) {
+    const index = item.chat.findIndex(m => m.content.toLowerCase() === content.toLowerCase());
+    if (index !== -1 && index + 1 < item.chat.length) {
+      return {
+        question: item.chat[index],
+        answer: item.chat[index + 1],
+        fullChat: item.chat,
+        currentIndex: index + 1
+      };
+    }
+  }
+  return null;
+};
