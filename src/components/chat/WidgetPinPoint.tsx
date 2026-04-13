@@ -43,13 +43,10 @@ export default function CampaignDirection({
 }: {
     widget: any;
 }) {
-
-
     return (
-        <div className="flex items-center     ">
-            <Card className="  rounded-2xl shadow-md">
+        <div className="w-full">
+            <Card className="w-full rounded-2xl shadow-md">
                 <CardContent className="p-5">
-                    {/* Header */}
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 flex items-center justify-center rounded-full border">
@@ -66,7 +63,6 @@ export default function CampaignDirection({
                         </Button>
                     </div>
 
-                    {/* Options */}
                     <div className="border rounded-lg divide-y">
                         {widget.map((opt: any) => (
                             <label
@@ -76,17 +72,13 @@ export default function CampaignDirection({
                                 <input
                                     type="checkbox"
                                     name="campaign"
-                                // checked={selected === opt.id}
-                                // onChange={() => setSelected(opt.id)}
-
+                               
                                 />
                                 <p className="text-sm  "> <span className="font-bold ">{opt.type}</span>  {opt.content} </p>
 
                             </label>
                         ))}
                     </div>
-
-                    {/* Footer */}
                     <div className="flex items-center justify-between mt-4">
                         <p className="text-sm text-gray-600">
                             Which one feels right for you, or do you want to stick with Pin

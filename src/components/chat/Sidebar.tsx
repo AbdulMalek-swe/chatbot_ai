@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 
 const Sidebar = () => {
-    const { activeThreadId, createNewChat, setActiveThread, deleteThread } = useChat();
+    const { activeThreadId, setActiveThread, deleteThread } = useChat();
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -62,7 +62,7 @@ const Sidebar = () => {
                 <div className="flex items-center justify-between mb-8">
                     {!isCollapsed && (
                         <button onClick={() => navigate('/chat')} className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+                            <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0">
                                 <img src="/logo.png" alt="punk logo" className="w-full h-full object-cover" />
                             </div>
                             <span className="text-xl font-bold tracking-tight text-slate-900">punk</span>
@@ -106,7 +106,7 @@ const Sidebar = () => {
                 {!isCollapsed && (
                     <div className="px-6 mb-2">
                         <h3 className="text-xs font-bold text-slate-900 tracking-tight">Chat History</h3>
-                        <div className="h-[1px] bg-slate-100 w-full mt-4"></div>
+                        <div className="h-px bg-slate-100 w-full mt-4"></div>
                     </div>
                 )}
 
@@ -166,7 +166,7 @@ const Sidebar = () => {
                     onClick={() => !isCollapsed && setShowUserMenu(!showUserMenu)}
                     className="flex items-center gap-3 px-2 py-1 transition-colors cursor-pointer group"
                 >
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100 shrink-0 border border-slate-100">
                         {user?.profile_image ? (
                             <img src={user.profile_image} alt={user.full_name} className="w-full h-full object-cover" />
                         ) : (

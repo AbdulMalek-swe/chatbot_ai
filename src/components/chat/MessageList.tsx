@@ -53,7 +53,6 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                                     className=" px-5 py-3 rounded-xl text-left transition-all group active:scale-[0.98] flex items-center justify-between gap-4 animate-popup btn-gradient-border"
                                 >
                                     <div className="flex flex-col">
-                                        {/* <span className="text-[9px] font-black text-primary-400 group-hover:text-white transition-colors uppercase tracking-[0.2em] mb-0.5">{item.label}</span> */}
                                         <span className="text-[12px] md:text-[13px] lg:text-[14px] text-foreground transition-colors">{item.text}</span>
                                     </div>
                                     <div className="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -64,8 +63,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="max-w-4xl mx-auto w-full space-y-4">
-                        {messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)}
+                    <div className="max-w-4xl mx-auto w-full">
+                        {messages.map((msg) => <MessageBubble key={msg.id} message={msg} allMessages={messages} />)}
                         <div ref={bottomRef} className="h-24" />
                         {streaming && <div>
                             loading...

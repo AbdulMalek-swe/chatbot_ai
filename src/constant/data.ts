@@ -1,4 +1,13 @@
-const swarma: { id: string, role: string, content: string, created_at: string, widget?: string, points?: any[] }[] = [
+interface MockChatMessage {
+  id: string;
+  role: string;
+  content: string;
+  created_at: string;
+  widget?: string;
+  points?: any[];
+}
+
+const swarma: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -21,13 +30,13 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
       {
         id: "2",
         type: "Target by Location",
-        content: "Finds frequent visitors across all tattoo shops in the city (Best for '3+ days a week' artists)",
+        content: "Finds frequent visitors across all shawarma shops in the city (Best for capturing high-intent foodies)",
         created_at: new Date().toISOString()
       },
       {
         id: "3",
         type: "Location",
-        content: "Broader area targeting",
+        content: "Broader area targeting for general awareness",
         created_at: new Date().toISOString()
       }
     ],
@@ -67,7 +76,7 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
     id: "8",
     role: "assistant",
     content: "Location locked. Is this correct?",
-    widget: "normal_map",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -97,7 +106,14 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
   {
     id: "13",
     role: "assistant",
-    content: "Competitors found: Shawarma King (0.3 km), Falafel Palace (0.6 km), Mediterranean Grill (0.9 km), Gyro Spot (0.4 km). Do you want to deselect any  ?",
+    content: "Competitors found: Shawarma King (0.3 km), Falafel Palace (0.6 km), Mediterranean Grill (0.9 km), Gyro Spot (0.4 km). Do you want to deselect any?",
+    widget: "pin_point",
+    points: [
+      { id: "1", type: "Shawarma King", content: "0.3 km away (Seattle Downtown)", created_at: new Date().toISOString() },
+      { id: "2", type: "Falafel Palace", content: "0.6 km away (Seattle Downtown)", created_at: new Date().toISOString() },
+      { id: "3", type: "Mediterranean Grill", content: "0.9 km away (Seattle Downtown)", created_at: new Date().toISOString() },
+      { id: "4", type: "Gyro Spot", content: "0.4 km away (Seattle Downtown)", created_at: new Date().toISOString() }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -135,6 +151,12 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
     id: "19",
     role: "assistant",
     content: "I found 8,400 potential customers (94% confidence). Minimum budget required: $600. Does this look good?",
+    widget: "pin_point",
+    points: [
+      { id: "1", type: "Audience Size", content: "8,400 potential customers", created_at: new Date().toISOString() },
+      { id: "2", type: "Reach Estimate", content: "12k - 15k impressions / mo", created_at: new Date().toISOString() },
+      { id: "3", type: "Target Type", content: "Frequent restaurant visitors", created_at: new Date().toISOString() }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -171,6 +193,12 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
     id: "25",
     role: "assistant",
     content: "What’s your creative direction, format, and campaign name?",
+    widget: "pin_point",
+    points: [
+      { id: "1", type: "Carousel", content: "Best for showing multiple menu items", created_at: new Date().toISOString() },
+      { id: "2", type: "Single Image", content: "Best for a specific discount offer", created_at: new Date().toISOString() },
+      { id: "3", type: "Video", content: "Great for capturing kitchen background vibes", created_at: new Date().toISOString() }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -211,7 +239,7 @@ const swarma: { id: string, role: string, content: string, created_at: string, w
   }
 ]
 
-const vibe: { id: string, role: string, content: string, created_at: string }[] = [
+const vibe: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -246,6 +274,7 @@ const vibe: { id: string, role: string, content: string, created_at: string }[] 
     id: "6",
     role: "assistant",
     content: "Location locked to Portland metro area (within 20 km). Now pulling tattoo shops across the metro so we can find the artists who visit them heavily. Here are the tattoo shops I found. Do you want to deselect any, or should I go ahead and find everyone who has been there recently?",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -357,7 +386,7 @@ const vibe: { id: string, role: string, content: string, created_at: string }[] 
     created_at: new Date().toISOString()
   }
 ];
-const rock_bank: { id: string, role: string, content: string, created_at: string }[] = [
+const rock_bank: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -392,6 +421,7 @@ const rock_bank: { id: string, role: string, content: string, created_at: string
     id: "6",
     role: "assistant",
     content: "Tour locked: Seattle (June 15), Portland (June 22), Austin (July 10). Found recent punk shows: The Crocodile (Seattle), Dante’s (Portland), Mohawk (Austin). Would you like to target all of these venues?",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -491,7 +521,7 @@ const rock_bank: { id: string, role: string, content: string, created_at: string
     created_at: new Date().toISOString()
   }
 ];
-const realEstateLeads: { id: string, role: string, content: string, created_at: string }[] = [
+const realEstateLeads: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -526,6 +556,7 @@ const realEstateLeads: { id: string, role: string, content: string, created_at: 
     id: "6",
     role: "assistant",
     content: "Location locked to Austin metro area. Found neighborhoods with recent home sales activity like Westlake Hills, Hyde Park, Mueller, and Tarrytown. Do you want to select all or refine?",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -637,7 +668,7 @@ const realEstateLeads: { id: string, role: string, content: string, created_at: 
     created_at: new Date().toISOString()
   }
 ];
-const game: { id: string, role: string, content: string, created_at: string }[] = [
+const game: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -672,6 +703,7 @@ const game: { id: string, role: string, content: string, created_at: string }[] 
     id: "6",
     role: "assistant",
     content: "Location locked to Chicago metro area. Found gaming spots like gaming cafes, esports lounges, arcades, and university gaming clubs. Do you want to refine or proceed?",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -771,7 +803,7 @@ const game: { id: string, role: string, content: string, created_at: string }[] 
     created_at: new Date().toISOString()
   }
 ];
-const matcha: { id: string, role: string, content: string, created_at: string }[] = [
+const matcha: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -806,6 +838,7 @@ const matcha: { id: string, role: string, content: string, created_at: string }[
     id: "6",
     role: "assistant",
     content: "Location locked to LA metro area. Found matcha cafés, wellness spots, yoga studios, and health stores. Do you want to refine or proceed?",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -917,7 +950,7 @@ const matcha: { id: string, role: string, content: string, created_at: string }[
     created_at: new Date().toISOString()
   }
 ];
-const gamble: { id: string, role: string, content: string, created_at: string }[] = [
+const gamble: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -952,6 +985,7 @@ const gamble: { id: string, role: string, content: string, created_at: string }[
     id: "6",
     role: "assistant",
     content: "Selected Bell Centre and Casino de Montréal. What radius should we use? I recommend 1 km.",
+    widget: "map_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -1039,7 +1073,7 @@ const gamble: { id: string, role: string, content: string, created_at: string }[
     created_at: new Date().toISOString()
   }
 ];
-const ai: { id: string, role: string, content: string, created_at: string }[] = [
+const ai: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -1173,7 +1207,7 @@ const ai: { id: string, role: string, content: string, created_at: string }[] = 
     created_at: new Date().toISOString()
   }
 ];
-export const chat_data: { chat: { id: string, role: string, content: string, widget?: string, points?: any[] }[], id: number, title: string }[] = [
+export const chat_data: { chat: MockChatMessage[], id: number, title: string }[] = [
   {
     chat: swarma,
     id: 1,

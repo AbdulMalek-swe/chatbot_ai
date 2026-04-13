@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/chat/Sidebar';
 import MessageList from '../components/chat/MessageList';
 import ChatInput from '../components/chat/ChatInput';
@@ -7,7 +6,6 @@ import { findMockResponse } from '../constant/data';
 import { Zap } from 'lucide-react';
 
 const NewChatPage = () => {
-    const navigate = useNavigate();
     const [messages, setMessages] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [activeFlow, setActiveFlow] = useState<any[] | null>(null);
@@ -66,7 +64,7 @@ const NewChatPage = () => {
         <div className={`font-body flex w-full h-screen overflow-hidden bg-[#CCCBC0] text-slate-900 relative transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
             <Sidebar />
             <div className="flex-1 p-4 flex flex-col overflow-hidden relative">
-                <div className="flex-1 bg-chat-beige rounded-[2rem] flex flex-col overflow-hidden relative shadow-sm border border-slate-200/50">
+                <div className="flex-1 bg-chat-beige rounded-4xl flex flex-col overflow-hidden relative shadow-sm border border-slate-200/50">
                     
                     <div className="absolute top-6 left-8 z-20">
                         <span className="px-3 py-1 bg-white rounded-lg text-[10px] font-bold text-slate-400 border border-slate-100 uppercase tracking-tighter">beta</span>
@@ -133,7 +131,7 @@ const NewChatPage = () => {
                             <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
                                 <MessageList messages={messages} streaming={isLoading} />
                             </div>
-                            <div className="p-6 bg-gradient-to-t from-chat-beige via-chat-beige to-transparent">
+                            <div className="p-6 bg-linear-to-t from-chat-beige via-chat-beige to-transparent">
                                 <ChatInput onSendMessage={handleSendMessage} disabled={isLoading} />
                             </div>
                         </div>
