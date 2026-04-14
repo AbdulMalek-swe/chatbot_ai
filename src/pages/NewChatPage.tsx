@@ -15,42 +15,66 @@ const NewChatPage = () => {
         setMounted(true);
     }, []);
 
-    const handleSendMessage = (value: string) => {
-        if (!value.trim()) return;
-
+    const handleSendMessage = (content: string) => {
+        if (!content.trim()) return;
+        
         // Add user message immediately
-        const userMsg = { id: Date.now().toString(), role: 'user', content: value };
+        const userMsg = { 
+            id: Date.now().toString(), 
+            role: 'user', 
+            content 
+        };
         setMessages(prev => [...prev, userMsg]);
         setIsLoading(true);
 
         setTimeout(() => {
-            // If already in a flow, find the next response in that flow
+            let mock: any = null;
+            
+            // 1. Check if we're already in a specific conversation flow
             if (activeFlow) {
-                const nextIndex = activeFlow.findIndex(m => m.content === value) + 1;
-                if (nextIndex > 0 && nextIndex < activeFlow.length) {
-                    setMessages(prev => [...prev, activeFlow[nextIndex]]);
-                } else {
-                    // Try to find in any flow if current flow doesn't match
-                    const mock = findMockResponse(value);
-                    if (mock) {
-                        setActiveFlow(mock.fullChat);
-                        setMessages(prev => [...prev, mock.answer]);
-                    } else {
-                        setMessages(prev => [...prev, { id: 'error', role: 'assistant', content: "I'm not sure how to help with that yet. Try one of the trending prompts!" }]);
+                const normalizedSearch = content.toLowerCase().trim();
+                const currentIndex = activeFlow.findIndex(m => 
+                    m.content.toLowerCase().includes(normalizedSearch) || 
+                    normalizedSearch.includes(m.content.toLowerCase())
+                );
+                
+                if (currentIndex !== -1) {
+                    // Look for the next message from the assistant in this flow
+                    for (let i = currentIndex + 1; i < activeFlow.length; i++) {
+                        if (activeFlow[i].role === 'assistant') {
+                            mock = { answer: activeFlow[i] };
+                            break;
+                        }
                     }
                 }
-            } else {
-                // Not in a flow, search all flows
-                const mock = findMockResponse(value);
-                if (mock) {
-                    setActiveFlow(mock.fullChat);
-                    setMessages(prev => [...prev, mock.answer]);
-                } else {
-                    setMessages(prev => [...prev, { id: 'error', role: 'assistant', content: "I'm not sure how to help with that yet. Try one of the trending prompts!" }]);
+            }
+            
+            // 2. If no matching flow response found, search all conversation data
+            if (!mock) {
+                const result = findMockResponse(content);
+                if (result) {
+                    setActiveFlow(result.fullChat);
+                    mock = { answer: result.answer };
                 }
             }
+
+            // 3. Update messages with the found response or a fallback
+            if (mock) {
+                setMessages(prev => [...prev, { 
+                    ...mock.answer, 
+                    id: (Date.now() + 1).toString(),
+                    created_at: new Date().toISOString()
+                }]);
+            } else {
+                setMessages(prev => [...prev, { 
+                    id: (Date.now() + 1).toString(), 
+                    role: 'assistant', 
+                    content: "I've analyzed your situation. Based on current market signals, I recommend a cross-channel targeting approach. Would you like to see a drafted campaign plan or shall we refine the audience parameters first?",
+                    created_at: new Date().toISOString()
+                }]);
+            }
             setIsLoading(false);
-        }, 800);
+        }, 1000);
     };
 
     const trendingPrompts = [

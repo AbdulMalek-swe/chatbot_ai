@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import api from '../api/client';
 
 interface AdPlatformStatus {
     platform: string;
@@ -24,14 +23,24 @@ export const AdsProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const [loading, setLoading] = useState(true);
 
     const refreshStatus = async () => {
-        try {
-            const response = await api.get('/ads/status');
-            setPlatforms(response.data);
-        } catch (error) {
-            console.error('Failed to fetch ad platform status', error);
-        } finally {
-            setLoading(false);
-        }
+        // Mock data
+        setPlatforms([
+            {
+                platform: 'meta',
+                connected: true,
+                account_id: 'act_123456789',
+                account_name: 'Shawarma Palace Ads',
+                accessible_accounts: [{ id: 'act_123456789', name: 'Shawarma Palace Ads' }]
+            },
+            {
+                platform: 'google',
+                connected: false,
+                account_id: null,
+                account_name: null,
+                accessible_accounts: null
+            }
+        ]);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -39,33 +48,24 @@ export const AdsProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }, []);
 
     const connectPlatform = async (platform: 'google' | 'meta') => {
-        try {
-            const response = await api.post(`/ads/connect/${platform}`);
-            const { authorization_url } = response.data;
-            if (authorization_url) {
-                window.location.href = authorization_url;
-            }
-        } catch (error) {
-            console.error(`Failed to initiate ${platform} connection`, error);
-            throw error;
-        }
+        console.log(`Mock connecting to ${platform}`);
+        setLoading(true);
+        setTimeout(() => {
+            setPlatforms(prev => prev.map(p => 
+                p.platform === platform ? { ...p, connected: true, account_id: 'mock_id', account_name: 'Mock Account' } : p
+            ));
+            setLoading(false);
+        }, 1000);
     };
 
     const disconnectPlatform = async (platform: 'google' | 'meta') => {
         setLoading(true);
-        try {
-            await api.delete(`/ads/disconnect/${platform}`);
-            
-            // Clear the cookie for this platform
-            document.cookie = `${platform}_ads_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; ${window.location.protocol === 'https:' ? 'Secure;' : ''}`;
-            
-            await refreshStatus();
-        } catch (error) {
-            console.error(`Failed to disconnect ${platform}`, error);
-            throw error;
-        } finally {
+        setTimeout(() => {
+            setPlatforms(prev => prev.map(p => 
+                p.platform === platform ? { ...p, connected: false, account_id: null, account_name: null } : p
+            ));
             setLoading(false);
-        }
+        }, 1000);
     };
 
     return (

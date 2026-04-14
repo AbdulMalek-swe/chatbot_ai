@@ -5,6 +5,7 @@ import { Cpu } from 'lucide-react';
 import MessageMap from './MessageMap';
 import CampaignDirection from './WidgetPinPoint';
 import LocationMapWidget from './LocationMapWidget';
+import WidgetRadiusSelection from './WidgetRadiusSelection';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -69,7 +70,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
     const coordinates = extractCoordinates();
 
     const hasText = !!message.content?.trim() || !!message.thinking || isSynthesizing;
-    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection") || coordinates.length > 0 || !!message.map_data;
+    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection") || coordinates.length > 0 || !!message.map_data;
 
     const thinkingPart = message.thinking && isAI && (
         <div className="p-px rounded-2xl bg-gradient-moving shadow-xl overflow-hidden mt-2 w-full">
@@ -120,7 +121,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                     </ReactMarkdown>
                 </div>
             ) : (
-                <div className={`whitespace-pre-wrap ${!isAI ? 'text-right' : ''}`}>{message.content}</div>
+                <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>{message.content}</div>
             )}
         </div>
     );
@@ -133,6 +134,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                     {message.widget === "map_selection" && (
                         <LocationMapWidget 
                             address={messages[messages.indexOf(message) - 1]?.content || "Current Location"} 
+                        />
+                    )}
+                    {message.widget === "radius_selection" && (
+                        <WidgetRadiusSelection 
+                             address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
                         />
                     )}
                 </>
@@ -165,12 +171,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
     );
 
     return (
-        <div className={`group w-full animate-fade-in font-body flex ${isAI ? 'justify-start' : 'justify-end'} mb-4`}>
-            <div className={`${isAI ? 'max-w-4xl w-full' : 'max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 opacity-100'} flex flex-col transition-all`}>
-                <div className={`flex items-start gap-4 sm:gap-6 ${isAI ? 'p-4 sm:p-6 flex-row' : 'flex-row-reverse'}`}>
-                    <div className="shrink-0 flex items-center justify-center transition-all top-0">
+        <div className={`group w-full animate-fade-in font-body flex ${isAI ? 'justify-start' : 'justify-end'} mb-6`}>
+            <div className={`${isAI ? (message.widget === "radius_selection" ? 'w-full' : 'max-w-4xl w-full') : 'max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 opacity-100'} flex flex-col transition-all`}>
+                <div className={`flex items-start gap-4 sm:gap-6 ${message.widget === "radius_selection" ? 'p-0 flex-row' : (isAI ? 'p-4 sm:p-6 flex-row' : 'flex-row-reverse')}`}>
+                    <div className={`${message.widget === "radius_selection" ? 'mt-4 ml-4' : 'shrink-0'} flex items-center justify-center transition-all top-0`}>
                         {isAI ? (
-                            <img src="/logo.png" alt="Logo" className="w-10 h-10 transition-transform group-hover:scale-110 duration-500" />
+                            <img src="/logo.png" alt="Logo" className="w-10 h-10 transition-transform group-hover:scale-110 duration-500 rounded-full" />
                         ) : null}
                     </div>
 
@@ -186,7 +192,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
 
                 {/* Render widget full width below ONLY if there is text/thinking */}
                 {isAI && hasText && hasWidget && (
-                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 w-full">
+                    <div className="pb-4 sm:pb-6 w-full">
                         {widgetPart}
                     </div>
                 )}

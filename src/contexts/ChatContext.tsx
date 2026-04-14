@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import api from '../api/client';
 import { useAuth } from './AuthContext';
+import { swarma } from '../constant/data';
 
 export interface ChatMessage {
     id: string;
@@ -68,58 +68,55 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, [user]);
 
     const refreshThreads = useCallback(async () => {
-        if (!user) return;
-        try {
-            const response = await api.get('/chat/threads');
-            setThreads(response.data.threads);
-        } catch (error) {
-            console.error('Failed to fetch threads', error);
-        }
-    }, [user]);
+        // Mock threads
+        setThreads([
+            {
+                thread_id: 'swarma-123',
+                title: 'Shawarma Palace Campaign',
+                status: 'active',
+                created_at: new Date().toISOString()
+            }
+        ]);
+    }, []);
 
     const setActiveThread = useCallback(async (threadId: string) => {
-        // Optimization: if switching to current thread and we already have messages, skip fetch
         if (threadId === activeThreadId && messages.length > 0) return;
 
         setLoading(true);
         setActiveThreadId(threadId);
-        try {
-            const response = await api.get(`/chat/history/${threadId}`);
-            const messagesWithData = response.data.messages.map((m: any) => {
-                const updated = { ...m };
-                // Extract structured data from langchain_data if matches our new worker format
-                if (m.langchain_data && typeof m.langchain_data === 'object' && !Array.isArray(m.langchain_data)) {
-                    if (m.langchain_data.poi_data) updated.poi_data = m.langchain_data.poi_data;
-                    if (m.langchain_data.campaign_plan) updated.campaign_plan = m.langchain_data.campaign_plan;
-                    if (m.langchain_data.map_data) updated.map_data = m.langchain_data.map_data;
-                }
-                return updated;
-            });
-            setMessages(messagesWithData);
-        } catch (error) {
-            console.error('Failed to fetch history', error);
-            setMessages([]);
-        } finally {
+        
+        // Mock loading history
+        setTimeout(() => {
+            if (threadId === 'swarma-123') {
+                setMessages(swarma as ChatMessage[]);
+            } else {
+                setMessages([]);
+            }
             setLoading(false);
-        }
+        }, 500);
     }, [activeThreadId, messages.length]);
 
     const createNewChat = useCallback(async (): Promise<string> => {
         setLoading(true);
-        try {
-            const response = await api.post('/chat/new');
-            const { thread_id } = response.data;
-            await refreshThreads();
-            setActiveThreadId(thread_id);
-            setMessages([]);
-            return thread_id;
-        } catch (error) {
-            console.error('Failed to create new chat', error);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
-    }, [refreshThreads]);
+        const newId = crypto.randomUUID();
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                setThreads(prev => [
+                    {
+                        thread_id: newId,
+                        title: 'New Conversation',
+                        status: 'active',
+                        created_at: new Date().toISOString()
+                    },
+                    ...prev
+                ]);
+                setActiveThreadId(newId);
+                setMessages([]);
+                setLoading(false);
+                resolve(newId);
+            }, 500);
+        });
+    }, []);
 
     const resetChat = useCallback(() => {
         setActiveThreadId(null);
@@ -127,44 +124,34 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }, []);
 
     const deleteThread = useCallback(async (threadId: string): Promise<boolean> => {
-        try {
-            await api.delete(`/chat/thread/${threadId}`);
-            await refreshThreads();
-            setActiveThreadId((prev) => {
-                if (prev === threadId) {
-                    setMessages([]);
-                    return null;
-                }
-                return prev;
-            });
-            return true;
-        } catch (error) {
-            console.error('Failed to delete thread', error);
-            return false;
+        setThreads(prev => prev.filter(t => t.thread_id !== threadId));
+        if (activeThreadId === threadId) {
+            setActiveThreadId(null);
+            setMessages([]);
         }
-    }, [refreshThreads]);
+        return true;
+    }, [activeThreadId]);
 
     const sendMessage = useCallback(async (content: string): Promise<string | null> => {
         if (!content.trim()) return null;
 
         let currentThreadId = activeThreadId;
 
-        // Auto-create thread if none is active
         if (!currentThreadId) {
-            try {
-                const response = await api.post('/chat/new');
-                currentThreadId = response.data.thread_id;
-                setActiveThreadId(currentThreadId);
-                await refreshThreads();
-            } catch (error) {
-                console.error('Failed to auto-create thread', error);
-                return null;
-            }
+            currentThreadId = crypto.randomUUID();
+            setActiveThreadId(currentThreadId);
+            setThreads(prev => [
+                {
+                    thread_id: currentThreadId!,
+                    title: content.slice(0, 30),
+                    status: 'active',
+                    created_at: new Date().toISOString()
+                },
+                ...prev
+            ]);
         }
 
-        if (!currentThreadId) return null;
-
-        // Add user message optimistically
+        // Add user message
         const userMsg: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'user',
@@ -173,121 +160,53 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         };
         setMessages(prev => [...prev, userMsg]);
 
-        // Prepare assistant message placeholder
-        const assistantMsgId = crypto.randomUUID();
-        const assistantMsg: ChatMessage = {
-            id: assistantMsgId,
-            role: 'assistant',
-            content: '',
-            created_at: new Date().toISOString(),
-        };
-        setMessages(prev => [...prev, assistantMsg]);
+        // Simulate AI thinking and streaming
         setStreaming(true);
+        setCurrentStepLabel('Analyzing request...');
+        
+        setTimeout(() => {
+            setCurrentStepLabel('Drafting strategy...');
+            setTimeout(() => {
+                setCurrentStepLabel(null);
+                
+                // Find matching response from swarma if possible, or generic one
+                const mockResponse = swarma.find(m => m.role === 'assistant' && !messages.some(em => em.content === m.content)) 
+                                    || { role: 'assistant', content: "That's an interesting point. Let me help you with that strategy." };
 
-        const token = localStorage.getItem('access_token');
-        const baseurl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        const controller = new AbortController();
+                const assistantMsgId = crypto.randomUUID();
+                const assistantMsg: ChatMessage = {
+                    ...mockResponse,
+                    id: assistantMsgId,
+                    role: 'assistant',
+                    content: '', // Start empty for streaming
+                    thinking: 'Simulated thinking process for demo...',
+                    created_at: new Date().toISOString(),
+                } as ChatMessage;
 
-        try {
-            const response = await fetch(`${baseurl}/chat/message`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    thread_id: currentThreadId,
-                    message: content,
-                }),
-                signal: controller.signal,
-            });
+                // Stream the content manually
+                let fullText = (mockResponse as any).content || '';
+                let currentText = '';
+                let i = 0;
+                
+                setMessages(prev => [...prev, assistantMsg]);
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ detail: 'Failed to send message' }));
-                throw new Error(errorData.detail || 'Failed to send message');
-            }
-
-            const reader = response.body?.getReader();
-            if (!reader) throw new Error('No reader available');
-
-            const decoder = new TextDecoder();
-            let thinking = '';
-            let fullContent = '';
-            let buffer = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                buffer += decoder.decode(value, { stream: true });
-
-                // SSE events use newlines (split by \n and handle buffer)
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || ''; // Buffer the last incomplete line
-
-                for (const line of lines) {
-                    const trimmedLine = line.trim();
-                    if (!trimmedLine || !trimmedLine.startsWith('data: ')) continue;
-
-                    const dataStr = trimmedLine.slice(6).trim();
-                    if (!dataStr) continue;
-
-                    try {
-                        const data = JSON.parse(dataStr);
-
-                        if (data.type === 'step') {
-                            setCurrentStepLabel(data.label || data.step || null);
-                        } else if (data.type === 'token') {
-                            setCurrentStepLabel(null);
-                            fullContent += data.content;
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, content: fullContent } : m
-                            ));
-                        } else if (data.type === 'thinking') {
-                            thinking += data.content;
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, thinking } : m
-                            ));
-                        } else if (data.type === 'campaign_plan') {
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, campaign_plan: data.data } : m
-                            ));
-                        } else if (data.type === 'poi_data') {
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, poi_data: data.data } : m
-                            ));
-                        } else if (data.type === 'map_data') {
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, map_data: data.data } : m
-                            ));
-                        } else if (data.type === 'requires_approval') {
-                            setMessages(prev => prev.map(m =>
-                                m.id === assistantMsgId ? { ...m, requires_approval: true } : m
-                            ));
-                        } else if (data.type === 'error') {
-                            throw new Error(data.message || 'AI Error');
-                        } else if (data.type === 'done') {
-                            setCurrentStepLabel(null);
-                            refreshThreads();
-                        }
-                    } catch (e) {
-                        console.warn('Failed to parse SSE data chunk', e, dataStr);
+                const interval = setInterval(() => {
+                    if (i < fullText.length) {
+                        currentText += fullText[i];
+                        setMessages(prev => prev.map(m => 
+                            m.id === assistantMsgId ? { ...m, content: currentText } : m
+                        ));
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        setStreaming(false);
                     }
-                }
-            }
-            return currentThreadId;
-        } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') return currentThreadId;
-            console.error('Streaming error', error);
-            const errorMessage = error instanceof Error ? error.message : 'Chat server connection issues.';
-            setMessages(prev => prev.map(m =>
-                m.id === assistantMsgId ? { ...m, content: `Error: ${errorMessage}` } : m
-            ));
-            return currentThreadId;
-        } finally {
-            setStreaming(false);
-        }
-    }, [activeThreadId, refreshThreads]);
+                }, 30);
+            }, 1000);
+        }, 800);
+
+        return currentThreadId;
+    }, [activeThreadId, messages]);
 
     return (
         <ChatContext.Provider value={{

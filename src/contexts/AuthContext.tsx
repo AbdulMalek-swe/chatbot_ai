@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import api from '../api/client';
 
 export interface User {
     id: string;
@@ -74,10 +73,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         })
     };
 
-    const register = async (email: string, password: string, full_name: string) => {
-        await api.post('/auth/register', { email, password, full_name });
-        // After registration, we usually ask the user to login or log them in automatically.
-        // Let's just finish the registration call here.
+    const register = async (email: string, _password: string, full_name: string) => {
+        // Mock registration delay
+        return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                setUser({
+                    id: crypto.randomUUID(),
+                    email,
+                    full_name,
+                    role: 'admin',
+                    profile_image: `https://i.pravatar.cc/150?u=${Math.random()}`
+                });
+                resolve();
+            }, 1000);
+        });
     };
 
     const updateProfile = async (data: { email?: string; password?: string; full_name?: string }) => {

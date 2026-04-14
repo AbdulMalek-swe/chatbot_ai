@@ -7,7 +7,7 @@ interface MockChatMessage {
   points?: any[];
 }
 
-const swarma: MockChatMessage[] = [
+export const swarma: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -89,6 +89,7 @@ const swarma: MockChatMessage[] = [
     id: "10",
     role: "assistant",
     content: "How far away from your shop do you want to reach?",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -239,7 +240,7 @@ const swarma: MockChatMessage[] = [
   }
 ]
 
-const vibe: MockChatMessage[] = [
+export const vibe: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -287,6 +288,7 @@ const vibe: MockChatMessage[] = [
     id: "8",
     role: "assistant",
     content: "All tattoo shops selected. What radius around each shop would you like me to use, and how far back should I look? I recommend 50 m around each shop and the last 30 days.",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -386,7 +388,7 @@ const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const rock_bank: MockChatMessage[] = [
+export const rock_bank: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -434,6 +436,7 @@ const rock_bank: MockChatMessage[] = [
     id: "8",
     role: "assistant",
     content: "All venues selected. How far around each venue should I target? I recommend 500 m.",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -521,7 +524,7 @@ const rock_bank: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const realEstateLeads: MockChatMessage[] = [
+export const realEstateLeads: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -569,6 +572,7 @@ const realEstateLeads: MockChatMessage[] = [
     id: "8",
     role: "assistant",
     content: "Top 50 neighborhoods selected. How far around each neighborhood should I target? I recommend 1 km.",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -668,7 +672,7 @@ const realEstateLeads: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const game: MockChatMessage[] = [
+export const game: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -716,6 +720,7 @@ const game: MockChatMessage[] = [
     id: "8",
     role: "assistant",
     content: "Top 40 gaming spots selected. With a $300 budget, we’ll need to keep targeting tight. What radius should we use? I recommend 20–50 m.",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -803,7 +808,7 @@ const game: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const matcha: MockChatMessage[] = [
+export const matcha: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -851,6 +856,7 @@ const matcha: MockChatMessage[] = [
     id: "8",
     role: "assistant",
     content: "Top 60 spots selected. What radius should we use? I recommend 1 km.",
+    widget: "radius_selection",
     created_at: new Date().toISOString()
   },
   {
@@ -950,7 +956,7 @@ const matcha: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const gamble: MockChatMessage[] = [
+export const gamble: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -1073,7 +1079,7 @@ const gamble: MockChatMessage[] = [
     created_at: new Date().toISOString()
   }
 ];
-const ai: MockChatMessage[] = [
+export const ai: MockChatMessage[] = [
   {
     id: "1",
     role: "user",
@@ -1251,15 +1257,26 @@ export const chat_data: { chat: MockChatMessage[], id: number, title: string }[]
 ];
 
 export const findMockResponse = (content: string) => {
+  const normalizedContent = content.toLowerCase().trim();
   for (const item of chat_data) {
-    const index = item.chat.findIndex(m => m.content.toLowerCase() === content.toLowerCase());
-    if (index !== -1 && index + 1 < item.chat.length) {
-      return {
-        question: item.chat[index],
-        answer: item.chat[index + 1],
-        fullChat: item.chat,
-        currentIndex: index + 1
-      };
+    // Check for exact match or if the prompt is a subset of the start of the message
+    const index = item.chat.findIndex(m => {
+        const msgContent = m.content.toLowerCase();
+        return msgContent.includes(normalizedContent) || normalizedContent.includes(msgContent);
+    });
+    
+    if (index !== -1) {
+      // Find the next assistant message after this match
+      for (let i = index + 1; i < item.chat.length; i++) {
+        if (item.chat[i].role === 'assistant') {
+          return {
+            question: item.chat[index],
+            answer: item.chat[i],
+            fullChat: item.chat,
+            currentIndex: i
+          };
+        }
+      }
     }
   }
   return null;

@@ -23,7 +23,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
 
     return (
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-6 font-body mt-12 lg:mt-0">
-            <div className="flex flex-col px-4 pt-12 sm:pt-20">
+            <div className="flex flex-col px-4 pt-4">
                 {messages.length === 0 ? (
                     <div className="flex-1 flex flex-col items-start justify-end pb-12 text-left max-w-4xl mx-auto animate-fade-in w-full">
                         <div className="flex items-center gap-3 sm:gap-4 mb-6">
@@ -63,7 +63,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="max-w-4xl mx-auto w-full">
+                    <div className="max-w-4xl mx-auto w-full px-4 sm:px-6">
                         {messages.map((msg) => <MessageBubble key={msg.id} message={msg} allMessages={messages} />)}
                         <div ref={bottomRef} className="h-24" />
                         {streaming && <div>
