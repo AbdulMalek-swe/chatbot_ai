@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
 import MessageBubble from './MessageBubble';
@@ -20,7 +20,31 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
     const handleQuickAction = (text: string) => {
         sendMessage(text);
     };
+    const steps = ["loading", "thinking", "generating"] as const;
 
+    const [step, setStep] = useState<typeof steps[number]>("loading");
+
+    useEffect(() => {
+        if (!streaming) return;
+
+        let index = 0;
+        const stepTime = 2000 / steps.length; // ≈ 666ms
+
+        setStep("loading");
+
+        const interval = setInterval(() => {
+            index++;
+
+            if (index >= steps.length) {
+                clearInterval(interval); // ✅ stop after 2 sec
+                return;
+            }
+
+            setStep(steps[index]);
+        }, stepTime);
+
+        return () => clearInterval(interval); // ✅ stop if streaming false
+    }, [streaming]);
     return (
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-6 font-body mt-12 lg:mt-0">
             <div className="flex flex-col px-4 pt-4">
@@ -67,7 +91,9 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                         {messages.map((msg) => <MessageBubble key={msg.id} message={msg} allMessages={messages} />)}
                         <div ref={bottomRef} className="h-24" />
                         {streaming && <div>
-                            loading...
+                            {step === "loading" && <p>⏳ Loading...</p>}
+                            {step === "thinking" && <p>🤔 Thinking...</p>}
+                            {step === "generating" && <p>✍️ Generating...</p>}
                         </div>}
                     </div>
                 )}

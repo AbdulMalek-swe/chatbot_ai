@@ -6,6 +6,7 @@ import MessageMap from './MessageMap';
 import CampaignDirection from './WidgetPinPoint';
 import LocationMapWidget from './LocationMapWidget';
 import WidgetRadiusSelection from './WidgetRadiusSelection';
+import { useEffect, useState } from 'react';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -16,7 +17,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
     const isAI = message.role === 'assistant';
     const { streaming, messages: contextMessages, currentStepLabel } = useChat();
     const messages = allMessages || contextMessages;
-    
+    const [widgetShow, setWidgetShow] = useState(false);
     const isLatestMessage = messages[messages.length - 1]?.id === message.id;
     const isSynthesizing = isAI && isLatestMessage && streaming && !message.content && !message.thinking && !message.poi_data && !message.map_data;
     const extractCoordinates = () => {
@@ -107,7 +108,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                 </div>
             ) : isAI ? (
                 <div className="chat-markdown max-w-none">
-                    <ReactMarkdown
+                    <StreamingMarkdown content={message.content} setWidgetShow={setWidgetShow} />
+                    {/* <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                             a: ({ href, children }) => (
@@ -118,7 +120,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                         }}
                     >
                         {message.content}
-                    </ReactMarkdown>
+                        
+                    </ReactMarkdown> */}
                 </div>
             ) : (
                 <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>{message.content}</div>
@@ -132,13 +135,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                 <>
                     {message.widget === "pin_point" && <CampaignDirection widget={message.points} />}
                     {message.widget === "map_selection" && (
-                        <LocationMapWidget 
-                            address={messages[messages.indexOf(message) - 1]?.content || "Current Location"} 
+                        <LocationMapWidget
+                            address={messages[messages.indexOf(message) - 1]?.content || "Current Location"}
                         />
                     )}
                     {message.widget === "radius_selection" && (
-                        <WidgetRadiusSelection 
-                             address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                        <WidgetRadiusSelection
+                            address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
                         />
                     )}
                 </>
@@ -189,11 +192,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                         </div>
                     </div>
                 </div>
-
                 {/* Render widget full width below ONLY if there is text/thinking */}
                 {isAI && hasText && hasWidget && (
                     <div className="pb-4 sm:pb-6 w-full">
-                        {widgetPart}
+                        {widgetShow && widgetPart}
                     </div>
                 )}
             </div>
@@ -202,3 +204,35 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
 };
 
 export default MessageBubble;
+
+const StreamingMarkdown = ({ content, setWidgetShow }: { content: any, setWidgetShow: (show: boolean) => any }) => {
+    const [displayedText, setDisplayedText] = useState("");
+    useEffect(() => {
+        let words = content.split(" ");
+        let index = 0;
+        const interval = setInterval(() => {
+            setDisplayedText((prev: any) => prev + (index === 0 ? "" : " ") + words[index]);
+            index++;
+            if (index >= words.length - 1) {
+                setWidgetShow(true);
+                clearInterval(interval);
+            }
+        }, 100); // speed control
+        return () => clearInterval(interval);
+    }, [content]);
+    return (
+        <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+                a: ({ href, children }) => (
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                        {children}
+                    </a>
+                ),
+            }}
+        >
+            {displayedText}
+        </ReactMarkdown>
+    );
+};
+
