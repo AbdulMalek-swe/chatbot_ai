@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { useAuth } from './AuthContext';
-import { swarma } from '../constant/data';
+import { findMockResponse, swarma } from '../constant/data';
 
 export interface ChatMessage {
     id: string;
@@ -169,9 +169,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setTimeout(() => {
                 setCurrentStepLabel(null);
                 
-                // Find matching response from swarma if possible, or generic one
-                const mockResponse = swarma.find(m => m.role === 'assistant' && !messages.some(em => em.content === m.content)) 
-                                    || { role: 'assistant', content: "That's an interesting point. Let me help you with that strategy." };
+                // Use the improved findMockResponse utility for consistent conversation flows
+                const result = findMockResponse(content);
+                const mockResponse = result?.answer || { 
+                    role: 'assistant', 
+                    content: "I've analyzed that parameter. Let's proceed with the optimization. Is there anything else you'd like to adjust?" 
+                };
 
                 const assistantMsgId = crypto.randomUUID();
                 const assistantMsg: ChatMessage = {
@@ -200,6 +203,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     } else {
                         clearInterval(interval);
                         setStreaming(false);
+
+                        // If the next message in the flow is also from the assistant, trigger it automatically
+                        const nextMock = findMockResponse(fullText);
+                        if (nextMock && nextMock.answer.role === 'assistant') {
+                            setTimeout(() => {
+                                sendMessage(fullText); // Recursive call to send the next part of the flow
+                            }, 1000);
+                        }
                     }
                 }, 30);
             }, 1000);

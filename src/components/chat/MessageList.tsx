@@ -87,7 +87,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="max-w-4xl mx-auto w-full px-4 sm:px-6">
+                    <div className="max-w-4xl mx-auto w-full">
                         {messages.map((msg) => <MessageBubble key={msg.id} message={msg} allMessages={messages} />)}
                         <div ref={bottomRef} className="h-24" />
                         {streaming && <div>

@@ -6,6 +6,7 @@ import MessageMap from './MessageMap';
 import CampaignDirection from './WidgetPinPoint';
 import LocationMapWidget from './LocationMapWidget';
 import WidgetRadiusSelection from './WidgetRadiusSelection';
+import WidgetCompetitorSelection from './WidgetCompetitorSelection';
 import { useEffect, useState } from 'react';
 
 interface MessageBubbleProps {
@@ -15,7 +16,7 @@ interface MessageBubbleProps {
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) => {
     const isAI = message.role === 'assistant';
-    const { streaming, messages: contextMessages, currentStepLabel } = useChat();
+    const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
     const messages = allMessages || contextMessages;
     const [widgetShow, setWidgetShow] = useState(false);
     const isLatestMessage = messages[messages.length - 1]?.id === message.id;
@@ -71,7 +72,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
     const coordinates = extractCoordinates();
 
     const hasText = !!message.content?.trim() || !!message.thinking || isSynthesizing;
-    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection") || coordinates.length > 0 || !!message.map_data;
+    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "competitor_selection") || coordinates.length > 0 || !!message.map_data;
 
     const thinkingPart = message.thinking && isAI && (
         <div className="p-px rounded-2xl bg-gradient-moving shadow-xl overflow-hidden mt-2 w-full">
@@ -142,6 +143,16 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
                             address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            onConfirm={(radius) => {
+                                sendMessage(`${radius} km is perfect.`);
+                            }}
+                        />
+                    )}
+                    {message.widget === "competitor_selection" && (
+                        <WidgetCompetitorSelection 
+                            points={message.points}
+                            title={(message as any).widget_title}
+                            suggestions={(message as any).widget_suggestions}
                         />
                     )}
                 </>
@@ -175,11 +186,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
 
     return (
         <div className={`group w-full animate-fade-in font-body flex ${isAI ? 'justify-start' : 'justify-end'} mb-6`}>
-            <div className={`${isAI ? (message.widget === "radius_selection" ? 'w-full' : 'max-w-4xl w-full') : 'max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 opacity-100'} flex flex-col transition-all`}>
-                <div className={`flex items-start gap-4 sm:gap-6 ${message.widget === "radius_selection" ? 'p-0 flex-row' : (isAI ? 'p-4 sm:p-6 flex-row' : 'flex-row-reverse')}`}>
-                    <div className={`${message.widget === "radius_selection" ? 'mt-4 ml-4' : 'shrink-0'} flex items-center justify-center transition-all top-0`}>
+            <div className={`${isAI ? (message.widget === "radius_selection" || message.widget === "competitor_selection" ? 'w-full' : 'max-w-4xl w-full') : 'max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 opacity-100'} flex flex-col transition-all`}>
+                <div className={`flex items-start ${message.widget === "radius_selection" || message.widget === "competitor_selection" ? 'p-0 flex-row' : (isAI ? ' flex-row' : 'flex-row-reverse')}`}>
+                    <div className={`${message.widget === "radius_selection" || message.widget === "competitor_selection" ? '' : 'shrink-0 mt-[-8px]'} flex items-center justify-center transition-all`}>
                         {isAI ? (
-                            <img src="/logo.png" alt="Logo" className="w-10 h-10 transition-transform group-hover:scale-110 duration-500 rounded-full" />
+                            <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] mr-4">
+                                <img src="/logo.png" alt="Logo" className="w-8 h-8 transition-transform group-hover:scale-110 duration-500 rounded-full" />
+                            </div>
                         ) : null}
                     </div>
 

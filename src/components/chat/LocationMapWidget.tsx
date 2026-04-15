@@ -30,7 +30,7 @@ export default function LocationMapWidget({ address }: { address?: string }) {
     const center: [number, number] = [47.6062, -122.3321];
 
     return (
-        <div className="w-full bg-[#DAD9CD]/10 rounded-4xl overflow-hidden border border-slate-200 shadow-2xl animate-fade-up">
+        <div className="w-full bg-[#DAD9CD]/10 rounded-4xl overflow-hidden border border-slate-200 animate-fade-up">
             {/* Header / Address Card */}
             <div className="p-6 bg-white flex items-center justify-between border-b border-slate-100">
                 <div className="flex items-center gap-4">

@@ -4,6 +4,8 @@ interface MockChatMessage {
   content: string;
   created_at: string;
   widget?: string;
+  widget_title?: string;
+  widget_suggestions?: string[];
   points?: any[];
 }
 
@@ -108,7 +110,7 @@ export const swarma: MockChatMessage[] = [
     id: "13",
     role: "assistant",
     content: "Competitors found: Shawarma King (0.3 km), Falafel Palace (0.6 km), Mediterranean Grill (0.9 km), Gyro Spot (0.4 km). Do you want to deselect any?",
-    widget: "pin_point",
+    widget: "competitor_selection",
     points: [
       { id: "1", type: "Shawarma King", content: "0.3 km away (Seattle Downtown)", created_at: new Date().toISOString() },
       { id: "2", type: "Falafel Palace", content: "0.6 km away (Seattle Downtown)", created_at: new Date().toISOString() },
@@ -300,7 +302,16 @@ export const vibe: MockChatMessage[] = [
   {
     id: "10",
     role: "assistant",
-    content: "Radius and lookback window set. Any specific demographics for the artists?",
+    content: "Perfect. Now pulling all tattoo shops in Portland that match our criteria. Here are the locations I've pinpointed. Do you want to adjust the list before we finalize the audience?",
+    widget: "competitor_selection",
+    widget_title: "Tattoo Shops in Portland",
+    widget_suggestions: ["Tattoo Studio", "Piercing Shop", "Artistic Studio", "Gallery"],
+    points: [
+      { id: "1", type: "Atlas Tattoo", content: "0.2 km away (NE Portland)", lat: 45.5485, lng: -122.6288, created_at: new Date().toISOString() },
+      { id: "2", type: "Scrape the Sky", content: "0.5 km away (SE Portland)", lat: 45.5126, lng: -122.6512, created_at: new Date().toISOString() },
+      { id: "3", type: "Sea Tramp Tattoo", content: "1.1 km away (NW Portland)", lat: 45.5262, lng: -122.6789, created_at: new Date().toISOString() },
+      { id: "4", type: "Icon Tattoo", content: "0.8 km away (N Portland)", lat: 45.5592, lng: -122.6658, created_at: new Date().toISOString() }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -423,7 +434,12 @@ export const rock_bank: MockChatMessage[] = [
     id: "6",
     role: "assistant",
     content: "Tour locked: Seattle (June 15), Portland (June 22), Austin (July 10). Found recent punk shows: The Crocodile (Seattle), Dante’s (Portland), Mohawk (Austin). Would you like to target all of these venues?",
-    widget: "map_selection",
+    widget: "competitor_selection",
+    points: [
+      { id: "1", type: "The Crocodile", content: "0.5 km away (Seattle)", lat: 47.6128, lng: -122.3458, created_at: new Date().toISOString() },
+      { id: "2", type: "Dante's", content: "0.8 km away (Portland)", lat: 45.5234, lng: -122.6762, created_at: new Date().toISOString() },
+      { id: "3", type: "Mohawk", content: "1.2 km away (Austin)", lat: 30.2672, lng: -97.7431, created_at: new Date().toISOString() }
+    ],
     created_at: new Date().toISOString()
   },
   {

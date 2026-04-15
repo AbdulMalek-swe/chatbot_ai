@@ -57,7 +57,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ activeTab, setActiveTab
                 {/* Tier badge */}
                 <div className={`rounded-2xl border border-slate-100 flex items-center bg-white shadow-sm transition-all
                     ${isCollapsed ? 'w-10 h-10 justify-center p-0' : 'p-4 gap-3'}`}>
-                    <div className={`rounded-lg flex items-center justify-center flex-shrink-0 bg-slate-900 shadow-sm
+                    <div className={`rounded-lg flex items-center justify-center shrink-0 bg-slate-900 shadow-sm
                         ${isCollapsed ? 'w-8 h-8' : 'w-9 h-9'}`}>
                         <Zap size={16} className="text-white" />
                     </div>
@@ -72,7 +72,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({ activeTab, setActiveTab
                 {/* Security */}
                 <div className={`rounded-2xl bg-white border border-slate-100 flex items-center transition-all shadow-sm
                     ${isCollapsed ? 'w-10 h-10 justify-center p-0' : 'p-4 gap-3'}`}>
-                    <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
                         <ShieldCheck size={18} className="text-emerald-500" />
                     </div>
                     {!isCollapsed && (
