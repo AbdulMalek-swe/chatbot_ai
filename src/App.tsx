@@ -1,12 +1,17 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { AdsProvider } from './contexts/AdsContext';
-import { ChatProvider } from './contexts/ChatContext';
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from 'react-router-dom';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
-import { ChatPage, ProfilePage, CampaignPage } from './pages';
 import MainLayout from './components/layouts/MainLayout';
+import { AdsProvider } from './contexts/AdsContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { ChatProvider } from './contexts/ChatContext';
 import './index.css';
+import { CampaignPage, ChatPage, ProfilePage } from './pages';
 
 function App() {
   return (
@@ -26,8 +31,6 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/campaigns" element={<CampaignPage />} />
               </Route>
-
-
 
               {/* Default Route */}
               <Route path="/" element={<Navigate to="/chat" replace />} />
