@@ -4,12 +4,9 @@ import { AdsProvider } from './contexts/AdsContext';
 import { ChatProvider } from './contexts/ChatContext';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
-import ChatPage from './pages/ChatPage';
-import NewChatPage from './pages/NewChatPage';
-import ProfilePage from './pages/ProfilePage';
+import { ChatPage, ProfilePage, CampaignPage } from './pages';
 import MainLayout from './components/layouts/MainLayout';
 import './index.css';
-import CampaignPage from './pages/Campaign';
 
 function App() {
   return (
@@ -25,11 +22,11 @@ function App() {
               {/* Protected Routes nested under MainLayout */}
               <Route element={<MainLayout />}>
                 <Route path="/chat" element={<ChatPage />} />
-                <Route path="/new-chat" element={<NewChatPage />} />
                 <Route path="/chat/:threadId" element={<ChatPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/campaigns" element={<CampaignPage />} />
               </Route>
+
 
 
               {/* Default Route */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/chat/Sidebar';
+import { Sidebar } from '../components/chat';
 import CampaignList from '../components/campaigns/CampaignList';
 import CampaignDetail from '../components/campaigns/CampaignDetail';
 

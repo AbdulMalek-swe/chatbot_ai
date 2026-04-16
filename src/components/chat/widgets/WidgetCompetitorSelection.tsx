@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, useMap, Circle } from 'react-leaflet';
+import { useState } from 'react';
+import { MapContainer, Marker, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Edit2, Search, Minus, Plus } from 'lucide-react';
 
-// Custom Marker for competitors - Small grey dots as seen in high-fidelity designs
 const competitorIcon = new L.DivIcon({
     html: `
         <div class="relative flex items-center justify-center">
@@ -16,7 +15,6 @@ const competitorIcon = new L.DivIcon({
     iconAnchor: [6, 6],
 });
 
-// Main shop icon (pink) to match the Frame exactly
 const mainIcon = new L.DivIcon({
     html: `
         <div class="relative flex items-center justify-center">
@@ -34,22 +32,22 @@ const mainIcon = new L.DivIcon({
     iconAnchor: [16, 16],
 });
 
-function MapBoundsUpdater({ center, points, radius }: { center: [number, number], points: any[], radius: number }) {
-    const map = useMap();
-    useEffect(() => {
-        if (!map) return;
-        try {
-            const circle = L.circle(center, { radius: radius * 1000 });
-            const timeoutId = setTimeout(() => {
-                map.fitBounds(circle.getBounds(), { padding: [100, 100], maxZoom: 15 });
-            }, 200);
-            return () => clearTimeout(timeoutId);
-        } catch (e) {
-            console.warn('MapBoundsUpdater error', e);
-        }
-    }, [center, points, radius, map]);
-    return null;
-}
+// function MapBoundsUpdater({ center, points, radius }: { center: [number, number], points: any[], radius: number }) {
+//     const map = useMap();
+//     useEffect(() => {
+//         if (!map) return;
+//         try {
+//             const circle = L.circle(center, { radius: radius * 1000 });
+//             const timeoutId = setTimeout(() => {
+//                 map.fitBounds(circle.getBounds(), { padding: [100, 100], maxZoom: 15 });
+//             }, 200);
+//             return () => clearTimeout(timeoutId);
+//         } catch (e) {
+//             console.warn('MapBoundsUpdater error', e);
+//         }
+//     }, [center, points, radius, map]);
+//     return null;
+// }
 
 interface Competitor {
     id: string;
@@ -227,12 +225,6 @@ export default function WidgetCompetitorSelection({
                     zoomControl={false}
                     className="h-full w-full grayscale-[0.2] contrast-[0.9] opacity-90"
                 >
-                    <TileLayer
-                        attribution='&copy; OpenStreetMap'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <MapBoundsUpdater center={center} points={selectedCompetitors} radius={radius} />
-                    
                     <Marker position={center} icon={mainIcon} />
                     
                     <Circle

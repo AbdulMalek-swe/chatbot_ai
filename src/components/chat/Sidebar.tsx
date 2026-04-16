@@ -3,9 +3,10 @@ import { Plus, Trash2, PanelLeftClose, PanelLeftOpen, Megaphone, LayoutGrid, Mes
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
+import { chat_data } from '../../constant/data';
 
 const Sidebar = () => {
-    const { activeThreadId, setActiveThread, deleteThread } = useChat();
+    const { activeThreadId, createNewChat, setActiveThread, deleteThread } = useChat();
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -31,7 +32,7 @@ const Sidebar = () => {
     };
 
     const handleNewChat = () => {
-        navigate('/new-chat');
+        navigate('/chat');
     };
 
     const handleSelectThread = (threadId: string) => {
@@ -50,12 +51,11 @@ const Sidebar = () => {
     };
 
     const initials = user?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'B';
-    const threads = [{ thread_id: '1', title: 'Shawarma Shop' }, { thread_id: '2', title: 'Vibe' },
-    { thread_id: '3', title: 'Rock Bank' }, { thread_id: '4', title: 'Real Estate' },
-    { thread_id: '5', title: 'Game' }, { thread_id: '6', title: 'Matcha' },
-    { thread_id: '7', title: 'Gamble' }, { thread_id: '8', title: 'AI' },
+    const threads = chat_data.map(item => ({
+        thread_id: item.id.toString(),
+        title: item.title
+    }));
 
-    ]
     return (
         <aside className={`${isCollapsed ? 'w-20' : 'w-72'} flex flex-col h-full transition-all duration-300 relative`}>
             <div className="p-6 pb-2">
