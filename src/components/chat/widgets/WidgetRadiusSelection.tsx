@@ -165,7 +165,7 @@ export default function WidgetRadiusSelection({
             </MapContainer>
 
             {/* Map Controls */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl shadow-2xl border border-white/20">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl shadow-2xl border border-white/20">
                 <button 
                     onClick={() => setRadius(prev => Math.max(1, prev - 1))}
                     className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

@@ -94,20 +94,20 @@ export default function WidgetAudienceSetup() {
                 </button>
             </div>
 
-            <div className="w-full h-[1px] bg-slate-100 mb-6" />
+            <div className="w-full h-px bg-slate-100 mb-6" />
 
             {/* Checklist */}
             <div className="space-y-4 mb-6">
                 {checklist.map((item, index) => (
                     <div key={index} className="flex items-center gap-3">
                         {item.completed ? (
-                            <div className="flex-shrink-0">
+                            <div className="shrink-0">
                                 <Check size={16} className="text-slate-900" strokeWidth={3} />
                             </div>
                         ) : item.loading ? (
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
+                            <div className="shrink-0 w-4 h-4 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
                         ) : (
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-200" />
+                            <div className="shrink-0 w-4 h-4 rounded-full border-2 border-slate-200" />
                         )}
                         <span className={`text-[15px] font-bold ${item.completed ? 'text-slate-900' : 'text-slate-900'}`}>
                             {item.label}
@@ -174,7 +174,7 @@ export default function WidgetAudienceSetup() {
             </MapContainer>
 
             {/* Bottom Center Controls */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000] flex items-center bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
                 <button 
                     onClick={() => setRadius(prev => Math.max(100, prev - 100))}
                     className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
@@ -193,7 +193,7 @@ export default function WidgetAudienceSetup() {
             </div>
 
             {/* Zoom Controls (Bottom Right) */}
-            <div className="absolute bottom-6 right-6 z-[1000] flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+            <div className="absolute bottom-6 right-6 z-1000 flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
                 <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50 border-b border-slate-100">
                     <Plus size={18} />
                 </button>

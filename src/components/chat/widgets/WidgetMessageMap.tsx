@@ -81,7 +81,7 @@ const RecenterControl: React.FC<{ coords: L.LatLngExpression[], zoom: number }> 
     };
 
     return (
-        <div className="leaflet-bottom leaflet-right !mb-4 !mr-4 z-[1000]">
+        <div className="leaflet-bottom leaflet-right mb-4! mr-4! z-1000">
             <button
                 onClick={handleRecenter}
                 className="bg-white/90 hover:bg-slate-50 text-slate-600 hover:text-primary-600 p-2 rounded-lg border border-slate-200 shadow-xl transition-all active:scale-95 group"
@@ -197,7 +197,7 @@ const MessageMap: React.FC<MessageMapProps> = ({ coordinates = [], mapData, zoom
     return (
         <WidgetLayout mode="single">
             <div className="my-4 rounded-2xl overflow-hidden border border-white/10 shadow-2xl animate-fade-in group relative">
-                <div className="absolute top-4 left-10 z-[1000] flex flex-col gap-2">
+                <div className="absolute top-4 left-10 z-1000 flex flex-col gap-2">
                     {mapData ? (
                         <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-bold text-slate-700 shadow-lg">
                             <span className="text-primary-600 font-black mr-2">LIVE</span>

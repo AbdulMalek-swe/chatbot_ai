@@ -183,7 +183,7 @@ export default function WidgetCompetitorSelection({
 
                     {/* Autocomplete Dropdown */}
                     {showSuggestions && searchValue && filteredSuggestions.length > 0 && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-[2000] animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-2000 animate-in fade-in slide-in-from-top-2 duration-200">
                             {filteredSuggestions.map((suggestion, idx) => (
                                 <button
                                     key={idx}
@@ -230,7 +230,7 @@ export default function WidgetCompetitorSelection({
             </MapContainer>
 
             {/* Map Controls */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-[20px] shadow-2xl border border-white/40">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-[20px] shadow-2xl border border-white/40">
                 <button 
                     onClick={() => setRadius(prev => Math.max(0.1, prev - 1))}
                     className="w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

@@ -68,7 +68,7 @@ export default function LocationMapWidget({ address }: { address?: string }) {
                     </MapContainer>
                     
                     {/* Floating Map Label */}
-                    <div className="absolute top-4 left-4 z-[1000] bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-black text-slate-800 shadow-xl uppercase tracking-widest">
+                    <div className="absolute top-4 left-4 z-1000 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-black text-slate-800 shadow-xl uppercase tracking-widest">
                         Precision Sync Active
                     </div>
                 </div>
