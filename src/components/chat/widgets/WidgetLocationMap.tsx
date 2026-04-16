@@ -36,9 +36,9 @@ export default function LocationMapWidget({ address }: { address?: string }) {
         {/* Header / Address Card */}
         <div className="p-4 bg-white flex items-center justify-between border-b border-slate-100">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 shadow-sm">
-              <img src="/locationIcon.png" alt="Location" />
-            </div>
+            <div className="w-12 h-12 flex items-center justify-center rounded-full ">
+                                <img src="/locationIcon.png" alt="Location" />
+                            </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-md font-semibold text-[#151515] font-inter">
                 Location Locked
@@ -48,10 +48,6 @@ export default function LocationMapWidget({ address }: { address?: string }) {
               </p>
             </div>
           </div>
-          {/* <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 transition-all group">
-                        <Pencil size={14} className="group-hover:rotate-12 transition-transform" />
-                        <span className="text-[12px] font-bold">Edit</span>
-                    </button> */}
         </div>
 
         {/* Map Container */}
