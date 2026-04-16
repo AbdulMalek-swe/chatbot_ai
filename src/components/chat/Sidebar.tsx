@@ -97,7 +97,7 @@ const Sidebar = () => {
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg hover:bg-slate-50 text-slate-400 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-slate-50 text-#151515 transition-colors px-2"
           >
             {isCollapsed ? (
               <PanelLeftOpen size={18} />
@@ -161,9 +161,7 @@ const Sidebar = () => {
       <div className="flex-1 flex flex-col mt-10 min-h-0 overflow-hidden">
         {!isCollapsed && (
           <div className="px-6 mb-2">
-            <h3 className="text-xs  text-#151515 tracking-tight">
-              Chat History
-            </h3>
+            <h3 className="text-lg  text-#151515 font-normal">Chat History</h3>
             <div className="h-px bg-slate-100 w-full mt-4"></div>
           </div>
         )}
@@ -173,7 +171,7 @@ const Sidebar = () => {
             <button
               key={thread.thread_id}
               onClick={() => handleSelectThread(thread.thread_id)}
-              className={`w-full flex items-center gap-3 px-4 py-2 hover:bg-slate-50 transition-colors rounded-lg group relative ${activeThreadId === thread.thread_id ? 'bg-slate-50' : ''}`}
+              className={`w-full flex items-center gap-3 px-4 py-1 hover:py-2 hover:bg-slate-50 rounded-lg group relative truncate transition-all ${activeThreadId === thread.thread_id ? 'bg-slate-50' : ''}`}
             >
               <MessageCircle size={18} className="shrink-0 text-slate-400" />
               {!isCollapsed && (
