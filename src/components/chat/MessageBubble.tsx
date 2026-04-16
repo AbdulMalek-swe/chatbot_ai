@@ -10,7 +10,7 @@ import {
     WidgetCompetitorSelection 
 } from './widgets';
 import { useEffect, useState } from 'react';
-import HeatMap from './HeatMap';
+import HeatMap from './widgets/HeatMap';
 
 interface MessageBubbleProps {
     message: ChatMessage;
