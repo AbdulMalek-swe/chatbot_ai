@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import Sidebar from '../components/chat/Sidebar';
-import MessageList from '../components/chat/MessageList';
-import ChatInput from '../components/chat/ChatInput';
+import { Sidebar, MessageList, ChatInput } from '../components/chat';
 import { findMockResponse } from '../constant/data';
 import { Zap } from 'lucide-react';
 

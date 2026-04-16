@@ -1,14 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useChat } from '../contexts/ChatContext';
-import Sidebar from '../components/chat/Sidebar';
-import MessageList from '../components/chat/MessageList';
-// import ChatInput from '../components/chat/ChatInput';
+import { Sidebar, MessageList, ChatInput } from '../components/chat';
 import api from '../api/client';
 import { Loader2, Code, } from 'lucide-react';
-// import AgentStateView from '../components/chat/AgentStateView';
 import { chat_data } from '../constant/data';
-import ChatInput from '../components/chat/ChatInput';
 
 const ChatPage = () => {
     const { threadId: paramsThreadId } = useParams<{ threadId: string }>();

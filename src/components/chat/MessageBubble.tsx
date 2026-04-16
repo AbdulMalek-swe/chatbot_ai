@@ -2,11 +2,13 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
 import { Cpu } from 'lucide-react';
-import MessageMap from './MessageMap';
-import CampaignDirection from './WidgetPinPoint';
-import LocationMapWidget from './LocationMapWidget';
-import WidgetRadiusSelection from './WidgetRadiusSelection';
-import WidgetCompetitorSelection from './WidgetCompetitorSelection';
+import { 
+    WidgetMessageMap as MessageMap, 
+    WidgetPinPoint as CampaignDirection, 
+    WidgetLocationMap as LocationMapWidget, 
+    WidgetRadiusSelection, 
+    WidgetCompetitorSelection 
+} from './widgets';
 import { useEffect, useState } from 'react';
 
 interface MessageBubbleProps {
