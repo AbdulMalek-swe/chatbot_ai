@@ -22,7 +22,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
     // Logo component
     const logoBlock = showLogo && (
         <div className="shrink-0 flex items-center justify-center transition-all mr-4">
-            <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            <div className="bg-[#C0C0C0] rounded-full pt-2.75 pr-2.75 pb-2.75 pl-1.25 flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
                 <img src="/logo.png" alt="Logo" className="w-8 h-8 transition-transform group-hover:scale-110 duration-500 rounded-full" />
             </div>
         </div>
@@ -33,7 +33,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
             <div className={`w-full max-w-7xl flex flex-col transition-all duration-500 gap-6 ${className}`}>
                 <div className="flex flex-col lg:flex-row gap-6 animate-fade-up">
                     {/* Left Panel: (AI Text + UI) or Custom Content */}
-                    <div className="w-full lg:w-[480px] flex flex-col gap-6">
+                    <div className="w-full lg:w-120 flex flex-col gap-6">
                         {aiText && (
                             <div className="flex items-start">
                                 {logoBlock}
@@ -44,7 +44,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                         )}
                         
                         {(leftContent || children) && (
-                            <div className="w-full bg-white rounded-[24px] shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+                            <div className="w-full bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
                                 {leftContent || children}
                             </div>
                         )}
@@ -52,7 +52,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                     
                     {/* Right Panel: Map or Visuals */}
                     {rightContent && (
-                        <div className="flex-1 min-h-[500px] lg:h-auto rounded-[24px] overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50">
+                        <div className="flex-1 min-h-125 lg:h-auto rounded-3xl overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50 mt-20">
                             {rightContent}
                         </div>
                     )}
@@ -78,7 +78,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                 </div>
              )}
              {rightContent && (
-                 <div className="w-full rounded-[24px] overflow-hidden border border-slate-200 min-h-[300px] bg-slate-50">
+                 <div className="w-full rounded-3xl overflow-hidden border border-slate-200 min-h-75 bg-slate-50">
                      {rightContent}
                  </div>
              )}
