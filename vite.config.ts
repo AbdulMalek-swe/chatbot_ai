@@ -9,4 +9,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  esbuild: {
+    logOverride: { "this-is-undefined-in-esm": "silent" }
+  }
 })
