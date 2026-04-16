@@ -1,3 +1,4 @@
+export { default as WidgetLayout } from './WidgetLayout';
 export { default as WidgetLocationMap } from './WidgetLocationMap';
 export { default as WidgetMessageMap } from './WidgetMessageMap';
 export { default as WidgetAudienceSetup } from './WidgetAudienceSetup';

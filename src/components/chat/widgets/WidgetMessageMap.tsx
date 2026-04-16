@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, Circle, CircleMarker } 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
+import WidgetLayout from './WidgetLayout';
 
 // Specialized icon to match the premium theme
 const customIcon = new L.DivIcon({
@@ -194,136 +195,138 @@ const MessageMap: React.FC<MessageMapProps> = ({ coordinates = [], mapData, zoom
     const center = pointsToFit[0];
 
     return (
-        <div className="my-4 rounded-2xl overflow-hidden border border-white/10 shadow-2xl animate-fade-in group relative">
-            <div className="absolute top-4 left-10 z-[1000] flex flex-col gap-2">
-                {mapData ? (
-                    <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-bold text-slate-700 shadow-lg">
-                        <span className="text-primary-600 font-black mr-2">LIVE</span>
-                        {(mapData.total_count || 0).toLocaleString()} Device Signals Identified
-                    </div>
-                ) : (
-                    coordinates.slice(0, 2).map((coord, i) => (
-                        <div key={i} className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-bold text-slate-700 shadow-lg">
-                            <MapPin size={12} className="text-primary-600" />
-                            <span className="truncate max-w-[120px]">{coord.name || coord.label || `Target ${i + 1}`}</span>
+        <WidgetLayout mode="single">
+            <div className="my-4 rounded-2xl overflow-hidden border border-white/10 shadow-2xl animate-fade-in group relative">
+                <div className="absolute top-4 left-10 z-[1000] flex flex-col gap-2">
+                    {mapData ? (
+                        <div className="bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-bold text-slate-700 shadow-lg">
+                            <span className="text-primary-600 font-black mr-2">LIVE</span>
+                            {(mapData.total_count || 0).toLocaleString()} Device Signals Identified
                         </div>
-                    ))
-                )}
-            </div>
-
-            <div className="h-[400px] w-full relative z-10 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-                <MapContainer
-                    center={center}
-                    zoom={zoom}
-                    scrollWheelZoom={false}
-                    className="h-full w-full"
-                >
-                    <MapUpdater coords={pointsToFit} zoom={zoom} />
-                    <RecenterControl coords={pointsToFit} zoom={zoom} />
-                    <TileLayer
-                        attribution='&copy; OpenStreetMap'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-
-                    {/* Render POIs with Radius */}
-                    {mapData?.pois_targeted.map((poi, idx) => (
-                        <Hub key={`poi-${idx}`} poi={poi} />
-                    ))}
-
-                    {/* Render Sample Device Locations */}
-                    {mapData?.sample_maids.map((maid, idx) => {
-                        const lat = parseFloat(maid.latitude as any);
-                        const lng = parseFloat(maid.longitude as any);
-                        if (isNaN(lat) || isNaN(lng)) return null;
-
-                        return (
-                            <CircleMarker
-                                key={`maid-${idx}`}
-                                center={[lat, lng]}
-                                radius={2}
-                                pathOptions={{
-                                    color: '#6366f1',
-                                    fillColor: '#6366f1',
-                                    fillOpacity: 0.8,
-                                    weight: 1
-                                }}
-                            >
-                                <Popup>
-                                    <div className="text-[9px] font-mono">Device ID: {maid.maid?.slice(0, 8) || 'Unknown'}...</div>
-                                </Popup>
-                            </CircleMarker>
-                        );
-                    })}
-
-                    {/* Standard Coordinates (Fallback/Static) */}
-                    {!mapData && coordinates.map((coord, idx) => {
-                        const lat = parseFloat(coord.lat as any);
-                        const lng = parseFloat(coord.lng as any);
-                        if (isNaN(lat) || isNaN(lng)) return null;
-
-                        return (
-                            <Marker
-                                key={`coord-${idx}`}
-                                position={[lat, lng]}
-                                icon={customIcon}
-                            >
-                                <Popup>
-                                    <div className="p-1 font-sans">
-                                        <p className="font-bold text-gray-900 m-0">{coord.name || 'Target Area'}</p>
-                                        <p className="text-[10px] text-gray-500 m-0">{lat.toFixed(6)}, {lng.toFixed(6)}</p>
-                                    </div>
-                                </Popup>
-                            </Marker>
-                        );
-                    })}
-                </MapContainer>
-            </div>
-
-            <div className="bg-slate-50 p-4 flex items-center justify-between border-t border-slate-100 relative z-10">
-                <div className="flex flex-col gap-0.5">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Geospatial Intelligence Engine</span>
-                    <span className="text-[12px] font-medium text-slate-600 italic">
-                        {mapData ? `Visualizing ${mapData.sample_maids?.length || 0} representative device signals across hubs.` : `${pointsToFit.length} coordinates mapped.`}
-                    </span>
+                    ) : (
+                        coordinates.slice(0, 2).map((coord, i) => (
+                            <div key={i} className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 text-[10px] font-bold text-slate-700 shadow-lg">
+                                <MapPin size={12} className="text-primary-600" />
+                                <span className="truncate max-w-[120px]">{coord.name || coord.label || `Target ${i + 1}`}</span>
+                            </div>
+                        ))
+                    )}
                 </div>
-                <div className="px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-[9px] font-black text-primary-400 uppercase tracking-widest">
-                    OSM Protocol
-                </div>
-            </div>
 
-            <style>{`
-                .leaflet-container {
-                    background: #fdfdfb !important;
-                }
-                .leaflet-control-attribution {
-                    background: rgba(0,0,0,0.5) !important;
-                    color: rgba(255,255,255,0.3) !important;
-                    font-size: 8px !important;
-                }
-                .leaflet-bar a {
-                    background-color: #ffffff !important;
-                    color: #1a1a1a !important;
-                    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
-                }
-                .leaflet-bar a:hover {
-                    background-color: #f8f8f8 !important;
-                }
-                .premium-popup .leaflet-popup-content-wrapper {
-                    background: #ffffff !important;
-                    color: #000000 !important;
-                    border-radius: 12px !important;
-                    padding: 0 !important;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
-                }
-                .premium-popup .leaflet-popup-tip {
-                    background: #ffffff !important;
-                }
-                .premium-popup .leaflet-popup-content {
-                    margin: 0 !important;
-                    width: auto !important;
-                }
-            `}</style>
-        </div>
+                <div className="h-[400px] w-full relative z-10 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+                    <MapContainer
+                        center={center}
+                        zoom={zoom}
+                        scrollWheelZoom={false}
+                        className="h-full w-full"
+                    >
+                        <MapUpdater coords={pointsToFit} zoom={zoom} />
+                        <RecenterControl coords={pointsToFit} zoom={zoom} />
+                        <TileLayer
+                            attribution='&copy; OpenStreetMap'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+
+                        {/* Render POIs with Radius */}
+                        {mapData?.pois_targeted.map((poi, idx) => (
+                            <Hub key={`poi-${idx}`} poi={poi} />
+                        ))}
+
+                        {/* Render Sample Device Locations */}
+                        {mapData?.sample_maids.map((maid, idx) => {
+                            const lat = parseFloat(maid.latitude as any);
+                            const lng = parseFloat(maid.longitude as any);
+                            if (isNaN(lat) || isNaN(lng)) return null;
+
+                            return (
+                                <CircleMarker
+                                    key={`maid-${idx}`}
+                                    center={[lat, lng]}
+                                    radius={2}
+                                    pathOptions={{
+                                        color: '#6366f1',
+                                        fillColor: '#6366f1',
+                                        fillOpacity: 0.8,
+                                        weight: 1
+                                    }}
+                                >
+                                    <Popup>
+                                        <div className="text-[9px] font-mono">Device ID: {maid.maid?.slice(0, 8) || 'Unknown'}...</div>
+                                    </Popup>
+                                </CircleMarker>
+                            );
+                        })}
+
+                        {/* Standard Coordinates (Fallback/Static) */}
+                        {!mapData && coordinates.map((coord, idx) => {
+                            const lat = parseFloat(coord.lat as any);
+                            const lng = parseFloat(coord.lng as any);
+                            if (isNaN(lat) || isNaN(lng)) return null;
+
+                            return (
+                                <Marker
+                                    key={`coord-${idx}`}
+                                    position={[lat, lng]}
+                                    icon={customIcon}
+                                >
+                                    <Popup>
+                                        <div className="p-1 font-sans">
+                                            <p className="font-bold text-gray-900 m-0">{coord.name || 'Target Area'}</p>
+                                            <p className="text-[10px] text-gray-500 m-0">{lat.toFixed(6)}, {lng.toFixed(6)}</p>
+                                        </div>
+                                    </Popup>
+                                </Marker>
+                            );
+                        })}
+                    </MapContainer>
+                </div>
+
+                <div className="bg-slate-50 p-4 flex items-center justify-between border-t border-slate-100 relative z-10">
+                    <div className="flex flex-col gap-0.5">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Geospatial Intelligence Engine</span>
+                        <span className="text-[12px] font-medium text-slate-600 italic">
+                            {mapData ? `Visualizing ${mapData.sample_maids?.length || 0} representative device signals across hubs.` : `${pointsToFit.length} coordinates mapped.`}
+                        </span>
+                    </div>
+                    <div className="px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-[9px] font-black text-primary-400 uppercase tracking-widest">
+                        OSM Protocol
+                    </div>
+                </div>
+
+                <style>{`
+                    .leaflet-container {
+                        background: #fdfdfb !important;
+                    }
+                    .leaflet-control-attribution {
+                        background: rgba(0,0,0,0.5) !important;
+                        color: rgba(255,255,255,0.3) !important;
+                        font-size: 8px !important;
+                    }
+                    .leaflet-bar a {
+                        background-color: #ffffff !important;
+                        color: #1a1a1a !important;
+                        border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+                    }
+                    .leaflet-bar a:hover {
+                        background-color: #f8f8f8 !important;
+                    }
+                    .premium-popup .leaflet-popup-content-wrapper {
+                        background: #ffffff !important;
+                        color: #000000 !important;
+                        border-radius: 12px !important;
+                        padding: 0 !important;
+                        box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+                    }
+                    .premium-popup .leaflet-popup-tip {
+                        background: #ffffff !important;
+                    }
+                    .premium-popup .leaflet-popup-content {
+                        margin: 0 !important;
+                        width: auto !important;
+                    }
+                `}</style>
+            </div>
+        </WidgetLayout>
     );
 };
 

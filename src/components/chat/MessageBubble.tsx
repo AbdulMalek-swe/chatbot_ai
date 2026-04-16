@@ -113,19 +113,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
             ) : isAI ? (
                 <div className="chat-markdown max-w-none">
                     <StreamingMarkdown content={message.content} setWidgetShow={setWidgetShow} />
-                    {/* <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                            a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer">
-                                    {children}
-                                </a>
-                            ),
-                        }}
-                    >
-                        {message.content}
-                        
-                    </ReactMarkdown> */}
                 </div>
             ) : (
                 <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>{message.content}</div>
@@ -133,9 +120,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
         </div>
     );
 
-    const widgetPart = (
+    const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "competitor_selection");
+
+    const widgetContent = (
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
-            <HeatMap />
             {isAI && (
                 <>
                     {message.widget === "pin_point" && <CampaignDirection widget={message.points} />}
@@ -188,36 +176,77 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
         </div>
     );
 
-    return (
-        <div className={`group w-full animate-fade-in font-body flex ${isAI ? 'justify-start' : 'justify-end'} mb-6`}>
-            <div className={`${isAI ? (message.widget === "radius_selection" || message.widget === "competitor_selection" ? 'w-full' : 'max-w-4xl w-full') : 'max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 opacity-100'} flex flex-col transition-all`}>
-                <div className={`flex items-start ${message.widget === "radius_selection" || message.widget === "competitor_selection" ? 'p-0 flex-row' : (isAI ? ' flex-row' : 'flex-row-reverse')}`}>
-                    <div className={`${message.widget === "radius_selection" || message.widget === "competitor_selection" ? '' : 'shrink-0 mt-[-8px]'} flex items-center justify-center transition-all`}>
-                        {isAI ? (
-                            <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)] mr-4">
-                                <img src="/logo.png" alt="Logo" className="w-8 h-8 transition-transform group-hover:scale-110 duration-500 rounded-full" />
-                            </div>
-                        ) : null}
-                    </div>
+    if (!isAI) {
+        return (
+            <div className="group w-full animate-fade-in font-body flex justify-end mb-6 max-w-4xl mx-auto">
+                <div className="max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 text-left">
+                    {mainContentPart}
+                </div>
+            </div>
+        );
+    }
 
-                    <div className={`flex-1 space-y-4 overflow-hidden flex flex-col ${isAI ? 'items-start' : 'items-end'}`}>
-                        <div className="flex flex-col gap-6 w-full">
-                            {thinkingPart}
-                            {mainContentPart}
-                            {/* Render widget beside logo ONLY if there is no text/thinking */}
-                            {isAI && !hasText && hasWidget && widgetPart}
-                        </div>
+    if (isSplitWidget) {
+        return (
+            <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="w-full">
+                    {message.widget === "radius_selection" && (
+                        <WidgetRadiusSelection
+                            address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            aiText={
+                                <div className="space-y-4">
+                                    {thinkingPart}
+                                    {mainContentPart}
+                                </div>
+                            }
+                            showLogo={true}
+                            onConfirm={(radius) => {
+                                sendMessage(`${radius} km is perfect.`);
+                            }}
+                        />
+                    )}
+                    {message.widget === "competitor_selection" && (
+                        <WidgetCompetitorSelection
+                            points={message.points}
+                            title={(message as any).widget_title}
+                            suggestions={(message as any).widget_suggestions}
+                            aiText={
+                                <div className="space-y-4">
+                                    {thinkingPart}
+                                    {mainContentPart}
+                                </div>
+                            }
+                            showLogo={true}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto px-4 sm:px-6">
+            <div className="w-full flex flex-row gap-4">
+                <div className="shrink-0 flex items-center justify-center transition-all self-start mt-[-8px]">
+                    <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                        <img src="/logo.png" alt="Logo" className="w-8 h-8 transition-transform group-hover:scale-110 duration-500 rounded-full" />
                     </div>
                 </div>
-                {/* Render widget full width below ONLY if there is text/thinking */}
-                {isAI && hasText && hasWidget && (
-                    <div className="pb-4 sm:pb-6 w-full">
-                        {widgetShow && widgetPart}
-                    </div>
-                )}
+                <div className="flex-1 flex flex-col gap-6 min-w-0">
+                    {hasText && (
+                        <div className="w-full">
+                            {thinkingPart}
+                            {mainContentPart}
+                        </div>
+                    )}
+                    {widgetShow && widgetContent}
+                    {!hasText && hasWidget && widgetContent}
+                </div>
             </div>
         </div>
     );
+
+
 };
 
 export default MessageBubble;
@@ -252,4 +281,5 @@ const StreamingMarkdown = ({ content, setWidgetShow }: { content: any, setWidget
         </ReactMarkdown>
     );
 };
+
 

@@ -1,5 +1,6 @@
-//import { MapPin, Pencil } from "lucide-react";
 import { MapPin, Pencil } from "lucide-react";
+import WidgetLayout from './WidgetLayout';
+
 // --- Simple Card & Button Components (no shadcn needed) ---
 function Card({ children, className = "" }: { children: React.ReactNode, className?: string }) {
     return (
@@ -36,15 +37,13 @@ function Button({ children, className = "", variant = "default", size = "md", ..
     );
 }
 
-
-
 export default function CampaignDirection({
     widget
 }: {
     widget: any;
 }) {
     return (
-        <div className="w-full">
+        <WidgetLayout mode="single">
             <Card className="w-full rounded-2xl shadow-md">
                 <CardContent className="p-5">
                     <div className="flex items-center justify-between mb-4">
@@ -72,10 +71,8 @@ export default function CampaignDirection({
                                 <input
                                     type="checkbox"
                                     name="campaign"
-                               
                                 />
                                 <p className="text-sm  "> <span className="font-bold ">{opt.type}</span>  {opt.content} </p>
-
                             </label>
                         ))}
                     </div>
@@ -90,6 +87,6 @@ export default function CampaignDirection({
                     </div>
                 </CardContent>
             </Card>
-        </div>
+        </WidgetLayout>
     );
 }

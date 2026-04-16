@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Edit2, Minus, Plus } from 'lucide-react';
+import WidgetLayout from './WidgetLayout';
 
 // Custom Marker for competitors - Small pink dots as seen in the design
 const competitorIcon = new L.DivIcon({
@@ -72,135 +73,133 @@ export default function WidgetAudienceSetup() {
         { label: "Demographics", completed: false, loading: true },
     ];
 
-    return (
-        <div className="w-full h-full flex flex-col md:flex-row gap-0 rounded-[24px] overflow-hidden bg-white shadow-2xl border border-slate-200/50">
-            {/* Left Card: Status & Checklist */}
-            <div className="w-full md:w-[420px] bg-white flex flex-col p-6 border-r border-slate-100">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
-                            <div className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-slate-300">
-                                <div className="w-1 h-1 bg-slate-400 rounded-full" />
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className="text-[17px] font-bold text-slate-900 leading-tight">Shawarma Palace</h3>
-                            <p className="text-[13px] text-slate-400 font-medium">456 Elm Street.</p>
+    const leftContent = (
+        <div className="bg-white flex flex-col p-6 h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm">
+                        <div className="w-6 h-6 flex items-center justify-center rounded-full border-2 border-slate-300">
+                            <div className="w-1 h-1 bg-slate-400 rounded-full" />
                         </div>
                     </div>
-                    <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-slate-200 bg-white text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
-                        <Edit2 size={12} />
-                        Edit
-                    </button>
+                    <div>
+                        <h3 className="text-[17px] font-bold text-slate-900 leading-tight">Shawarma Palace</h3>
+                        <p className="text-[13px] text-slate-400 font-medium">456 Elm Street.</p>
+                    </div>
                 </div>
-
-                <div className="w-full h-[1px] bg-slate-100 mb-6" />
-
-                {/* Checklist */}
-                <div className="space-y-4 mb-6">
-                    {checklist.map((item, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                            {item.completed ? (
-                                <div className="flex-shrink-0">
-                                    <Check size={16} className="text-slate-900" strokeWidth={3} />
-                                </div>
-                            ) : item.loading ? (
-                                <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
-                            ) : (
-                                <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-200" />
-                            )}
-                            <span className={`text-[15px] font-bold ${item.completed ? 'text-slate-900' : 'text-slate-900'}`}>
-                                {item.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="w-full border-t border-dashed border-slate-200 mb-6" />
-
-                {/* Prompt Text */}
-                <p className="text-[14px] text-slate-600 leading-relaxed font-medium">
-                    Before I build the audience, any specific demographics you want to focus on? (I recommend 18–45 for food lovers, but you can narrow it.)
-                </p>
+                <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-slate-200 bg-white text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
+                    <Edit2 size={12} />
+                    Edit
+                </button>
             </div>
 
-            {/* Right Side: Map */}
-            <div className="flex-1 min-h-[400px] relative overflow-hidden bg-[#fafaf8]">
-                <MapContainer
-                    center={center}
-                    zoom={15}
-                    scrollWheelZoom={false}
-                    zoomControl={false}
-                    className="h-full w-full"
-                >
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                    />
-                    <MapBoundsUpdater center={center} radius={radius} />
-                    
-                    {/* Main Marker with Circle Labels */}
-                    <Marker position={center} icon={mainIcon} />
-                    
-                    {/* Main Radius */}
-                    <Circle
-                        center={center}
-                        radius={radius}
-                        pathOptions={{
-                            color: '#e91e63',
-                            fillColor: '#e91e63',
-                            fillOpacity: 0.1,
-                            weight: 1,
-                        }}
-                    />
+            <div className="w-full h-[1px] bg-slate-100 mb-6" />
 
-                    {/* Competitor Markers and Their Radii */}
-                    {competitors.map(c => (
-                        <div key={c.id}>
-                            <Marker position={[c.lat, c.lng]} icon={competitorIcon} />
-                            <Circle 
-                                center={[c.lat, c.lng]}
-                                radius={radius * 0.6} // Slightly smaller for visual variety or as seen in image
-                                pathOptions={{
-                                    color: '#e91e63',
-                                    fillColor: '#e91e63',
-                                    fillOpacity: 0.1,
-                                    weight: 1,
-                                }}
-                            />
-                        </div>
-                    ))}
-                </MapContainer>
-
-                {/* Bottom Center Controls */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000] flex items-center bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-                    <button 
-                        onClick={() => setRadius(prev => Math.max(100, prev - 100))}
-                        className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-                    >
-                        <Minus size={20} />
-                    </button>
-                    <div className="px-6 min-w-[100px] text-center text-[15px] font-bold text-slate-800 border-x border-slate-100">
-                        {radius}m
+            {/* Checklist */}
+            <div className="space-y-4 mb-6">
+                {checklist.map((item, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                        {item.completed ? (
+                            <div className="flex-shrink-0">
+                                <Check size={16} className="text-slate-900" strokeWidth={3} />
+                            </div>
+                        ) : item.loading ? (
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
+                        ) : (
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full border-2 border-slate-200" />
+                        )}
+                        <span className={`text-[15px] font-bold ${item.completed ? 'text-slate-900' : 'text-slate-900'}`}>
+                            {item.label}
+                        </span>
                     </div>
-                    <button 
-                        onClick={() => setRadius(prev => Math.min(5000, prev + 100))}
-                        className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
-                    >
-                        <Plus size={20} />
-                    </button>
-                </div>
+                ))}
+            </div>
 
-                {/* Zoom Controls (Bottom Right) */}
-                <div className="absolute bottom-6 right-6 z-[1000] flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-                    <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50 border-b border-slate-100">
-                        <Plus size={18} />
-                    </button>
-                    <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50">
-                        <Minus size={18} />
-                    </button>
+            <div className="w-full border-t border-dashed border-slate-200 mb-6" />
+
+            {/* Prompt Text */}
+            <p className="text-[14px] text-slate-600 leading-relaxed font-medium">
+                Before I build the audience, any specific demographics you want to focus on? (I recommend 18–45 for food lovers, but you can narrow it.)
+            </p>
+        </div>
+    );
+
+    const rightContent = (
+        <div className="w-full h-full relative min-h-[400px]">
+            <MapContainer
+                center={center}
+                zoom={15}
+                scrollWheelZoom={false}
+                zoomControl={false}
+                className="h-full w-full"
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                />
+                <MapBoundsUpdater center={center} radius={radius} />
+                
+                {/* Main Marker with Circle Labels */}
+                <Marker position={center} icon={mainIcon} />
+                
+                {/* Main Radius */}
+                <Circle
+                    center={center}
+                    radius={radius}
+                    pathOptions={{
+                        color: '#e91e63',
+                        fillColor: '#e91e63',
+                        fillOpacity: 0.1,
+                        weight: 1,
+                    }}
+                />
+
+                {/* Competitor Markers and Their Radii */}
+                {competitors.map(c => (
+                    <div key={c.id}>
+                        <Marker position={[c.lat, c.lng]} icon={competitorIcon} />
+                        <Circle 
+                            center={[c.lat, c.lng]}
+                            radius={radius * 0.6} // Slightly smaller for visual variety or as seen in image
+                            pathOptions={{
+                                color: '#e91e63',
+                                fillColor: '#e91e63',
+                                fillOpacity: 0.1,
+                                weight: 1,
+                            }}
+                        />
+                    </div>
+                ))}
+            </MapContainer>
+
+            {/* Bottom Center Controls */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000] flex items-center bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <button 
+                    onClick={() => setRadius(prev => Math.max(100, prev - 100))}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                >
+                    <Minus size={20} />
+                </button>
+                <div className="px-6 min-w-[100px] text-center text-[15px] font-bold text-slate-800 border-x border-slate-100">
+                    {radius}m
                 </div>
+                <button 
+                    onClick={() => setRadius(prev => Math.min(5000, prev + 100))}
+                    className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                >
+                    <Plus size={20} />
+                </button>
+            </div>
+
+            {/* Zoom Controls (Bottom Right) */}
+            <div className="absolute bottom-6 right-6 z-[1000] flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+                <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50 border-b border-slate-100">
+                    <Plus size={18} />
+                </button>
+                <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+                    <Minus size={18} />
+                </button>
             </div>
 
             <style>{`
@@ -216,5 +215,13 @@ export default function WidgetAudienceSetup() {
                 }
             `}</style>
         </div>
+    );
+
+    return (
+        <WidgetLayout 
+            mode="split" 
+            leftContent={leftContent} 
+            rightContent={rightContent} 
+        />
     );
 }
