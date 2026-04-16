@@ -18,7 +18,7 @@ const heatData: [number, number, number][] = [
     [47.615, -122.315, 0.5],
 ];
 
-// 🎯 Custom White Pin Marker with the Label "Shawarma Palace..."
+// Custom White Pin Marker with the Label "Shawarma Palace..."
 const customIcon = new L.DivIcon({
     html: `
     <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
