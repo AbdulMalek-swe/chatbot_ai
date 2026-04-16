@@ -20,7 +20,7 @@ const PrimaryBtn = ({
   return (
     <button
       className={cn(
-        `flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-normal text-md uppercase tracking-wider hover:bg-black transition-all shadow-lg font-inter`,
+        `flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-slate-900 text-white font-normal text-sm uppercase tracking-wider hover:bg-black transition-all shadow-lg font-inter `,
         className,
       )}
       onClick={onClick}
