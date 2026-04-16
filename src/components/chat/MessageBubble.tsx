@@ -8,6 +8,7 @@ import LocationMapWidget from './LocationMapWidget';
 import WidgetRadiusSelection from './WidgetRadiusSelection';
 import WidgetCompetitorSelection from './WidgetCompetitorSelection';
 import { useEffect, useState } from 'react';
+import HeatMap from './HeatMap';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -132,6 +133,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
 
     const widgetPart = (
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
+            <HeatMap />
             {isAI && (
                 <>
                     {message.widget === "pin_point" && <CampaignDirection widget={message.points} />}
@@ -149,7 +151,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                         />
                     )}
                     {message.widget === "competitor_selection" && (
-                        <WidgetCompetitorSelection 
+                        <WidgetCompetitorSelection
                             points={message.points}
                             title={(message as any).widget_title}
                             suggestions={(message as any).widget_suggestions}
