@@ -1,8 +1,8 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Minus, Plus, Search } from 'lucide-react';
-import { useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer } from 'react-leaflet';
+import React, { useState } from 'react';
+import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
 const competitorIcon = new L.DivIcon({
@@ -33,6 +33,86 @@ const mainIcon = new L.DivIcon({
   iconSize: [32, 32],
   iconAnchor: [16, 16],
 });
+
+function HeatmapCircles({ center }: { center: [number, number] }) {
+  const map = useMap();
+  React.useEffect(() => {
+    if (!map) return;
+
+    // Load leaflet.heat from CDN if not available
+    if (!(L as any).heatLayer) {
+      const script = document.createElement('script');
+      script.src =
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+      script.async = true;
+      script.onload = () => {
+        drawHeatmaps();
+      };
+      document.head.appendChild(script);
+    } else {
+      drawHeatmaps();
+    }
+
+    function drawHeatmaps() {
+      const heatmapCenters = [
+        {
+          lat: center[0] + 0.003,
+          lng: center[1] - 0.003,
+        },
+        {
+          lat: center[0] - 0.003,
+          lng: center[1] + 0.003,
+        },
+        {
+          lat: center[0] + 0.003,
+          lng: center[1] + 0.003,
+        },
+        {
+          lat: center[0] - 0.003,
+          lng: center[1] - 0.003,
+        },
+      ];
+
+      const heatLayers: any[] = [];
+
+      heatmapCenters.forEach((heatCenter) => {
+        // Generate 15 points for each heatmap circle
+        const heatmapPoints = Array.from({ length: 15 }, () => [
+          heatCenter.lat + (Math.random() - 0.5) * 0.004,
+          heatCenter.lng + (Math.random() - 0.5) * 0.004,
+          Math.random() * 0.9 + 0.3,
+        ]) as any[];
+
+        const heat = (L as any).heatLayer(heatmapPoints, {
+          radius: 20,
+          blur: 12,
+          maxZoom: 17,
+          gradient: {
+            0.2: '#51bbd6',
+            0.4: '#f1f33e',
+            0.6: '#fe7233',
+            0.8: '#cc0000',
+          },
+        });
+
+        heat.addTo(map);
+        heatLayers.push(heat);
+      });
+
+      return () => {
+        heatLayers.forEach((heat) => {
+          map.removeLayer(heat);
+        });
+      };
+    }
+
+    return () => {
+      // Cleanup
+    };
+  }, [map, center]);
+
+  return null;
+}
 
 interface Competitor {
   id: string;
@@ -252,6 +332,7 @@ export default function WidgetCompetitorSelection({
           attribution="&copy; OpenStreetMap"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <HeatmapCircles center={center} />
         <Marker position={center} icon={mainIcon} />
 
         <Circle
@@ -292,22 +373,22 @@ export default function WidgetCompetitorSelection({
 
       {/* Map Controls */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
-           <button
-             onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
-             className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
-           >
-             <Minus size={18} />
-           </button>
-           <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
-             {Math.round(radius)} km
-           </div>
-           <button
-             onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
-             className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
-           >
-             <Plus size={18} />
-           </button>
-         </div>
+        <button
+          onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
+          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+        >
+          <Minus size={18} />
+        </button>
+        <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
+          {Math.round(radius)} km
+        </div>
+        <button
+          onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
+          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+        >
+          <Plus size={18} />
+        </button>
+      </div>
 
       <style>{`
                 .leaflet-container {

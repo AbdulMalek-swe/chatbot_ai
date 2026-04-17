@@ -51,6 +51,86 @@ function MapRadiusUpdater({
   return null;
 }
 
+function HeatmapCircles({ center }: { center: [number, number] }) {
+  const map = useMap();
+  React.useEffect(() => {
+    if (!map) return;
+
+    // Load leaflet.heat from CDN if not available
+    if (!(L as any).heatLayer) {
+      const script = document.createElement('script');
+      script.src =
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+      script.async = true;
+      script.onload = () => {
+        drawHeatmaps();
+      };
+      document.head.appendChild(script);
+    } else {
+      drawHeatmaps();
+    }
+
+    function drawHeatmaps() {
+      const heatmapCenters = [
+        {
+          lat: center[0] + 0.003,
+          lng: center[1] - 0.003,
+        },
+        {
+          lat: center[0] - 0.003,
+          lng: center[1] + 0.003,
+        },
+        {
+          lat: center[0] + 0.003,
+          lng: center[1] + 0.003,
+        },
+        {
+          lat: center[0] - 0.003,
+          lng: center[1] - 0.003,
+        },
+      ];
+
+      const heatLayers: any[] = [];
+
+      heatmapCenters.forEach((heatCenter) => {
+        // Generate 15 points for each heatmap circle
+        const heatmapPoints = Array.from({ length: 15 }, () => [
+          heatCenter.lat + (Math.random() - 0.5) * 0.004,
+          heatCenter.lng + (Math.random() - 0.5) * 0.004,
+          Math.random() * 0.9 + 0.3,
+        ]) as any[];
+
+        const heat = (L as any).heatLayer(heatmapPoints, {
+          radius: 20,
+          blur: 12,
+          maxZoom: 17,
+          gradient: {
+            0.2: '#51bbd6',
+            0.4: '#f1f33e',
+            0.6: '#fe7233',
+            0.8: '#cc0000',
+          },
+        });
+
+        heat.addTo(map);
+        heatLayers.push(heat);
+      });
+
+      return () => {
+        heatLayers.forEach((heat) => {
+          map.removeLayer(heat);
+        });
+      };
+    }
+
+    return () => {
+      // Cleanup
+    };
+  }, [map, center]);
+
+  return null;
+}
+
 interface WidgetRadiusSelectionProps {
   address?: string;
   onConfirm?: (radius: number) => void;
@@ -160,6 +240,7 @@ export default function WidgetRadiusSelection({
           attribution="&copy; OpenStreetMap"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <HeatmapCircles center={center} />
         <MapRadiusUpdater center={center} radius={radius} />
         <Marker position={center} icon={customIcon} />
         <Circle
