@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Check, Edit2, Minus, Plus } from 'lucide-react';
+import { Check, Minus, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
@@ -10,7 +10,7 @@ import WidgetLayout from './WidgetLayout';
 const customIcon = new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
-            <div class="w-8 h-8 bg-[#E91E63] rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+            <div class="w-8 h-8 bg-[#D62575] rounded-full flex items-center justify-center border-2 border-white shadow-lg">
                 <div class="w-2 h-2 bg-white rounded-full"></div>
             </div>
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
@@ -86,10 +86,6 @@ export default function WidgetRadiusSelection({
             </div>
           </div>
         
-        <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white text-sm! font-normal text-[#141414] hover:bg-slate-50 transition-all">
-          <Edit2 size={14} />
-          Edit
-        </button>
       </div>
 
       {/* Status */}
@@ -171,17 +167,36 @@ export default function WidgetRadiusSelection({
           center={center}
           radius={radius * 1000}
           pathOptions={{
-            color: '#E91E63',
-            fillColor: '#E91E63',
+            color: '#D62575',
+            fillColor: '#D62575',
             fillOpacity: 0.1,
             weight: 1,
             dashArray: '5, 5',
           }}
         />
+        {/* Inner shadow simulation circles */}
+        <Circle
+          center={center}
+          radius={radius * 1000}
+          pathOptions={{
+            stroke: false,
+            fillColor: '#D62575',
+            fillOpacity: 0.05,
+          }}
+        />
+        <Circle
+          center={center}
+          radius={radius * 950}
+          pathOptions={{
+            stroke: false,
+            fillColor: '#D62575',
+            fillOpacity: 0.03,
+          }}
+        />
       </MapContainer>
 
       {/* Map Controls */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl shadow-2xl border border-white/20">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
         <button
           onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
           className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

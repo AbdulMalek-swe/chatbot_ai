@@ -128,14 +128,14 @@ export const swarma: MockChatMessage[] = [
   {
     id: "15",
     role: "assistant",
-    content: "What radius around each shop and lookback window?",
+    content: "What radius around each shop and lookback window? I recommend 20 meters and the last 30 days.",
     created_at: new Date().toISOString()
   },
   {
     id: "16",
 
     role: "user",
-    content: "500 m around each shop and the last 30 days.",
+    content: "50 meters around each shop and the last 30 days.",
     created_at: new Date().toISOString()
   },
   {

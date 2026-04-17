@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Check, Edit2, Minus, Plus } from 'lucide-react';
+import { Check, Minus, Plus } from 'lucide-react';
 import WidgetLayout from './WidgetLayout';
 
 // Custom Marker for competitors - Small pink dots as seen in the design
@@ -88,10 +88,6 @@ export default function WidgetAudienceSetup() {
                         <p className="text-[13px] text-slate-400 font-medium">456 Elm Street.</p>
                     </div>
                 </div>
-                <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-slate-200 bg-white text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
-                    <Edit2 size={12} />
-                    Edit
-                </button>
             </div>
 
             <div className="w-full h-px bg-slate-100 mb-6" />
@@ -174,7 +170,7 @@ export default function WidgetAudienceSetup() {
             </MapContainer>
 
             {/* Bottom Center Controls */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-slate-200 overflow-hidden">
                 <button 
                     onClick={() => setRadius(prev => Math.max(100, prev - 100))}
                     className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"

@@ -32,7 +32,7 @@ export default function LocationMapWidget({ address }: { address?: string }) {
 
   return (
     <WidgetLayout mode="single">
-      <div className="w-full bg-[#F7F7F7] rounded-2xl overflow-hidden border border-slate-200">
+      <div className="w-full bg-[#F7F7F7] rounded-xl overflow-hidden border border-slate-200">
         {/* Header / Address Card */}
         <div className="p-4 bg-white flex items-center justify-between border-b border-slate-100">
           <div className="flex items-center gap-4">

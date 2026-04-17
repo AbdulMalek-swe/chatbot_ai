@@ -31,11 +31,11 @@ export default function WidgetMapSelection({ address }: { address?: string }) {
     const center: [number, number] = [47.6062, -122.3321];
 
     return (
-        <div className="w-full max-w-[630px] bg-[#DAD9CD]/10 rounded-[24px] overflow-hidden border border-slate-200 shadow-2xl animate-fade-up">
+        <div className="w-full max-w-[630px] bg-[#DAD9CD]/10 rounded-xl overflow-hidden border border-slate-200 shadow-2xl animate-fade-up">
             {/* Header / Address Card */}
             <div className="p-6 bg-white flex items-center justify-between border-b border-slate-100">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 shadow-sm">
+                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 shadow-sm">
                         <MapPin size={22} className="text-primary-600" />
                     </div>
                     <div className="flex-1 min-w-0">

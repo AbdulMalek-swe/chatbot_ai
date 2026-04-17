@@ -44,7 +44,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                         )}
                         
                         {(leftContent || children) && (
-                            <div className="w-full bg-white rounded-3xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+                            <div className="w-full bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
                                 {leftContent || children}
                             </div>
                         )}
@@ -52,7 +52,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                     
                     {/* Right Panel: Map or Visuals */}
                     {rightContent && (
-                        <div className="flex-1 min-h-125 lg:h-auto rounded-3xl overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50">
+                        <div className="flex-1 min-h-125 lg:h-auto rounded-xl overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50">
                             {rightContent}
                         </div>
                     )}
@@ -78,7 +78,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                 </div>
              )}
              {rightContent && (
-                 <div className="w-full rounded-3xl overflow-hidden border border-slate-200 min-h-75 bg-slate-50">
+                 <div className="w-full rounded-xl overflow-hidden border border-slate-200 min-h-75 bg-slate-50">
                      {rightContent}
                  </div>
              )}

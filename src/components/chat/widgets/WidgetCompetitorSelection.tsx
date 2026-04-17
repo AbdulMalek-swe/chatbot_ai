@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { MapContainer, Marker, Circle } from 'react-leaflet';
+import { MapContainer, Marker, Circle, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Check, Edit2, Search, Minus, Plus } from 'lucide-react';
+import { Check, Search, Minus, Plus } from 'lucide-react';
 import WidgetLayout from './WidgetLayout';
 
 const competitorIcon = new L.DivIcon({
@@ -19,10 +19,11 @@ const competitorIcon = new L.DivIcon({
 const mainIcon = new L.DivIcon({
     html: `
         <div class="relative flex items-center justify-center">
-            <div class="w-8 h-8 bg-[#E91E63] rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+            <div class="absolute w-12 h-12 bg-[#D62575]/20 rounded-full animate-ping"></div>
+            <div class="w-8 h-8 bg-[#D62575] rounded-full flex items-center justify-center border-2 border-white shadow-lg relative z-10">
                 <div class="w-2 h-2 bg-white rounded-full"></div>
             </div>
-            <div class="absolute top-[-44px] whitespace-nowrap bg-white px-3 py-2 rounded-xl shadow-xl border border-slate-100 text-[13px] font-bold text-slate-800">
+            <div class="absolute top-[-44px] whitespace-nowrap bg-white px-3 py-2 rounded-xl shadow-xl border border-slate-100 text-[13px] font-bold text-slate-800 z-20">
                 Shawarma Palace at 456 Elm Street.
                 <div class="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45"></div>
             </div>
@@ -110,10 +111,6 @@ export default function WidgetCompetitorSelection({
                         <p className="text-[14px] text-slate-400 font-medium">456 Elm Street.</p>
                     </div>
                 </div>
-                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-[14px] font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
-                    <Edit2 size={14} />
-                    Edit
-                </button>
             </div>
 
             {/* Status items */}
@@ -148,7 +145,7 @@ export default function WidgetCompetitorSelection({
                             </div>
                             <button 
                                 onClick={() => handleRemove(competitor.id)}
-                                className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center hover:bg-black transition-all active:scale-95"
+                                className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center hover:bg-black transition-all active:scale-95"
                             >
                                 <Minus size={14} strokeWidth={3} />
                             </button>
@@ -158,7 +155,7 @@ export default function WidgetCompetitorSelection({
 
                 {/* Add Competitor with Autocomplete */}
                 <div className="relative">
-                    <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-2xl p-2 pl-5 shadow-sm focus-within:border-slate-400 transition-colors">
+                    <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-2 pl-5 shadow-sm focus-within:border-slate-400 transition-colors">
                         <Search size={20} className="text-slate-300" />
                         <input 
                             type="text" 
@@ -183,7 +180,7 @@ export default function WidgetCompetitorSelection({
 
                     {/* Autocomplete Dropdown */}
                     {showSuggestions && searchValue && filteredSuggestions.length > 0 && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-2000 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-2000 animate-in fade-in slide-in-from-top-2 duration-200">
                             {filteredSuggestions.map((suggestion, idx) => (
                                 <button
                                     key={idx}
@@ -208,19 +205,42 @@ export default function WidgetCompetitorSelection({
                 zoom={15}
                 scrollWheelZoom={false}
                 zoomControl={false}
-                className="h-full w-full grayscale-[0.2] contrast-[0.9] opacity-90"
+                className="h-full w-full grayscale-[0.2] contrast-[0.9] leaflet-grayscale"
             >
+                <TileLayer
+                    attribution='&copy; OpenStreetMap'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
                 <Marker position={center} icon={mainIcon} />
                 
                 <Circle
                     center={center}
                     radius={radius * 1000}
                     pathOptions={{
-                        color: '#E91E63',
-                        fillColor: '#E91E63',
+                        color: '#D62575',
+                        fillColor: '#D62575',
+                        fillOpacity: 0.1,
+                        weight: 1,
+                        dashArray: '5, 5'
+                    }}
+                />
+                {/* Inner shadow simulation circles */}
+                <Circle
+                    center={center}
+                    radius={radius * 1000}
+                    pathOptions={{
+                        stroke: false,
+                        fillColor: '#D62575',
                         fillOpacity: 0.05,
-                        weight: 1.5,
-                        dashArray: '8, 8'
+                    }}
+                />
+                <Circle
+                    center={center}
+                    radius={radius * 950}
+                    pathOptions={{
+                        stroke: false,
+                        fillColor: '#D62575',
+                        fillOpacity: 0.03,
                     }}
                 />
 
@@ -230,7 +250,7 @@ export default function WidgetCompetitorSelection({
             </MapContainer>
 
             {/* Map Controls */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-[20px] shadow-2xl border border-white/40">
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-xl shadow-2xl border border-white/40">
                 <button 
                     onClick={() => setRadius(prev => Math.max(0.1, prev - 1))}
                     className="w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

@@ -240,12 +240,12 @@ const ChatPage = () => {
               <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pt-4">
                 <MessageList messages={messages} streaming={isLoading} />
               </div>
-              <div className="p-6 bg-linear-to-t from-chat-beige via-chat-beige to-transparent">
-                <ChatInput
-                  onSendMessage={handleSendMessage}
-                  disabled={isLoading}
-                />
-              </div>
+
+              <ChatInput
+                onSendMessage={handleSendMessage}
+                disabled={isLoading}
+              />
+
             </div>
           )}
         </div>

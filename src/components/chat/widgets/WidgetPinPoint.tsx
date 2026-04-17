@@ -40,7 +40,7 @@ function Button({
   props?: any;
 }) {
   const base =
-    'inline-flex items-center justify-center rounded-lg font-medium transition';
+    'inline-flex items-center justify-center rounded-xl font-medium transition';
 
   const variants: Record<string, string> = {
     default: 'bg-black text-white hover:bg-black/90',
@@ -81,7 +81,7 @@ export default function CampaignDirection({ widget }: { widget: any }) {
             </div>
           </div>
 
-          <div className="rounded-lg">
+          <div className="rounded-xl">
             {widget.map((opt: any) => (
               <label
                 key={opt.id}

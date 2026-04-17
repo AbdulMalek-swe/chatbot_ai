@@ -225,7 +225,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
     }
 
     return (
-        <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto pr-4 sm:pr-6">
             <div className="w-full flex flex-row gap-4">
                 <div className="shrink-0 flex items-center justify-center transition-all self-start mt-[-8px]">
                     <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)]">

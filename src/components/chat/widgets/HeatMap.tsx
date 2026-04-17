@@ -122,7 +122,7 @@ export default function HeatMap() {
 const uiButtonStyle: React.CSSProperties = {
     background: "white",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "12px",
     width: "45px",
     height: "45px",
     display: "flex",
@@ -137,7 +137,7 @@ const controlGroupStyle: React.CSSProperties = {
     background: "white",
     display: "flex",
     alignItems: "center",
-    borderRadius: "10px",
+    borderRadius: "12px",
     overflow: "hidden",
     boxShadow: "0 2px 10px rgba(0,0,0,0.3)"
 };

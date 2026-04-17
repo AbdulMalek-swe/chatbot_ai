@@ -84,7 +84,7 @@ const RecenterControl: React.FC<{ coords: L.LatLngExpression[], zoom: number }> 
         <div className="leaflet-bottom leaflet-right mb-4! mr-4! z-1000">
             <button
                 onClick={handleRecenter}
-                className="bg-white/90 hover:bg-slate-50 text-slate-600 hover:text-primary-600 p-2 rounded-lg border border-slate-200 shadow-xl transition-all active:scale-95 group"
+                className="bg-white/90 hover:bg-slate-50 text-slate-600 hover:text-primary-600 p-2 rounded-xl border border-slate-200 shadow-xl transition-all active:scale-95 group"
                 title="Recenter Map"
             >
                 <div className="flex items-center gap-2 px-2 py-1">
