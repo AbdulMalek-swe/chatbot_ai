@@ -326,7 +326,7 @@ export default function WidgetCompetitorSelection({
         zoom={15}
         scrollWheelZoom={false}
         zoomControl={false}
-        className="h-full w-full grayscale-[0.2] contrast-[0.9] leaflet-grayscale"
+        className="h-full w-full leaflet-grayscale"
       >
         <TileLayer
           attribution="&copy; OpenStreetMap"
@@ -370,6 +370,12 @@ export default function WidgetCompetitorSelection({
           <Marker key={c.id} position={[c.lat, c.lng]} icon={competitorIcon} />
         ))}
       </MapContainer>
+
+      <style>{`
+        .leaflet-tile {
+          filter: grayscale(60%) brightness(108%) contrast(92%) saturate(80%) hue-rotate(170deg);
+        }
+      `}</style>
 
       {/* Map Controls */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">

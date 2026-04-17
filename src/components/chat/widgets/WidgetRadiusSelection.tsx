@@ -234,7 +234,7 @@ export default function WidgetRadiusSelection({
         zoom={14}
         scrollWheelZoom={false}
         zoomControl={false}
-        className="h-full w-full grayscale-[0.2] contrast-[0.9] leaflet-grayscale"
+        className="h-full w-full leaflet-grayscale"
       >
         <TileLayer
           attribution="&copy; OpenStreetMap"
@@ -275,7 +275,12 @@ export default function WidgetRadiusSelection({
         />
       </MapContainer>
 
-      {/* Map Controls */}
+      <style>{`
+        .leaflet-tile {
+          filter: grayscale(60%) brightness(108%) contrast(92%) saturate(80%) hue-rotate(170deg);
+        }
+      `}</style>
+
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
         <button
           onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
