@@ -237,7 +237,7 @@ const ChatPage = () => {
             </div>
           ) : (
             <div className="flex-1 flex flex-col overflow-hidden min-h-0 relative">
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pt-4">
+              <div className="flex-1 overflow-y-auto custom-scrollbar  pt-4">
                 <MessageList messages={messages} streaming={isLoading} />
               </div>
 
@@ -245,7 +245,6 @@ const ChatPage = () => {
                 onSendMessage={handleSendMessage}
                 disabled={isLoading}
               />
-
             </div>
           )}
         </div>
