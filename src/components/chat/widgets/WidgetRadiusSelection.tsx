@@ -74,20 +74,19 @@ export default function WidgetRadiusSelection({
     <div className="p-6 h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-         <div className="flex items-center justify-between my-2">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center rounded-full border">
-                <img src="/locationIcon.png" alt="Location" />
-              </div>
-              <div>
-                <p className="text-[#151515] font-inter font-semibold text-md">
-                  Campaign Direction
-                </p>
-                <p className="text-sm text-[#62646A]">456 Elm Street.</p>
-              </div>
+        <div className="flex items-center justify-between my-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 flex items-center justify-center rounded-full border">
+              <img src="/locationIcon.png" alt="Location" />
+            </div>
+            <div>
+              <p className="text-[#151515] font-inter font-semibold text-md">
+                Campaign Direction
+              </p>
+              <p className="text-sm text-[#62646A]">456 Elm Street.</p>
             </div>
           </div>
-        
+        </div>
       </div>
 
       {/* Status */}
@@ -100,7 +99,7 @@ export default function WidgetRadiusSelection({
 
       {/* Radius Section */}
       <div className="mt-4 flex-1 flex flex-col">
-        <div className="flex items-center gap-3 mb-4"> 
+        <div className="flex items-center gap-3 mb-4">
           <div className="w-5 h-5 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
           <span className="text-[14px] font-semibold text-slate-900">
             Radius Selection
@@ -116,16 +115,16 @@ export default function WidgetRadiusSelection({
         {/* Controls */}
         <div className="flex items-center justify-between mt-auto pb-4">
           <div className="flex items-center gap-2">
-               <PrimaryBtn
-                onClick={() => setRadius((prev) => Math.max(0.1, prev - 1))}
+            <PrimaryBtn
+              onClick={() => setRadius((prev) => Math.max(0.1, prev - 1))}
               className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!"
             >
-               <Minus size={18} />
+              <Minus size={18} />
             </PrimaryBtn>
             <div className="min-w-17.5 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-xl px-4 text-[14px] font-bold text-slate-900">
               {Math.round(radius)} km
             </div>
-         
+
             <PrimaryBtn
               onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
               className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!"
@@ -135,9 +134,7 @@ export default function WidgetRadiusSelection({
           </div>
 
           <div className="flex items-center gap-3">
-           <PrimaryBtn
-              className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!"
-            >
+            <PrimaryBtn className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!">
               No
             </PrimaryBtn>
 
@@ -151,7 +148,7 @@ export default function WidgetRadiusSelection({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-200">
+    <div className="w-full h-full relative min-h-[500px]">
       <MapContainer
         center={center}
         zoom={14}
