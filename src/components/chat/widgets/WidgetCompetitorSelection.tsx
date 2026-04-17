@@ -326,7 +326,7 @@ export default function WidgetCompetitorSelection({
         zoom={15}
         scrollWheelZoom={false}
         zoomControl={false}
-        className="h-full w-full leaflet-grayscale"
+        className="h-full w-full"
       >
         <TileLayer
           attribution="&copy; OpenStreetMap"
