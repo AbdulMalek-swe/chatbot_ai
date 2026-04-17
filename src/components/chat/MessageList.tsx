@@ -46,8 +46,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
         return () => clearInterval(interval); // ✅ stop if streaming false
     }, [streaming]);
     return (
-        <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-6 font-body mt-12 lg:mt-0">
-            <div className="flex flex-col px-4 pt-4">
+        <div className="w-full font-body">
+            <div className="flex flex-col">
                 {messages.length === 0 ? (
                     <div className="flex-1 flex flex-col items-start justify-end pb-12 text-left max-w-4xl mx-auto animate-fade-in w-full">
                         <div className="flex items-center gap-3 sm:gap-4 mb-6">
@@ -88,7 +88,61 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                     </div>
                 ) : (
                     <div className="w-full mx-auto">
-                        {messages.map((msg) => <MessageBubble key={msg.id} message={msg} allMessages={messages} />)}
+                        {(() => {
+                            const renderedElements: React.ReactNode[] = [];
+                            
+                            interface SplitGroup {
+                                msg: any;
+                                children: React.ReactNode[];
+                            }
+                            
+                            let currentSplitWidget: SplitGroup | null = null;
+
+                            messages.forEach((msg) => {
+                                const isSplit = msg.role === 'assistant' && (msg.widget === "radius_selection" || msg.widget === "competitor_selection");
+                                
+                                if (isSplit) {
+                                    // If we already have a split widget, finalize it and start a new one
+                                    if (currentSplitWidget) {
+                                        const groupToFinalize = currentSplitWidget as SplitGroup;
+                                        renderedElements.push(
+                                            <MessageBubble 
+                                                key={groupToFinalize.msg.id} 
+                                                message={groupToFinalize.msg} 
+                                                allMessages={messages}
+                                            >
+                                                {groupToFinalize.children}
+                                            </MessageBubble>
+                                        );
+                                    }
+                                    currentSplitWidget = { msg, children: [] };
+                                } else if (currentSplitWidget) {
+                                    currentSplitWidget.children.push(
+                                        <MessageBubble key={msg.id} message={msg} allMessages={messages} />
+                                    );
+                                } else {
+                                    renderedElements.push(
+                                        <MessageBubble key={msg.id} message={msg} allMessages={messages} />
+                                    );
+                                }
+                            });
+
+                            // Finalize last group
+                            if (currentSplitWidget) {
+                                const activeGroup = currentSplitWidget as SplitGroup;
+                                renderedElements.push(
+                                    <MessageBubble 
+                                        key={activeGroup.msg.id} 
+                                        message={activeGroup.msg} 
+                                        allMessages={messages}
+                                    >
+                                        {activeGroup.children}
+                                    </MessageBubble>
+                                );
+                            }
+
+                            return renderedElements;
+                        })()}
                         <div ref={bottomRef} className="h-24" />
                         {streaming && <div className="max-w-4xl px-2 mx-auto">
                             {step === "loading" && <p>⏳ Loading...</p>}

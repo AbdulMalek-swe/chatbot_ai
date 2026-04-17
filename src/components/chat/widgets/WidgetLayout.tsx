@@ -30,10 +30,10 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
 
     if (mode === 'split') {
         return (
-            <div className={`w-full max-w-7xl flex flex-col transition-all duration-500 gap-6 ${className}`}>
-                <div className="flex flex-col lg:flex-row gap-6 animate-fade-up">
+            <div className={`w-full max-w-7xl flex flex-col transition-all duration-500 gap-6 lg:h-[calc(100vh-250px)] ${className}`}>
+                <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0">
                     {/* Left Panel: (AI Text + UI) or Custom Content */}
-                    <div className="flex-1 flex flex-col gap-6">
+                    <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-4 custom-scrollbar h-full">
                         {aiText && (
                             <div className="flex items-start">
                                 {logoBlock}
@@ -43,16 +43,25 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                             </div>
                         )}
                         
-                        {(leftContent || children) && (
-                            <div className="w-full bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
-                                {leftContent || children}
+                        {(leftContent || children || aiText) && (
+                            <div className="w-full flex flex-col gap-6 pb-12">
+                                {leftContent && (
+                                    <div className="w-full bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+                                        {leftContent}
+                                    </div>
+                                )}
+                                {children && (
+                                    <div className="w-full flex flex-col gap-6">
+                                        {children}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                     
                     {/* Right Panel: Map or Visuals */}
                     {rightContent && (
-                        <div className="flex-1 min-h-125 lg:h-auto rounded-xl overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50">
+                        <div className="flex-1 min-h-[400px] lg:h-full rounded-xl overflow-hidden border border-slate-200 relative shadow-inner bg-slate-50 sticky top-0 self-start">
                             {rightContent}
                         </div>
                     )}

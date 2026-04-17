@@ -57,6 +57,7 @@ interface WidgetRadiusSelectionProps {
   initialRadius?: number;
   aiText?: React.ReactNode;
   showLogo?: boolean;
+  children?: React.ReactNode;
 }
 
 export default function WidgetRadiusSelection({
@@ -64,6 +65,7 @@ export default function WidgetRadiusSelection({
   initialRadius = 1,
   aiText,
   showLogo = false,
+  children,
 }: WidgetRadiusSelectionProps) {
   const [radius, setRadius] = useState(initialRadius);
   const center: [number, number] = [47.6062, -122.3321];
@@ -223,6 +225,8 @@ export default function WidgetRadiusSelection({
       rightContent={rightContent}
       aiText={aiText}
       showLogo={showLogo}
-    />
+    >
+      {children}
+    </WidgetLayout>
   );
 }

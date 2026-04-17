@@ -15,9 +15,10 @@ import { useEffect, useState } from 'react';
 interface MessageBubbleProps {
     message: ChatMessage;
     allMessages?: ChatMessage[];
+    children?: React.ReactNode;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, children }) => {
     const isAI = message.role === 'assistant';
     const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
     const messages = allMessages || contextMessages;
@@ -130,6 +131,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                     {message.widget === "map_selection" && (
                         <LocationMapWidget
                             address={messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            onConfirm={(val) => sendMessage(val)}
                         />
                     )}
                     {message.widget === "radius_selection" && (
@@ -188,7 +190,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
 
     if (isSplitWidget) {
         return (
-            <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="group w-full font-body flex justify-start mb-10 max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="w-full">
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
@@ -203,7 +205,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                             onConfirm={(radius) => {
                                 sendMessage(`${radius} km is perfect.`);
                             }}
-                        />
+                        >
+                            {children}
+                        </WidgetRadiusSelection>
                     )}
                     {message.widget === "competitor_selection" && (
                         <WidgetCompetitorSelection
@@ -217,8 +221,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages }) =
                                 </div>
                             }
                             showLogo={true}
-                        />
+                        >
+                            {children}
+                        </WidgetCompetitorSelection>
                     )}
+
                 </div>
             </div>
         );

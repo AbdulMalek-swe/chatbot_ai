@@ -48,6 +48,7 @@ interface WidgetCompetitorSelectionProps {
     suggestions?: string[];
     aiText?: React.ReactNode;
     showLogo?: boolean;
+    children?: React.ReactNode;
 }
 
 export default function WidgetCompetitorSelection({ 
@@ -55,7 +56,8 @@ export default function WidgetCompetitorSelection({
     title = "Competitors in 1km Radius",
     suggestions = ["Local Shop", "Regional Chain", "Dine-in", "Takeaway"],
     aiText,
-    showLogo = false
+    showLogo = false,
+    children
 }: WidgetCompetitorSelectionProps) {
     const center: [number, number] = [47.6062, -122.3321];
     const [radius, setRadius] = useState(1);
@@ -286,6 +288,8 @@ export default function WidgetCompetitorSelection({
             rightContent={rightContent}
             aiText={aiText}
             showLogo={showLogo}
-        />
+        >
+            {children}
+        </WidgetLayout>
     );
 }

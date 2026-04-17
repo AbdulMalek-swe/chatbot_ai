@@ -27,46 +27,52 @@ function MapCenter({ center }: { center: [number, number] }) {
   return null;
 }
 
-export default function LocationMapWidget({ address }: { address?: string }) {
+export default function LocationMapWidget({ 
+  address,
+  onConfirm 
+}: { 
+  address?: string,
+  onConfirm?: (val: string) => void
+}) {
   const center: [number, number] = [47.6062, -122.3321];
 
   return (
     <WidgetLayout mode="single">
       <div className="w-full bg-[#F7F7F7] rounded-xl overflow-hidden border border-slate-200">
-        {/* Header / Address Card */}
+       {/* Header / Address Card */}
         <div className="p-4 bg-white flex items-center justify-between border-b border-slate-100">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 flex items-center justify-center rounded-full ">
                                 <img src="/locationIcon.png" alt="Location" />
-                            </div>
-            <div className="flex-1 min-w-0">
+          </div>
+          <div className="flex-1 min-w-0">
               <h4 className="text-md font-semibold text-[#151515] font-inter">
-                Location Locked
-              </h4>
+              Location Locked
+            </h4>
               <p className="text-[14px] font-normal text-[#62646A] truncate">
-                {address || 'Detecting Location...'}
-              </p>
-            </div>
+              {address || 'Detecting Location...'}
+            </p>
+          </div>
           </div>
         </div>
 
         {/* Map Container */}
         <div className="h-70 w-full relative z-10 bg-slate-50 overflow-hidden px-3">
-          <MapContainer
-            center={center}
-            zoom={15}
-            scrollWheelZoom={false}
-            zoomControl={false}
-            className="h-full w-full leaflet-grayscale"
-          >
-            <TileLayer
-              attribution="&copy; OpenStreetMap"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MapCenter center={center} />
-            <Marker position={center} icon={customIcon} />
-          </MapContainer>
-        </div>
+      <MapContainer
+        center={center}
+        zoom={15}
+        scrollWheelZoom={false}
+        zoomControl={false}
+        className="h-full w-full leaflet-grayscale"
+      >
+        <TileLayer
+          attribution="&copy; OpenStreetMap"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapCenter center={center} />
+        <Marker position={center} icon={customIcon} />
+      </MapContainer>
+    </div>
         {/* Footer Actions */}
         <div className="p-4 bg-[#F7F7F7] flex items-center justify-between gap-4">
           <p className="text-md text-[#151515] font-normal">
@@ -77,7 +83,12 @@ export default function LocationMapWidget({ address }: { address?: string }) {
               No
             </PrimaryBtn>
 
-            <PrimaryBtn className="px-6!">Yes</PrimaryBtn>
+            <PrimaryBtn 
+              className="px-6!"
+              onClick={() => onConfirm?.("Yes, that’s me.")}
+    >
+              Yes
+            </PrimaryBtn>
           </div>
         </div>
       </div>
