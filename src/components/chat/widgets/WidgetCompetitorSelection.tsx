@@ -291,23 +291,23 @@ export default function WidgetCompetitorSelection({
       </MapContainer>
 
       {/* Map Controls */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/95 backdrop-blur-md p-2 rounded-xl shadow-2xl border border-white/40">
-        <button
-          onClick={() => setRadius((prev) => Math.max(0.1, prev - 1))}
-          className="w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
-        >
-          <Minus size={20} />
-        </button>
-        <div className="px-8 h-12 flex items-center justify-center text-[16px] font-bold text-slate-900 min-w-[100px]">
-          {radius} km
-        </div>
-        <button
-          onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
-          className="w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
-        >
-          <Plus size={20} />
-        </button>
-      </div>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
+           <button
+             onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
+             className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+           >
+             <Minus size={18} />
+           </button>
+           <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
+             {Math.round(radius)} km
+           </div>
+           <button
+             onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
+             className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+           >
+             <Plus size={18} />
+           </button>
+         </div>
 
       <style>{`
                 .leaflet-container {
