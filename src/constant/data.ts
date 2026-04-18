@@ -128,7 +128,8 @@ export const swarma: MockChatMessage[] = [
   {
     id: "15",
     role: "assistant",
-    content: "What radius around each shop and lookback window? I recommend 20 meters and the last 30 days.",
+    content: "All competitors locked in. Now let's define how far around each shop you want to target. The red heat zones show visitor density around competitor locations.",
+    widget: "radius_heatmap",
     created_at: new Date().toISOString()
   },
   {

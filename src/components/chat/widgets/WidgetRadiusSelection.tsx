@@ -148,7 +148,7 @@ export default function WidgetRadiusSelection({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-[500px]">
+    <div className="w-full h-full relative min-h-[500px] rounded-[12px] overflow-hidden">
       <MapContainer
         center={center}
         zoom={14}

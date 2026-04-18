@@ -99,7 +99,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                             let currentSplitWidget: SplitGroup | null = null;
 
                             messages.forEach((msg) => {
-                                const isSplit = msg.role === 'assistant' && (msg.widget === "radius_selection" || msg.widget === "competitor_selection");
+                                const isSplit = msg.role === 'assistant' && (msg.widget === "radius_selection" || msg.widget === "radius_heatmap" || msg.widget === "competitor_selection");
                                 
                                 if (isSplit) {
                                     // If we already have a split widget, finalize it and start a new one

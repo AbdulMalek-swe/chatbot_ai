@@ -6,6 +6,7 @@ export { default as WidgetCompetitorSelection } from './WidgetCompetitorSelectio
 export { default as WidgetMapSelection } from './WidgetMapSelection';
 export { default as WidgetPinPoint } from './WidgetPinPoint';
 export { default as WidgetRadiusSelection } from './WidgetRadiusSelection';
+export { default as WidgetRadiusHeatmap } from './WidgetRadiusHeatmap';
 
 // Aliases for backward compatibility or preferred naming
 export { default as MessageMap } from './WidgetMessageMap';

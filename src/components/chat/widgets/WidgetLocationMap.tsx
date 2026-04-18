@@ -57,7 +57,7 @@ export default function LocationMapWidget({
         </div>
 
         {/* Map Container */}
-        <div className="h-70 w-full relative z-10 bg-slate-50 overflow-hidden px-3">
+        <div className="h-70 w-full relative z-10 bg-slate-50 overflow-hidden px-3 rounded-[12px]">
           <MapContainer
             center={center}
             zoom={15}

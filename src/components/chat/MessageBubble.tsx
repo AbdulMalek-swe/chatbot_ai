@@ -7,6 +7,7 @@ import {
     WidgetPinPoint as CampaignDirection, 
     WidgetLocationMap as LocationMapWidget, 
     WidgetRadiusSelection, 
+    WidgetRadiusHeatmap,
     WidgetCompetitorSelection 
 } from './widgets';
 import { useEffect, useState } from 'react';
@@ -23,6 +24,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
     const messages = allMessages || contextMessages;
     const [widgetShow, setWidgetShow] = useState(false);
+
+    const assistantMessages = messages.filter(m => m.role === 'assistant');
+    const isFirstAI = isAI && assistantMessages.length > 0 && assistantMessages[0].id === message.id;
     const isLatestMessage = messages[messages.length - 1]?.id === message.id;
     const isSynthesizing = isAI && isLatestMessage && streaming && !message.content && !message.thinking && !message.poi_data && !message.map_data;
     const extractCoordinates = () => {
@@ -76,7 +80,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     const coordinates = extractCoordinates();
 
     const hasText = !!message.content?.trim() || !!message.thinking || isSynthesizing;
-    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "competitor_selection") || coordinates.length > 0 || !!message.map_data;
+    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection") || coordinates.length > 0 || !!message.map_data;
 
     const thinkingPart = message.thinking && isAI && (
         <div className="p-px rounded-2xl bg-gradient-moving shadow-xl overflow-hidden mt-2 w-full">
@@ -121,7 +125,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
         </div>
     );
 
-    const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "competitor_selection");
+    const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection");
 
     const widgetContent = (
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
@@ -137,6 +141,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
                             address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            onConfirm={(radius) => {
+                                sendMessage(`${radius} km is perfect.`);
+                            }}
+                        />
+                    )}
+                    {message.widget === "radius_heatmap" && (
+                        <WidgetRadiusHeatmap
                             onConfirm={(radius) => {
                                 sendMessage(`${radius} km is perfect.`);
                             }}
@@ -201,13 +212,29 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                     {mainContentPart}
                                 </div>
                             }
-                            showLogo={true}
+                            showLogo={isFirstAI}
                             onConfirm={(radius) => {
                                 sendMessage(`${radius} km is perfect.`);
                             }}
                         >
                             {children}
                         </WidgetRadiusSelection>
+                    )}
+                    {message.widget === "radius_heatmap" && (
+                        <WidgetRadiusHeatmap
+                            aiText={
+                                <div className="space-y-4">
+                                    {thinkingPart}
+                                    {mainContentPart}
+                                </div>
+                            }
+                            showLogo={isFirstAI}
+                            onConfirm={(radius) => {
+                                sendMessage(`${radius} km is perfect.`);
+                            }}
+                        >
+                            {children}
+                        </WidgetRadiusHeatmap>
                     )}
                     {message.widget === "competitor_selection" && (
                         <WidgetCompetitorSelection
@@ -220,7 +247,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                     {mainContentPart}
                                 </div>
                             }
-                            showLogo={true}
+                            showLogo={isFirstAI}
                         >
                             {children}
                         </WidgetCompetitorSelection>
@@ -234,11 +261,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     return (
         <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto pr-4 sm:pr-6">
             <div className="w-full flex flex-row gap-4">
-                <div className="shrink-0 flex items-center justify-center transition-all self-start mt-[-8px]">
-                    <div className="bg-[#C0C0C0] rounded-full pt-[11px] pr-[11px] pb-[11px] pl-[5px] flex items-center gap-[9.17px] shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                {isFirstAI && (
+                    <div className="shrink-0 flex items-center justify-center transition-all self-start">
                         <img src="/logo.png" alt="Logo" className="w-8 h-8 transition-transform group-hover:scale-110 duration-500 rounded-full" />
                     </div>
-                </div>
+                )}
                 <div className="flex-1 flex flex-col gap-6 min-w-0">
                     {hasText && (
                         <div className="w-full">
