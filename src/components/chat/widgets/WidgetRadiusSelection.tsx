@@ -71,7 +71,7 @@ export default function WidgetRadiusSelection({
   const center: [number, number] = [47.6062, -122.3321];
 
   const leftContent = (
-    <div className="p-6 h-full flex flex-col">
+    <div className="p-6 h-full flex flex-col bg-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center justify-between my-2">

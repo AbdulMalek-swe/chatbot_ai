@@ -46,7 +46,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                         {(leftContent || children || aiText) && (
                             <div className="w-full flex flex-col gap-6 pb-12">
                                 {leftContent && (
-                                    <div className="w-full bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+                                    <div className="w-full  rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
                                         {leftContent}
                                     </div>
                                 )} 

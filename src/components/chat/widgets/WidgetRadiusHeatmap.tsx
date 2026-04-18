@@ -123,7 +123,7 @@ export default function WidgetRadiusHeatmap({
   const center: [number, number] = [47.6062, -122.3321];
 
   const leftContent = (
-    <div className="p-8 h-full flex flex-col">
+    <div className="p-8 h-full flex flex-col bg-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
