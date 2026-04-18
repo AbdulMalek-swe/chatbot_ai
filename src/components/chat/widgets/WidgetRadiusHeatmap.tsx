@@ -122,6 +122,8 @@ export default function WidgetRadiusHeatmap({
   const [radius, setRadius] = useState(initialRadius);
   const center: [number, number] = [47.6062, -122.3321];
 
+  const fillRedOptions = { color: '#D62575', fillColor: '#D6257530', fillOpacity: 0.4 , weight: 2 };
+
   const leftContent = (
     <div className="p-8 h-full flex flex-col bg-white">
       {/* Header */}
@@ -209,26 +211,7 @@ export default function WidgetRadiusHeatmap({
         <HeatmapCircles center={center} />
         <Marker position={center} icon={mainIcon} />
 
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            color: '#D62575',
-            fillColor: '#D62575',
-            fillOpacity: 0.1,
-            weight: 1,
-            dashArray: '5, 5',
-          }}
-        />
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.05,
-          }}
-        />
+   <Circle center={center} pathOptions={fillRedOptions}  radius={radius * 1000} />
       </MapContainer>
 
       <style>{`
