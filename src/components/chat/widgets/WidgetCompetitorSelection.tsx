@@ -65,6 +65,9 @@ export default function WidgetCompetitorSelection({
   const [searchValue, setSearchValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+
+   const fillRedOptions = { color: '#D62575', fillColor: '#D6257540', fillOpacity: 0.1, weight: 1, dashArray: '10, 5' };
+
   // Default competitors if points are empty for demo
   const defaultCompetitors: Competitor[] = [
     {
@@ -256,35 +259,8 @@ export default function WidgetCompetitorSelection({
 
         <Marker position={center} icon={mainIcon} />
 
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            color: '#D62575',
-            fillColor: '#D62575',
-            fillOpacity: 0.1,
-            weight: 1,
-            dashArray: '5, 5',
-          }}
-        />
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.05,
-          }}
-        />
-        <Circle
-          center={center}
-          radius={radius * 950}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.03,
-          }}
-        />
+
+ <Circle center={center} pathOptions={fillRedOptions}  radius={radius * 1000} />
 
         {selectedCompetitors.map((c) => (
           <Marker key={c.id} position={[c.lat, c.lng]} icon={competitorIcon} />
