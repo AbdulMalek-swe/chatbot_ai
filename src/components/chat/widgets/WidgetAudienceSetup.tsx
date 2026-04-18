@@ -131,7 +131,7 @@ export default function WidgetAudienceSetup() {
     );
 
     const rightContent = (
-        <div className="w-full h-full relative min-h-[400px]">
+        <div className="w-full h-full relative min-h-100">
             <MapContainer
                 center={center}
                 zoom={15}
@@ -186,7 +186,7 @@ export default function WidgetAudienceSetup() {
                 >
                     <Minus size={20} />
                 </button>
-                <div className="px-6 min-w-[100px] text-center text-[15px] font-bold text-slate-800 border-x border-slate-100">
+                <div className="px-6 min-w-25 text-center text-[15px] font-bold text-slate-800 border-x border-slate-100">
                     {radius}m
                 </div>
                 <button 
