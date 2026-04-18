@@ -2,7 +2,14 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Minus, Plus } from 'lucide-react';
 import React, { useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import {
+  Circle,
+  CircleMarker,
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+} from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
 import WidgetLayout from './WidgetLayout';
 
@@ -75,6 +82,13 @@ export default function WidgetRadiusSelection({
 }: WidgetRadiusSelectionProps) {
   const [radius, setRadius] = useState(initialRadius);
   const center: [number, number] = [47.6062, -122.3321];
+
+  const fillRedOptions = {
+    color: '#D62575',
+    fillColor: '#D6257530',
+    fillOpacity: 0.3,
+    weight: 2,
+  };
 
   const leftContent = (
     <div className="p-6 h-full flex flex-col bg-white">
@@ -170,34 +184,15 @@ export default function WidgetRadiusSelection({
         <Marker position={center} icon={customIcon} />
         <Circle
           center={center}
+          pathOptions={fillRedOptions}
           radius={radius * 1000}
-          pathOptions={{
-            color: '#D62575',
-            fillColor: '#D62575',
-            fillOpacity: 0.1,
-            weight: 1,
-            dashArray: '5, 5',
-          }}
         />
-        {/* Inner shadow simulation circles */}
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.05,
-          }}
-        />
-        <Circle
-          center={center}
-          radius={radius * 950}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.03,
-          }}
-        />
+
+        <CircleMarker
+          center={[51.51, -0.12]}
+          pathOptions={fillRedOptions}
+          radius={20}
+        ></CircleMarker>
       </MapContainer>
 
       <style>{`
