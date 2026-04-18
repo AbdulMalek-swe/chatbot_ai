@@ -130,7 +130,7 @@ export default function WidgetCompetitorSelection({
   );
 
   const leftContent = (
-    <div className="p-8">
+    <div className="p-8 bg-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
