@@ -42,7 +42,16 @@ function MapBoundsUpdater({ center, radius }: { center: [number, number], radius
         try {
             const circle = L.circle(center, { radius: radius });
             const timeoutId = setTimeout(() => {
-                map.fitBounds(circle.getBounds(), { padding: [100, 100], maxZoom: 15 });
+                if (!map) return;
+                try {
+                    map.invalidateSize();
+                    const bounds = circle.getBounds();
+                    if (bounds.isValid()) {
+                        map.fitBounds(bounds, { padding: [100, 100], maxZoom: 15 });
+                    }
+                } catch (e) {
+                    console.warn('fitBounds failed', e);
+                }
             }, 200);
             return () => clearTimeout(timeoutId);
         } catch (e) {

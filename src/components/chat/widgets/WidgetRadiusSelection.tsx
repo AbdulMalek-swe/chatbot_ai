@@ -37,12 +37,18 @@ function MapRadiusUpdater({
     try {
       const circle = L.circle(center, { radius: radius * 1000 });
       const timeoutId = setTimeout(() => {
+        if (!map) return;
         try {
-          map.fitBounds(circle.getBounds(), { padding: [50, 50], maxZoom: 15 });
+          // Ensure map has a valid size and is ready
+          map.invalidateSize();
+          const bounds = circle.getBounds();
+          if (bounds.isValid()) {
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+          }
         } catch (e) {
           console.warn('fitBounds failed', e);
         }
-      }, 100);
+      }, 200);
       return () => clearTimeout(timeoutId);
     } catch (e) {
       console.warn('MapRadiusUpdater error', e);
