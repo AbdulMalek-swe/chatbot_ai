@@ -3,14 +3,14 @@ import PrimaryBtn from './PrimaryBtn';
 
 // --------------USAGE EXAMPLE:------------------
 
-//             <Upload
-//             imgSrc="/logo.png"
-//             title="Powered by"
-//             text="My Company"
-//             btnLabel="Learn"
-//             btnOnClick={() => console.log('clicked')}
-//             btnClassName="text-[12px] font-medium"
-//           />
+{/* <Upload 
+  imgSrc="/logo.png" 
+  title="Powered by" 
+  text="My Company"
+  btnLabel="Learn More"
+  btnLeftSection={<IconComponent />}
+  btnOnClick={() => console.log('clicked')}
+/> */}
 
 interface UploadProps {
   imgSrc: string;
@@ -20,6 +20,7 @@ interface UploadProps {
   btnLabel?: string;
   btnOnClick?: () => void;
   btnClassName?: string;
+  btnLeftSection?: ReactNode;
 }
 
 const cn = (...classes: (string | undefined)[]) =>
@@ -33,6 +34,7 @@ function Upload({
   btnLabel,
   btnOnClick,
   btnClassName,
+  btnLeftSection,
 }: UploadProps) {
   return (
     <div
@@ -53,7 +55,11 @@ function Upload({
       </div>
 
       {btnLabel && (
-        <PrimaryBtn onClick={btnOnClick} className={cn(btnClassName!)}>
+        <PrimaryBtn
+          onClick={btnOnClick}
+          className={cn(btnClassName!)}
+          leftSection={btnLeftSection}
+        >
           {btnLabel}
         </PrimaryBtn>
       )}
