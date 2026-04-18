@@ -8,15 +8,16 @@ import WidgetLayout from './WidgetLayout';
 
 const mainIcon = new L.DivIcon({
   html: `
-        <div class="relative flex items-center justify-center">
+         <div class="relative flex items-center justify-center">
             <div class="absolute w-12 h-12 bg-[#D62575]/20 rounded-full animate-ping"></div>
             <div class="w-8 h-8 bg-[#D62575] rounded-full flex items-center justify-center border-2 border-white shadow-lg relative z-10">
                 <div class="w-2 h-2 bg-white rounded-full"></div>
             </div>
-            <div class="absolute top-[-44px] whitespace-nowrap bg-white px-3 py-2 rounded-xl shadow-xl border border-slate-100 text-[13px] font-bold text-slate-800 z-20">
+            <div class="absolute -top-11 whitespace-nowrap bg-white px-3 py-2 rounded-xl shadow-xl border border-slate-100 text-[13px] font-bold text-slate-800 z-20">
                 Shawarma Palace at 456 Elm Street.
-                <div class="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45"></div>
+                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45"></div>
             </div>
+        </div>
         </div>
     `,
   className: 'main-marker-icon',
@@ -196,7 +197,7 @@ export default function WidgetRadiusHeatmap({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-[500px] rounded-[12px] overflow-hidden">
+    <div className="w-full h-full relative min-h-125 rounded-xl">
       <MapContainer
         center={center}
         zoom={15}
