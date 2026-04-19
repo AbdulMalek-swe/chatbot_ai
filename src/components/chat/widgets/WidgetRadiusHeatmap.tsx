@@ -116,6 +116,27 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
   return null;
 }
 
+function MapBoundsUpdater({
+  center,
+  radius,
+}: {
+  center: [number, number];
+  radius: number;
+}) {
+  const map = useMap();
+  React.useEffect(() => {
+    if (!map) return;
+    try {
+      // Create a bounding box that is roughly 2x the radius to show more area
+      const bounds = L.latLng(center).toBounds(radius * 2000); // radius is in km, toBounds takes meters
+      map.fitBounds(bounds, { animate: true, padding: [20, 20] });
+    } catch (e) {
+      console.warn('MapBoundsUpdater error', e);
+    }
+  }, [center, radius, map]);
+  return null;
+}
+
 interface WidgetRadiusHeatmapProps {
   onConfirm?: (radius: number) => void;
   initialRadius?: number;
@@ -233,6 +254,7 @@ export default function WidgetRadiusHeatmap({
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <ZoomControl position="bottomright" />
+        <MapBoundsUpdater center={center} radius={radius} />
         <HeatmapCircles center={center} />
         <Marker position={center} icon={mainIcon} />
 

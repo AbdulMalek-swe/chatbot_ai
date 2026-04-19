@@ -1,8 +1,8 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Minus, Plus, Search } from 'lucide-react';
-import { useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, ZoomControl } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
 const competitorIcon = new L.DivIcon({
@@ -33,6 +33,28 @@ const mainIcon = new L.DivIcon({
   iconSize: [32, 32],
   iconAnchor: [16, 16],
 });
+
+function MapBoundsUpdater({
+  center,
+  radius,
+}: {
+  center: [number, number];
+  radius: number;
+}) {
+  const map = useMap();
+  useEffect(() => {
+    if (!map) return;
+    try {
+      // Create a bounding box that is roughly 2x the radius to show more area
+      // radius is in km, toBounds takes meters (so 2km = 2000m)
+      const bounds = L.latLng(center).toBounds(radius * 2000);
+      map.fitBounds(bounds, { animate: true, padding: [20, 20] });
+    } catch (e) {
+      console.warn('MapBoundsUpdater error', e);
+    }
+  }, [center, radius, map]);
+  return null;
+}
 
 interface Competitor {
   id: string;
@@ -260,6 +282,7 @@ export default function WidgetCompetitorSelection({
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <ZoomControl position="bottomright" />
+        <MapBoundsUpdater center={center} radius={radius} />
 
         <Marker position={center} icon={mainIcon} />
 
