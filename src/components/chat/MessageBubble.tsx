@@ -8,7 +8,8 @@ import {
     WidgetLocationMap as LocationMapWidget, 
     WidgetRadiusSelection, 
     WidgetRadiusHeatmap,
-    WidgetCompetitorSelection 
+    WidgetCompetitorSelection,
+    WidgetSelectedLocations
 } from './widgets';
 import { useEffect, useState } from 'react';
 
@@ -125,7 +126,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
         </div>
     );
 
-    const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection");
+    const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection" || message.widget === "selected_locations");
 
     const widgetContent = (
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
@@ -158,6 +159,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             points={message.points}
                             title={(message as any).widget_title}
                             suggestions={(message as any).widget_suggestions}
+                        />
+                    )}
+                    {message.widget === "selected_locations" && (
+                        <WidgetSelectedLocations
+                            locations={message.points}
                         />
                     )}
                 </>
@@ -251,6 +257,18 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                         >
                             {children}
                         </WidgetCompetitorSelection>
+                    )}
+                    {message.widget === "selected_locations" && (
+                        <WidgetSelectedLocations
+                            locations={message.points}
+                            aiText={
+                                <div className="space-y-4">
+                                    {thinkingPart}
+                                    {mainContentPart}
+                                </div>
+                            }
+                            showLogo={isFirstAI}
+                        />
                     )}
 
                 </div>

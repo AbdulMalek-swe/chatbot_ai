@@ -128,7 +128,27 @@ export const swarma: MockChatMessage[] = [
   {
     id: "15",
     role: "assistant",
-    content: "All competitors locked in. Now let's define how far around each shop you want to target. The red heat zones show visitor density around competitor locations.",
+    content: "All target locations confirmed. I've mapped out the primary points for Shawarma Palace, Shawarma King, Falafel Palace, Mediterranean Grill, and Gyro Spot. Ready to see the visitor density heatmap for these areas?",
+    widget: "selected_locations",
+    points: [
+      { id: "1", name: "Shawarma Palace", address: "456 Elm Street.", lat: 47.6062, lng: -122.3321 },
+      { id: "2", name: "Shawarma King", address: "0.3 km away", lat: 47.6082, lng: -122.3351 },
+      { id: "3", name: "Falafel Palace", address: "0.6 km away", lat: 47.6042, lng: -122.3291 },
+      { id: "4", name: "Mediterranean Grill", address: "0.9 km away", lat: 47.6102, lng: -122.3301 },
+      { id: "5", name: "Gyro Spot", address: "0.4 km away", lat: 47.6032, lng: -122.3341 }
+    ],
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "15.2",
+    role: "user",
+    content: "Yes, show me the heatmap.",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "15.5",
+    role: "assistant",
+    content: "Now let's define how far around each shop you want to target. The red heat zones show visitor density around competitor locations.",
     widget: "radius_heatmap",
     created_at: new Date().toISOString()
   },
@@ -316,6 +336,19 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString()
   },
   {
+    id: "10.5",
+    role: "assistant",
+    content: "All tattoo shops confirmed. I've marked the primary target points across Portland. We're now ready to refine the audience demographics.",
+    widget: "selected_locations",
+    points: [
+      { id: "1", name: "Atlas Tattoo", address: "NE Portland", lat: 45.5485, lng: -122.6288 },
+      { id: "2", name: "Scrape the Sky", address: "SE Portland", lat: 45.5126, lng: -122.6512 },
+      { id: "3", name: "Sea Tramp Tattoo", address: "NW Portland", lat: 45.5262, lng: -122.6789 },
+      { id: "4", name: "Icon Tattoo", address: "N Portland", lat: 45.5592, lng: -122.6658 }
+    ],
+    created_at: new Date().toISOString()
+  },
+  {
     id: "11",
     role: "user",
     content: "18-45 is good.",
@@ -447,6 +480,18 @@ export const rock_bank: MockChatMessage[] = [
     id: "7",
     role: "user",
     content: "Target all of them.",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "7.5",
+    role: "assistant",
+    content: "All venues confirmed. Here are the target points I've mapped out for your tour shows. Now let's define the reach around each location.",
+    widget: "selected_locations",
+    points: [
+      { id: "1", name: "The Crocodile", address: "Seattle", lat: 47.6128, lng: -122.3458 },
+      { id: "2", name: "Dante's", address: "Portland", lat: 45.5234, lng: -122.6762 },
+      { id: "3", name: "Mohawk", address: "Austin", lat: 30.2672, lng: -97.7431 }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -583,6 +628,19 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "7",
     role: "user",
     content: "Select the top 50 neighborhoods.",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "7.5",
+    role: "assistant",
+    content: "Neighborhoods locked. I've pinned the central targeting points for all 50 selected areas. Next, we'll set the search radius for potential sellers.",
+    widget: "selected_locations",
+    points: [
+      { id: "1", name: "Westlake Hills", address: "Austin, TX", lat: 30.2974, lng: -97.8083 },
+      { id: "2", name: "Hyde Park", address: "Austin, TX", lat: 30.3025, lng: -97.7281 },
+      { id: "3", name: "Mueller", address: "Austin, TX", lat: 30.2941, lng: -97.7061 },
+      { id: "4", name: "Tarrytown", address: "Austin, TX", lat: 30.2982, lng: -97.7712 }
+    ],
     created_at: new Date().toISOString()
   },
   {
@@ -731,6 +789,18 @@ export const game: MockChatMessage[] = [
     id: "7",
     role: "user",
     content: "Select the top 40 gaming spots.",
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "7.5",
+    role: "assistant",
+    content: "Gaming locations locked. I've pinned all 40 hotspots across Chicago. With these selected, we'll now set a tight radius to maximize your $300 budget.",
+    widget: "selected_locations",
+    points: [
+      { id: "1", name: "Gaming Cafe", address: "Chicago, IL", lat: 41.8781, lng: -87.6298 },
+      { id: "2", name: "Esports Lounge", address: "Chicago, IL", lat: 41.8818, lng: -87.6231 },
+      { id: "3", name: "Retro Arcade", address: "Chicago, IL", lat: 41.8889, lng: -87.6358 }
+    ],
     created_at: new Date().toISOString()
   },
   {
