@@ -1,12 +1,4 @@
-import {
-  ArrowUp,
-  Image as ImageIcon,
-  Loader2,
-  Mic,
-  Plus,
-  Settings,
-  X,
-} from 'lucide-react';
+import { ArrowUp, Loader2, Mic, Plus, Settings } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import api from '../../api/client';
 import { useChat } from '../../contexts/ChatContext';
@@ -75,72 +67,63 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
   }, [message]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-8 rounded-t-2xl rounded-b-[20px] bg-white shadow-sm border border-slate-200 pt-4 pr-2 pb-2 pl-4 flex flex-col gap-5 min-h-27 transition-all focus-within:shadow-md focus-within:border-slate-300">
-      <div className="">
-        <textarea
-          ref={textareaRef}
-          rows={1}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Find me dog owners in New York"
-          className="w-full max-h-50 resize-none border-none p-0 bg-transparent text-slate-800 focus:outline-none focus:ring-0 text-base placeholder:text-slate-300 leading-relaxed active:border-none"
-          disabled={disabled || isUploading}
-        />
+    <div className="w-full max-w-4xl mx-auto mb-2 rounded-2xl bg-white shadow-sm border border-slate-200 px-4 py-3 flex items-center gap-3 transition-all focus-within:shadow-md focus-within:border-slate-300">
+      {/* Plus Icon */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        onChange={handleFileUpload}
+        accept="image/*,video/*"
+      />
+      <button
+        onClick={() => fileInputRef.current?.click()}
+        className="p-2 hover:bg-slate-100 rounded-full text-slate-600 transition-colors flex-shrink-0"
+        title="Add attachment"
+      >
+        <Plus size={20} />
+      </button>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileUpload}
-              accept="image/*,video/*"
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="p-2 hover:bg-slate-50 rounded-full text-slate-400 transition-colors"
-            >
-              <Plus size={20} />
-            </button>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-100 text-[12px] font-semibold text-slate-500 shadow-sm transition-all animate-fade-in">
-              <ImageIcon
-                size={14}
-                className={uploadStatus ? 'text-green-500' : 'text-slate-400'}
-              />
-              <span>{uploadStatus || 'Image'}</span>
-              <button
-                className="ml-1 hover:text-red-500 transition-colors"
-                onClick={() => setUploadStatus(null)}
-              >
-                <X size={12} />
-              </button>
-            </div>
-            {isUploading && (
-              <Loader2 size={16} className="animate-spin text-slate-400" />
-            )}
-          </div>
+      {/* Textarea */}
+      <textarea
+        ref={textareaRef}
+        rows={1}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={handleKeyDown}
+        className="flex-1 h-10 max-h-22 resize-none border-none p-0 bg-transparent text-slate-800 focus:outline-none focus:ring-0 text-base placeholder:text-slate-400 leading-relaxed overflow-y-auto"
+        disabled={disabled || isUploading}
+      />
 
-          <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-slate-50 rounded-full text-slate-400 transition-colors">
-              <Mic size={18} />
-            </button>
-            <button className="p-2 hover:bg-slate-50 rounded-full text-slate-400 transition-colors">
-              <Settings size={18} />
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={!message.trim() || disabled || isUploading}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                message.trim() && !disabled && !isUploading
-                  ? 'bg-slate-900 text-white hover:bg-black shadow-md'
-                  : 'bg-slate-100 text-slate-300 cursor-not-allowed'
-              }`}
-            >
-              <ArrowUp size={18} />
-            </button>
-          </div>
-        </div>
+      {/* Right Side Buttons */}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {isUploading && (
+          <Loader2 size={16} className="animate-spin text-slate-400" />
+        )}
+        <button
+          className="p-2 hover:bg-slate-100 rounded-full text-slate-600 transition-colors"
+          title="Voice message"
+        >
+          <Mic size={18} />
+        </button>
+        <button
+          className="p-2 hover:bg-slate-100 rounded-full text-slate-600 transition-colors"
+          title="Settings"
+        >
+          <Settings size={18} />
+        </button>
+        <button
+          onClick={handleSubmit}
+          disabled={!message.trim() || disabled || isUploading}
+          className={`w-9 h-9 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
+            message.trim() && !disabled && !isUploading
+              ? 'bg-slate-900 text-white hover:bg-black shadow-md'
+              : 'bg-slate-100 text-slate-300 cursor-not-allowed'
+          }`}
+          title="Send message"
+        >
+          <ArrowUp size={18} />
+        </button>
       </div>
     </div>
   );
