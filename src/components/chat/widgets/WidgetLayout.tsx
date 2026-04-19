@@ -31,7 +31,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
     if (mode === 'split') {
         return (
              
-                <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0 w-11/12">
+                <div className="flex flex-col justify-between lg:flex-row gap-6 h-full min-h-0 w-full">
                     {/* Left Panel: (AI Text + UI) or Custom Content */}
                     <div className="flex-1 flex flex-col gap-6 h-full">
                         {aiText && (

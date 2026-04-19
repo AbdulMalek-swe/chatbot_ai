@@ -207,7 +207,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
     if (isSplitWidget) {
         return (
-            <div className="group w-full font-body flex justify-start mb-10 max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="group w-full font-body flex mb-10 max-w-8xl mx-auto px-4 sm:px-6">
                 <div className="w-full">
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
