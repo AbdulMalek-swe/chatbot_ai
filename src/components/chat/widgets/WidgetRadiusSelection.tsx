@@ -19,12 +19,10 @@ import SecondaryBtn from '../../shared/secondaryBtn';
 const customIcon = new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
-            <div class="w-8 h-8 bg-[#D62575] rounded-full flex items-center justify-center border-2 border-white shadow-lg">
-                <div class="w-2 h-2 bg-white rounded-full"></div>
-            </div>
+            <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Marker" />
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
                 Shawarma Palace at 456 Elm Street.
-                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 border-r border-b border-slate-200 rotate-45"></div>
+                <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 border-r border-b border-slate-100 rotate-45"></div>
             </div>
         </div>
     `,

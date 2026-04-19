@@ -36,14 +36,7 @@ const customIcon = new L.DivIcon({
       ">
         Shawarma Palace at 456 Elm Street.
       </div>
-      <div style="
-        width: 14px;
-        height: 14px;
-        background: white;
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      "></div>
+      <img src="/indicator.svg" style="width: 32px; height: 32px;" alt="Marker" />
     </div>
   `,
     className: "",

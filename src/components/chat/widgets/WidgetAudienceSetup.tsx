@@ -21,9 +21,7 @@ const competitorIcon = new L.DivIcon({
 const mainIcon = new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
-            <div class="w-6 h-6 bg-[#E91E63] rounded-full flex items-center justify-center border-2 border-white shadow-lg">
-                <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
-            </div>
+            <img src="/indicator.svg" class="w-6 h-6 relative z-10" alt="Main Marker" />
             <div class="absolute top-[-38px] whitespace-nowrap bg-white px-3 py-1.5 rounded-lg shadow-sm border border-slate-100 text-[11px] font-bold text-slate-800">
                 Shawarma Palace at 456 Elm Street.
                 <div class="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-slate-100 rotate-45"></div>
