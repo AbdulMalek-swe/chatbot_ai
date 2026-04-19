@@ -65,7 +65,7 @@ function Button({
 export default function CampaignDirection({ widget }: { widget: any }) {
   return (
     <WidgetLayout mode="single">
-      <Card className="w-full rounded-xl shadow-md">
+      <Card className="w-12/13 rounded-xl shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">

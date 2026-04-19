@@ -30,14 +30,14 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
 
     if (mode === 'split') {
         return (
-              <div>
-                <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0">
+             
+                <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0 w-11/12">
                     {/* Left Panel: (AI Text + UI) or Custom Content */}
                     <div className="flex-1 flex flex-col gap-6 h-full">
                         {aiText && (
                             <div className="flex items-start">
                                 {logoBlock}
-                                <div className="flex-1 min-w-0">
+                                <div className="flex-1  min-w-0">
                                     {aiText}
                                 </div>
                             </div>
@@ -46,7 +46,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                         {(leftContent || children || aiText) && (
                             <div className="w-full flex flex-col gap-6 pb-12">
                                 {leftContent && (
-                                    <div className="w-full  rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
+                                    <div className="w-11/12  rounded-xl shadow-sm border border-slate-100 flex flex-col overflow-hidden">
                                         {leftContent}
                                     </div>
                                 )} 
@@ -66,7 +66,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
                         </div>
                     )}
                 </div>
-            </div>
+           
         );
     }
 
