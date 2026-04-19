@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
 import WidgetLayout from './WidgetLayout';
+import SecondaryBtn from '../../shared/secondaryBtn';
 
 const mainIcon = new L.DivIcon({
   html: `
@@ -213,21 +214,19 @@ export default function WidgetRadiusHeatmap({
         {/* Controls */}
         <div className="flex items-center justify-between mt-auto pb-4">
           <div className="flex items-center gap-2">
-            <PrimaryBtn
+            <SecondaryBtn
               onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
-              className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!"
             >
               <Minus size={18} />
-            </PrimaryBtn>
-            <div className="min-w-20 h-12 flex items-center justify-center bg-white border border-slate-200 rounded-xl px-4 text-[16px] font-bold text-slate-900">
+            </SecondaryBtn>
+            <div className="min-w-20 h-12 shadow-[inset_0_-3px_2px_rgba(0,0,0,0.07)] flex items-center justify-center bg-white border border-slate-200 rounded-xl px-4 text-[16px] font-bold text-slate-900">
               {Math.round(radius)} km
             </div>
-            <PrimaryBtn
+            <SecondaryBtn
               onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
-              className="bg-slate-50! border! border-slate-200! text-[#141414]! hover:bg-white! hover:shadow-sm! transition-all! active:scale-95!"
             >
               <Plus size={18} />
-            </PrimaryBtn>
+            </SecondaryBtn>
           </div>
 
           <div className="flex items-center gap-3">
