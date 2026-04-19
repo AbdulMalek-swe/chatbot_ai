@@ -532,12 +532,3 @@ body,
   z-index: 10;
 }
 
-.leaflet-grayscale {
-  filter: 
-    grayscale(60%)     /* reduce most colors */
-    brightness(108%)   /* make it lighter/white */
-    contrast(92%)      /* soften lines */
-    saturate(80%)      /* reduce harsh colors */
-    hue-rotate(170deg); /* slight blue shift */
-}
-

@@ -57,7 +57,7 @@ export default function LocationMapWidget({
         </div>
 
         {/* Map Container */}
-        <div className="h-70 w-full relative z-10 bg-slate-50 overflow-hidden px-3 rounded-[12px]">
+        <div className="h-80 w-full relative z-10 bg-slate-50 overflow-hidden px-3 rounded-xl">
           <MapContainer
             center={center}
             zoom={15}
@@ -66,17 +66,12 @@ export default function LocationMapWidget({
             className="h-full w-full"
           >
             <TileLayer
-              attribution="&copy; OpenStreetMap"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+             url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
+              attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
             <MapCenter center={center} />
             <Marker position={center} icon={customIcon} />
           </MapContainer>
-          <style>{`
-        .leaflet-tile {
-          filter: grayscale(60%) brightness(108%) contrast(92%) saturate(80%) hue-rotate(170deg);
-        }
-      `}</style>
         </div>
         {/* Footer Actions */}
         <div className="p-4 bg-[#F7F7F7] flex items-center justify-between gap-4">

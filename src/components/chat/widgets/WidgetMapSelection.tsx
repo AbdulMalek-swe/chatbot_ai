@@ -58,10 +58,10 @@ export default function WidgetMapSelection({ address }: { address?: string }) {
                     zoomControl={false}
                     className="h-full w-full grayscale-[0.2] contrast-[0.9]"
                 >
-                    <TileLayer
-                        attribution='&copy; OpenStreetMap'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+                   <TileLayer
+                               url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
+                                attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                              />
                     <MapCenter center={center} />
                     <Marker position={center} icon={customIcon} />
                 </MapContainer>
