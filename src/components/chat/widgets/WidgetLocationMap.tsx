@@ -4,6 +4,7 @@ import React from 'react';
 import { MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
 import WidgetLayout from './WidgetLayout';
+import SecondaryBtn from '../../shared/secondaryBtn';
 
 // Custom Marker to match the dashboard style
 const customIcon = new L.DivIcon({
@@ -80,9 +81,9 @@ export default function LocationMapWidget({
             Is this your business location?
           </p>
           <div className="flex items-center gap-3">
-            <PrimaryBtn className="bg-white! text-[#1D1D1D]! px-6!">
+            <SecondaryBtn>
               No
-            </PrimaryBtn>
+            </SecondaryBtn>
 
             <PrimaryBtn
               className="px-6!"
