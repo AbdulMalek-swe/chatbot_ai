@@ -10,6 +10,7 @@ import {
   Popup,
   TileLayer,
   useMap,
+  ZoomControl,
 } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
@@ -256,10 +257,12 @@ const MessageMap: React.FC<MessageMapProps> = ({
             center={center}
             zoom={zoom}
             scrollWheelZoom={false}
+            zoomControl={false}
             className="h-full w-full"
           >
             <MapUpdater coords={pointsToFit} zoom={zoom} />
             <RecenterControl coords={pointsToFit} zoom={zoom} />
+            <ZoomControl position="bottomright" />
             <TileLayer
               url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
               attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

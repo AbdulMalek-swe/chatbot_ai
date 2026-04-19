@@ -9,6 +9,7 @@ import {
   Marker,
   TileLayer,
   useMap,
+  ZoomControl,
 } from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
 import WidgetLayout from './WidgetLayout';
@@ -180,6 +181,7 @@ export default function WidgetRadiusSelection({
           url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+        <ZoomControl position="bottomright" />
         <MapRadiusUpdater center={center} radius={radius} />
         <Marker position={center} icon={customIcon} />
         <Circle
@@ -201,7 +203,7 @@ export default function WidgetRadiusSelection({
         }
       `}</style>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
         <button
           onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
           className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

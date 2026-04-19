@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, MapPin, Pencil, X } from 'lucide-react';
 import React from 'react';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 
 // Custom Marker to match the dashboard style
 const customIcon = new L.DivIcon({
@@ -65,10 +65,11 @@ export default function WidgetMapSelection({ address }: { address?: string }) {
           zoomControl={false}
           className="h-full w-full grayscale-[0.2] contrast-[0.9]"
         >
-          <TileLayer
+            <TileLayer
             url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
             attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
+          <ZoomControl position="bottomright" />
           <MapCenter center={center} />
           <Marker position={center} icon={customIcon} />
         </MapContainer>

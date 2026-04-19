@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Minus, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
 // Custom Marker for competitors - Small pink dots as seen in the design
@@ -157,6 +157,7 @@ export default function WidgetAudienceSetup() {
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <MapBoundsUpdater center={center} radius={radius} />
+        <ZoomControl position="bottomright" />
 
         {/* Main Marker with Circle Labels */}
         <Marker position={center} icon={mainIcon} />
@@ -191,8 +192,8 @@ export default function WidgetAudienceSetup() {
         ))}
       </MapContainer>
 
-      {/* Bottom Center Controls */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-slate-200 overflow-hidden">
+      {/* Bottom Left Radius Controls */}
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center bg-white/90 backdrop-blur-md rounded-xl shadow-xl border border-slate-200 overflow-hidden">
         <button
           onClick={() => setRadius((prev) => Math.max(100, prev - 100))}
           className="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-colors"
@@ -210,15 +211,7 @@ export default function WidgetAudienceSetup() {
         </button>
       </div>
 
-      {/* Zoom Controls (Bottom Right) */}
-      <div className="absolute bottom-6 right-6 z-1000 flex flex-col bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-        <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50 border-b border-slate-100">
-          <Plus size={18} />
-        </button>
-        <button className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-50">
-          <Minus size={18} />
-        </button>
-      </div>
+      {/* Standard ZoomControl is now used instead of manual custom buttons */}
 
       <style>{`
                 .leaflet-container {

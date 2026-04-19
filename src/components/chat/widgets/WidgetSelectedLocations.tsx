@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Crosshair, Minus, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
 // Main location marker with label tooltip
@@ -241,6 +241,7 @@ export default function WidgetSelectedLocations({
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <MapBoundsUpdater locations={locations} />
+        <ZoomControl position="bottomright" />
 
         {/* Main location marker with label */}
         {mainLocation && (
@@ -275,8 +276,8 @@ export default function WidgetSelectedLocations({
         }
       `}</style>
 
-      {/* Map Radius Controls */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
+      {/* Map Radius Controls - Moved to left side */}
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
         <button
           onClick={() => setRadius((prev) => Math.max(0.5, prev - 0.5))}
           className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"

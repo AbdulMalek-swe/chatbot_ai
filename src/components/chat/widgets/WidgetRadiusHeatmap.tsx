@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Minus, Plus } from 'lucide-react';
 import React, { useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import PrimaryBtn from '../../shared/PrimaryBtn';
 import WidgetLayout from './WidgetLayout';
 
@@ -232,6 +232,7 @@ export default function WidgetRadiusHeatmap({
           url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
           attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+        <ZoomControl position="bottomright" />
         <HeatmapCircles center={center} />
         <Marker position={center} icon={mainIcon} />
 
