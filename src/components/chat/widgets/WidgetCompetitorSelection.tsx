@@ -43,8 +43,6 @@ function MapBoundsUpdater({
   useEffect(() => {
     if (!map) return;
     try {
-      // Create a bounding box that is roughly 2x the radius to show more area
-      // radius is in km, toBounds takes meters (so 2km = 2000m)
       const bounds = L.latLng(center).toBounds(radius * 2000);
       map.fitBounds(bounds, { animate: true, padding: [20, 20] });
     } catch (e) {
@@ -91,7 +89,6 @@ export default function WidgetCompetitorSelection({
     weight: 2,
   };
 
-  // Default competitors if points are empty for demo
   const defaultCompetitors: Competitor[] = [
     {
       id: '1',
