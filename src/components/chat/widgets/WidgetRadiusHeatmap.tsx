@@ -37,7 +37,11 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
     function addHeatLayers() {
       // Clean up any existing layers first
       layersRef.current.forEach((layer) => {
-        try { map.removeLayer(layer); } catch (_) { /* ignore */ }
+        try {
+          map.removeLayer(layer);
+        } catch (_) {
+          /* ignore */
+        }
       });
       layersRef.current = [];
 
@@ -79,12 +83,15 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
 
     if (!(L as any).heatLayer) {
       // Check if script is already being loaded
-      const existingScript = document.querySelector('script[src*="leaflet-heat"]');
+      const existingScript = document.querySelector(
+        'script[src*="leaflet-heat"]',
+      );
       if (existingScript) {
         existingScript.addEventListener('load', addHeatLayers);
       } else {
         const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+        script.src =
+          'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
         script.async = true;
         script.onload = addHeatLayers;
         document.head.appendChild(script);
@@ -95,7 +102,11 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
 
     return () => {
       layersRef.current.forEach((layer) => {
-        try { map.removeLayer(layer); } catch (_) { /* ignore */ }
+        try {
+          map.removeLayer(layer);
+        } catch (_) {
+          /* ignore */
+        }
       });
       layersRef.current = [];
       initializedRef.current = false;
@@ -123,7 +134,12 @@ export default function WidgetRadiusHeatmap({
   const [radius, setRadius] = useState(initialRadius);
   const center: [number, number] = [47.6062, -122.3321];
 
-  const fillRedOptions = { color: '#D62575', fillColor: '#D6257530', fillOpacity: 0.4 , weight: 2 };
+  const fillRedOptions = {
+    color: '#D62575',
+    fillColor: '#D6257530',
+    fillOpacity: 0.4,
+    weight: 2,
+  };
 
   const leftContent = (
     <div className="p-8 h-full flex flex-col bg-white">
@@ -131,11 +147,15 @@ export default function WidgetRadiusHeatmap({
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-             <img src="/locationIcon.png" alt="Location" className="w-6 h-6" />
+            <img src="/locationIcon.png" alt="Location" className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-[20px] font-bold text-slate-900 leading-tight">Shawarma Palace</h3>
-            <p className="text-[14px] text-slate-400 font-medium">456 Elm Street.</p>
+            <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
+              Shawarma Palace
+            </h3>
+            <p className="text-[14px] text-slate-400 font-medium">
+              456 Elm Street.
+            </p>
           </div>
         </div>
       </div>
@@ -158,12 +178,15 @@ export default function WidgetRadiusHeatmap({
       <div className="flex-1 flex flex-col">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-5 h-5 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
-          <span className="text-[16px] font-bold text-slate-900">Radius Selection</span>
+          <span className="text-[16px] font-bold text-slate-900">
+            Radius Selection
+          </span>
         </div>
 
         <p className="text-[15px] text-slate-600 leading-relaxed font-medium mb-8">
-            Select the radius around your shop to identify potential customers. 
-            The heat zones indicate areas with high visitor density from your competitors.
+          Select the radius around your shop to identify potential customers.
+          The heat zones indicate areas with high visitor density from your
+          competitors.
         </p>
 
         {/* Controls */}
@@ -187,7 +210,7 @@ export default function WidgetRadiusHeatmap({
           </div>
 
           <div className="flex items-center gap-3">
-             <PrimaryBtn className="px-8!" onClick={() => onConfirm?.(radius)}>
+            <PrimaryBtn className="px-8!" onClick={() => onConfirm?.(radius)}>
               Confirm Radius
             </PrimaryBtn>
           </div>
@@ -206,13 +229,17 @@ export default function WidgetRadiusHeatmap({
         className="h-full w-full"
       >
         <TileLayer
-                    url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
-                     attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                   />
+          url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
+          attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
         <HeatmapCircles center={center} />
         <Marker position={center} icon={mainIcon} />
 
-   <Circle center={center} pathOptions={fillRedOptions}  radius={radius * 1000} />
+        <Circle
+          center={center}
+          pathOptions={fillRedOptions}
+          radius={radius * 1000}
+        />
       </MapContainer>
 
       <style>{`

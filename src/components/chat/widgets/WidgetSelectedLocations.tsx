@@ -2,13 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Check, Crosshair, Minus, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import {
-  Circle,
-  MapContainer,
-  Marker,
-  TileLayer,
-  useMap,
-} from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 
 // Main location marker with label tooltip
@@ -160,37 +154,69 @@ export default function WidgetSelectedLocations({
       {/* Checklist items */}
       <div className="space-y-5 flex-1">
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
-          <span className="text-[15px] font-bold text-slate-900">Location Confirmed</span>
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
+          <span className="text-[15px] font-bold text-slate-900">
+            Location Confirmed
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
-          <span className="text-[15px] font-bold text-slate-900">1km Radius set</span>
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
+          <span className="text-[15px] font-bold text-slate-900">
+            1km Radius set
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
           <span className="text-[15px] font-bold text-slate-900">
             All {competitorCount} competitor locations selected
           </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
           <span className="text-[15px] font-bold text-slate-900">
             Individual Radius Selected to 500 meter
           </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
-          <span className="text-[15px] font-bold text-slate-900">Lookback window is 30 days</span>
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
+          <span className="text-[15px] font-bold text-slate-900">
+            Lookback window is 30 days
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <Check size={18} className="text-slate-900 shrink-0" strokeWidth={3} />
-          <span className="text-[15px] font-bold text-slate-900">Demographics applied to 15-50</span>
+          <Check
+            size={18}
+            className="text-slate-900 shrink-0"
+            strokeWidth={3}
+          />
+          <span className="text-[15px] font-bold text-slate-900">
+            Demographics applied to 15-50
+          </span>
         </div>
       </div>
 
@@ -210,10 +236,10 @@ export default function WidgetSelectedLocations({
         zoomControl={false}
         className="h-full w-full"
       >
-      <TileLayer
-                  url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
-                   attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                 />
+        <TileLayer
+          url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=eTv72QZ1tQRMGSvSdUtUadKcClkD6xYlPVSy85fiE88lfHT8NC1JngM8jchQ3f7W"
+          attribution='<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
         <MapBoundsUpdater locations={locations} />
 
         {/* Main location marker with label */}
