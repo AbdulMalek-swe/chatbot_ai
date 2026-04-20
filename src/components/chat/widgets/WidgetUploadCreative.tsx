@@ -38,7 +38,7 @@ export default function WidgetUploadCreative({ onConfirm }: WidgetUploadCreative
                 text="Images or Videos"
                 btnLabel="Upload"
                 btnOnClick={handleUploadClick}
-                className="w-full border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+               className="w-xl! p-4!"
                 btnClassName="bg-slate-900 hover:bg-black text-white px-5 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95"
             />
         </div>

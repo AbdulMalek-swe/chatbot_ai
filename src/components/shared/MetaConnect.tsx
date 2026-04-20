@@ -1,17 +1,21 @@
-import Upload from "./Upload";
+import Upload from './Upload';
 
-function MetaConnect() {
+interface MetaConnectProps {
+  onConnect?: () => void;
+}
+
+function MetaConnect({ onConnect }: MetaConnectProps) {
   return (
     <div>
-    <Upload 
-  imgSrc="/Meta.png" 
-  title=" META ACCOUNT VALIDATION" 
-  text="Connect Meta Account"
-  btnLabel="Connect"
-  className="w-md!"
-  btnClassName="text-[10px] font-normal! py-2.5! px-4!"
-  btnOnClick={() => console.log('clicked')}
-/>
+      <Upload
+        imgSrc="/Meta.png"
+        title=" META ACCOUNT VALIDATION"
+        text="Connect Meta Account"
+        btnLabel="Connect"
+        className="w-xl! p-4!"
+        btnClassName="text-[12px] font-normal! py-2.5! px-4!"
+        btnOnClick={onConnect}
+      />
     </div>
   );
 }
