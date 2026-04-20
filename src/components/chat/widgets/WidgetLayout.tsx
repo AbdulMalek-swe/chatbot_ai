@@ -60,7 +60,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
 
         {/* Right Panel: Map or Visuals */}
         {rightContent && (
-          <div className="flex-1 flex justify-end lg:h-125 rounded-xl   sticky top-0">
+          <div className="flex-1 self-start flex justify-end lg:h-185 rounded-xl   sticky top-0">
             {rightContent}
           </div>
         )}
