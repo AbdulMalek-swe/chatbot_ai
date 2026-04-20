@@ -241,7 +241,7 @@ export default function WidgetSelectedLocations({
   );
 
   const rightContent = (
-    <div className="w-full h-[80vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
+    <div className="w-[90%] h-[76vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={[mainLocation.lat, mainLocation.lng]}
         zoom={14}
