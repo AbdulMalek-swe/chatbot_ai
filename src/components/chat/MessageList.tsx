@@ -6,9 +6,11 @@ import MessageBubble from './MessageBubble';
 interface MessageListProps {
     messages: any[];
     streaming: boolean;
+    isNewChat?: boolean;
+    onSendMessage?: (content: string) => void;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, streaming, isNewChat = true, onSendMessage }) => {
     const bottomRef = useRef<HTMLDivElement>(null);
     const { user } = useAuth();
     const { sendMessage } = useChat();
@@ -110,6 +112,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                                                 key={groupToFinalize.msg.id} 
                                                 message={groupToFinalize.msg} 
                                                 allMessages={messages}
+                                                isNewChat={isNewChat}
+                                                onSendMessage={onSendMessage}
                                             >
                                                 {groupToFinalize.children}
                                             </MessageBubble>
@@ -122,7 +126,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                                     );
                                 } else {
                                     renderedElements.push(
-                                        <MessageBubble key={msg.id} message={msg} allMessages={messages} />
+                                        <MessageBubble key={msg.id} message={msg} allMessages={messages} isNewChat={isNewChat} onSendMessage={onSendMessage} />
                                     );
                                 }
                             });
@@ -135,6 +139,8 @@ const MessageList: React.FC<MessageListProps> = ({ messages, streaming }) => {
                                         key={activeGroup.msg.id} 
                                         message={activeGroup.msg} 
                                         allMessages={messages}
+                                        isNewChat={isNewChat}
+                                        onSendMessage={onSendMessage}
                                     >
                                         {activeGroup.children}
                                     </MessageBubble>

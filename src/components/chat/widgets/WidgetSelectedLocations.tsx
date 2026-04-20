@@ -81,6 +81,7 @@ interface WidgetSelectedLocationsProps {
   locations?: Location[];
   aiText?: React.ReactNode;
   showLogo?: boolean;
+  onConfirm?: () => void;
 }
 
 export default function WidgetSelectedLocations({
@@ -128,6 +129,7 @@ export default function WidgetSelectedLocations({
   ],
   aiText,
   showLogo = false,
+  onConfirm,
 }: WidgetSelectedLocationsProps) {
   const [radius, setRadius] = useState(1);
   const mainLocation = locations[0];
@@ -229,7 +231,10 @@ export default function WidgetSelectedLocations({
       </div>
 
       {/* CTA Button */}
-      <button className="w-full mt-8 px-6 py-4 bg-slate-900 text-white rounded-2xl text-[15px] font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98]">
+      <button
+        className={`w-full mt-8 px-6 py-4 bg-slate-900 text-white rounded-2xl text-[15px] font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98] ${!onConfirm ? 'opacity-50 cursor-not-allowed' : ''}`}
+        onClick={() => onConfirm?.()}
+      >
         Run Target People mode on Meta...
       </button>
     </div>

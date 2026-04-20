@@ -81,13 +81,13 @@ export default function LocationMapWidget({
             Is this your business location?
           </p>
           <div className="flex items-center gap-3">
-            <SecondaryBtn>
+            <SecondaryBtn className={!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}>
               No
             </SecondaryBtn>
 
             <PrimaryBtn
-              className="px-6!"
-              onClick={() => onConfirm?.('Yes, that’s me.')}
+              className={`px-6! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`}
+              onClick={() => onConfirm?.('Yes, that\'s me.')}
             >
               Yes
             </PrimaryBtn>

@@ -1368,3 +1368,24 @@ export const findMockResponse = (content: string) => {
   }
   return null;
 };
+
+export const findNextUserMessage = (assistantContent: string): string | null => {
+  const normalizedContent = assistantContent.toLowerCase().trim();
+  for (const item of chat_data) {
+    const index = item.chat.findIndex(m => {
+      if (m.role !== 'assistant') return false;
+      const msgContent = m.content.toLowerCase().trim();
+      return msgContent === normalizedContent || msgContent.includes(normalizedContent) || normalizedContent.includes(msgContent);
+    });
+    
+    if (index !== -1) {
+      // Find the next user message after this assistant message
+      for (let i = index + 1; i < item.chat.length; i++) {
+        if (item.chat[i].role === 'user') {
+          return item.chat[i].content;
+        }
+      }
+    }
+  }
+  return null;
+};

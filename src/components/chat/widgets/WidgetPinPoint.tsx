@@ -62,7 +62,7 @@ function Button({
   );
 }
 
-export default function CampaignDirection({ widget }: { widget: any }) {
+export default function CampaignDirection({ widget, onConfirm }: { widget: any; onConfirm?: () => void }) {
   return (
     <WidgetLayout mode="single">
       <Card className="w-full border rounded-xl shadow-md">
@@ -105,7 +105,10 @@ export default function CampaignDirection({ widget }: { widget: any }) {
               Which one feels right for you, or do you want to stick with Pin
               Point?
             </p>
-            <PrimaryBtn>Confirm</PrimaryBtn>
+            <PrimaryBtn
+              onClick={() => onConfirm?.()}
+              className={!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}
+            >Confirm</PrimaryBtn>
           </div>
         </CardContent>
       </Card>

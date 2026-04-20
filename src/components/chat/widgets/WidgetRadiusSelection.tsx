@@ -152,9 +152,9 @@ export default function WidgetRadiusSelection({
           </div>
 
           <div className="flex items-center gap-3">
-            <SecondaryBtn>No</SecondaryBtn>
+            <SecondaryBtn className={!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}>No</SecondaryBtn>
 
-            <PrimaryBtn className="px-6!" onClick={() => onConfirm?.(radius)}>
+            <PrimaryBtn className={`px-6! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`} onClick={() => onConfirm?.(radius)}>
               Yes
             </PrimaryBtn>
           </div>

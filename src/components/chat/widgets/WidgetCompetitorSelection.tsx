@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
 import SecondaryBtn from '../../shared/secondaryBtn';
+import PrimaryBtn from '../../shared/PrimaryBtn';
 
 const competitorIcon = new L.DivIcon({
   html: `
@@ -68,6 +69,7 @@ interface WidgetCompetitorSelectionProps {
   aiText?: React.ReactNode;
   showLogo?: boolean;
   children?: React.ReactNode;
+  onConfirm?: () => void;
 }
 
 export default function WidgetCompetitorSelection({
@@ -77,6 +79,7 @@ export default function WidgetCompetitorSelection({
   aiText,
   showLogo = false,
   children,
+  onConfirm,
 }: WidgetCompetitorSelectionProps) {
   const center: [number, number] = [47.6062, -122.3321];
   const [radius, setRadius] = useState(1);
@@ -259,6 +262,16 @@ export default function WidgetCompetitorSelection({
               ))}
             </div>
           )}
+        </div>
+
+        {/* Confirm Selection Button */}
+        <div className="flex items-center justify-end mt-8">
+          <PrimaryBtn
+            className={`px-8! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`}
+            onClick={() => onConfirm?.()}
+          >
+            Confirm Selection
+          </PrimaryBtn>
         </div>
       </div>
     </div>

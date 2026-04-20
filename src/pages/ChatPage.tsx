@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api/client';
 import { ChatInput, MessageList, Sidebar } from '../components/chat';
 import PrimaryBtn from '../components/shared/PrimaryBtn';
-import { chat_data, findMockResponse } from '../constant/data';
+import { chat_data, findMockResponse, findNextUserMessage } from '../constant/data';
 import { useChat } from '../contexts/ChatContext';
 
 const ChatPage = () => {
@@ -27,6 +27,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeFlow, setActiveFlow] = useState<any[] | null>(null);
+  const [isNewChat, setIsNewChat] = useState(true);
   const lastThreadId = useRef<string | undefined>(paramsThreadId);
 
   // Sync with chat_data when threadId changes
@@ -37,10 +38,12 @@ const ChatPage = () => {
         const thread = chat_data[threadIndex];
         setMessages(thread.chat);
         setActiveFlow(thread.chat);
+        setIsNewChat(false); // Loading history
       }
     } else {
       setMessages([]);
       setActiveFlow(null);
+      setIsNewChat(true); // New chat
     }
   }, [paramsThreadId]);
 
@@ -64,6 +67,7 @@ const ChatPage = () => {
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
+    setIsNewChat(true); // User is actively chatting, mark as new
 
     // Add user message immediately
     const userMsg = {
@@ -238,7 +242,7 @@ const ChatPage = () => {
           ) : (
             <div className="flex-1 flex flex-col overflow-hidden min-h-0 relative">
               <div className="flex-1 overflow-y-auto custom-scrollbar  pt-4">
-                <MessageList messages={messages} streaming={isLoading} />
+                <MessageList messages={messages} streaming={isLoading} isNewChat={isNewChat} onSendMessage={handleSendMessage} />
               </div>
 
               <ChatInput

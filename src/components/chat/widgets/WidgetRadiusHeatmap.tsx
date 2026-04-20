@@ -227,7 +227,7 @@ export default function WidgetRadiusHeatmap({
           </div>
 
           <div className="flex items-center gap-3">
-            <PrimaryBtn className="px-8!" onClick={() => onConfirm?.(radius)}>
+            <PrimaryBtn className={`px-8! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`} onClick={() => onConfirm?.(radius)}>
               Confirm Radius
             </PrimaryBtn>
           </div>

@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
+import { findNextUserMessage } from '../../constant/data';
 import { Cpu } from 'lucide-react';
 import { 
     WidgetMessageMap as MessageMap, 
@@ -18,12 +19,31 @@ interface MessageBubbleProps {
     message: ChatMessage;
     allMessages?: ChatMessage[];
     children?: React.ReactNode;
+    isNewChat?: boolean;
+    onSendMessage?: (content: string) => void;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, children }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, children, isNewChat = true, onSendMessage }) => {
     const isAI = message.role === 'assistant';
     const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
     const messages = allMessages || contextMessages;
+
+    // Determine if this widget's confirm button should be active
+    const messageIndex = messages.indexOf(message);
+    const hasSubsequentUserMessage = messages.slice(messageIndex + 1).some(m => m.role === 'user');
+    const canConfirm = isNewChat && !streaming && !hasSubsequentUserMessage;
+
+    // Generic confirm handler: finds next user message from mock data and sends it
+    const handleWidgetConfirm = () => {
+        const nextUserMsg = findNextUserMessage(message.content);
+        if (nextUserMsg) {
+            if (onSendMessage) {
+                onSendMessage(nextUserMsg);
+            } else {
+                sendMessage(nextUserMsg);
+            }
+        }
+    };
     const [widgetShow, setWidgetShow] = useState(false);
 
     const assistantMessages = messages.filter(m => m.role === 'assistant');
@@ -132,26 +152,33 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
             {isAI && (
                 <>
-                    {message.widget === "pin_point" && <CampaignDirection widget={message.points} />}
+                    {message.widget === "pin_point" && <CampaignDirection widget={message.points} onConfirm={canConfirm ? handleWidgetConfirm : undefined} />}
                     {message.widget === "map_selection" && (
                         <LocationMapWidget
                             address={messages[messages.indexOf(message) - 1]?.content || "Current Location"}
-                            onConfirm={(val) => sendMessage(val)}
+                            onConfirm={canConfirm ? (val) => {
+                                if (onSendMessage) onSendMessage(val);
+                                else sendMessage(val);
+                            } : undefined}
                         />
                     )}
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
                             address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
-                            onConfirm={(radius) => {
-                                sendMessage(`${radius} km is perfect.`);
-                            }}
+                            onConfirm={canConfirm ? (radius) => {
+                                const msg = `${radius} km is perfect.`;
+                                if (onSendMessage) onSendMessage(msg);
+                                else sendMessage(msg);
+                            } : undefined}
                         />
                     )}
                     {message.widget === "radius_heatmap" && (
                         <WidgetRadiusHeatmap
-                            onConfirm={(radius) => {
-                                sendMessage(`${radius} km is perfect.`);
-                            }}
+                            onConfirm={canConfirm ? (radius) => {
+                                const msg = `${radius} km is perfect.`;
+                                if (onSendMessage) onSendMessage(msg);
+                                else sendMessage(msg);
+                            } : undefined}
                         />
                     )}
                     {message.widget === "competitor_selection" && (
@@ -159,11 +186,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             points={message.points}
                             title={(message as any).widget_title}
                             suggestions={(message as any).widget_suggestions}
+                            onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
                     )}
                     {message.widget === "selected_locations" && (
                         <WidgetSelectedLocations
                             locations={message.points}
+                            onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
                     )}
                 </>
@@ -219,9 +248,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                 </div>
                             }
                             showLogo={isFirstAI}
-                            onConfirm={(radius) => {
-                                sendMessage(`${radius} km is perfect.`);
-                            }}
+                            onConfirm={canConfirm ? (radius) => {
+                                const msg = `${radius} km is perfect.`;
+                                if (onSendMessage) onSendMessage(msg);
+                                else sendMessage(msg);
+                            } : undefined}
                         >
                             {children}
                         </WidgetRadiusSelection>
@@ -235,9 +266,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                 </div>
                             }
                             showLogo={isFirstAI}
-                            onConfirm={(radius) => {
-                                sendMessage(`${radius} km is perfect.`);
-                            }}
+                            onConfirm={canConfirm ? (radius) => {
+                                const msg = `${radius} km is perfect.`;
+                                if (onSendMessage) onSendMessage(msg);
+                                else sendMessage(msg);
+                            } : undefined}
                         >
                             {children}
                         </WidgetRadiusHeatmap>
@@ -254,6 +287,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                 </div>
                             }
                             showLogo={isFirstAI}
+                            onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         >
                             {children}
                         </WidgetCompetitorSelection>
@@ -268,6 +302,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                                 </div>
                             }
                             showLogo={isFirstAI}
+                            onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
                     )}
 
