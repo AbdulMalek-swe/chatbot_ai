@@ -118,7 +118,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     );
 
     const mainContentPart = (
-        <div className={`text-[15px] sm:text-[16px] leading-relaxed font-medium tracking-tight w-full ${isAI ? 'text-foreground/90' : 'text-foreground'}`}>
+        <div className={`w-full ${isAI 
+            ? 'text-[15px] sm:text-[16px] leading-relaxed font-medium tracking-tight text-foreground/90' 
+            : 'font-inter font-normal text-[16px] leading-[24px] tracking-[0px] text-foreground'}`}>
             {isSynthesizing ? (
                 <div className="flex flex-col gap-3 py-4">
                     {currentStepLabel ? (
