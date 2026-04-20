@@ -1,7 +1,7 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Check, Minus, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Check, Minus, Plus } from "lucide-react";
+import React, { useState } from "react";
 import {
   Circle,
   CircleMarker,
@@ -10,10 +10,10 @@ import {
   TileLayer,
   useMap,
   ZoomControl,
-} from 'react-leaflet';
-import PrimaryBtn from '../../shared/PrimaryBtn';
-import WidgetLayout from './WidgetLayout';
-import SecondaryBtn from '../../shared/secondaryBtn';
+} from "react-leaflet";
+import PrimaryBtn from "../../shared/PrimaryBtn";
+import WidgetLayout from "./WidgetLayout";
+import SecondaryBtn from "../../shared/secondaryBtn";
 
 // Custom Marker to match the screenshot style
 const customIcon = new L.DivIcon({
@@ -26,7 +26,7 @@ const customIcon = new L.DivIcon({
             </div>
         </div>
     `,
-  className: 'custom-marker-icon',
+  className: "custom-marker-icon",
   iconSize: [32, 32],
   iconAnchor: [16, 16],
 });
@@ -53,12 +53,12 @@ function MapRadiusUpdater({
             map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
           }
         } catch (e) {
-          console.warn('fitBounds failed', e);
+          console.warn("fitBounds failed", e);
         }
       }, 200);
       return () => clearTimeout(timeoutId);
     } catch (e) {
-      console.warn('MapRadiusUpdater error', e);
+      console.warn("MapRadiusUpdater error", e);
     }
   }, [center, radius, map]);
   return null;
@@ -84,8 +84,8 @@ export default function WidgetRadiusSelection({
   const center: [number, number] = [47.6062, -122.3321];
 
   const fillRedOptions = {
-    color: '#D62575',
-    fillColor: '#D6257530',
+    color: "#D62575",
+    fillColor: "#D6257530",
     fillOpacity: 0.3,
     weight: 2,
   };
@@ -152,9 +152,7 @@ export default function WidgetRadiusSelection({
           </div>
 
           <div className="flex items-center gap-3">
-            <SecondaryBtn>
-              No
-            </SecondaryBtn>
+            <SecondaryBtn>No</SecondaryBtn>
 
             <PrimaryBtn className="px-6!" onClick={() => onConfirm?.(radius)}>
               Yes
@@ -166,7 +164,7 @@ export default function WidgetRadiusSelection({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-125 rounded-xl">
+    <div className="w-full h-full relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={14}
@@ -200,22 +198,22 @@ export default function WidgetRadiusSelection({
         }
       `}</style>
 
-      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
-        <button
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 rounded-xl">
+        <SecondaryBtn
+          className="bg-white"
           onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
         >
           <Minus size={18} />
-        </button>
-        <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
+        </SecondaryBtn>
+        <div className="px-3 h-10 flex items-center shadow-[inset_0_-3px_2px_rgba(0,0,0,0.07)] bg-white rounded-md justify-center text-[14px] font-bold text-slate-900 min-w-20">
           {Math.round(radius)} km
         </div>
-        <button
+        <SecondaryBtn
+          className="bg-white"
           onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
         >
           <Plus size={18} />
-        </button>
+        </SecondaryBtn>
       </div>
     </div>
   );
