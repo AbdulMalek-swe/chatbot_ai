@@ -277,7 +277,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     }
 
     return (
-        <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto pl-2">
+        <div className="group w-full animate-fade-in font-body flex justify-start mb-10 max-w-4xl mx-auto px-1.5">
             <div className="w-full flex flex-row gap-4">
                 {isFirstAI && (
                     <div className="shrink-0 flex items-center justify-center transition-all self-start">
