@@ -274,6 +274,27 @@ export const vibe: MockChatMessage[] = [
     id: "2",
     role: "assistant",
     content: "Yes, I can definitely help you find those people. Let’s build this campaign to hit exactly the tattoo artists who are at shops all the time — not the clients. We have three main ways to do this on Meta: Pin Point, Category, and Target by Location. Which one do you want to go with?",
+    widget: "pin_point",
+      points: [
+      {
+        id: "1",
+        type: "Pin Point",
+        content: "Targets people at specific shops you choose",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: "2",
+        type: "Target by Location",
+        content: "Finds frequent visitors across all shawarma shops in the city (Best for capturing high-intent foodies)",
+        created_at: new Date().toISOString()
+      },
+      {
+        id: "3",
+        type: "Location",
+        content: "Broader area targeting for general awareness",
+        created_at: new Date().toISOString()
+      }
+    ],
     created_at: new Date().toISOString()
   },
   {
