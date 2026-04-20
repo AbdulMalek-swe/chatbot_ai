@@ -237,7 +237,7 @@ export default function WidgetRadiusHeatmap({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-125 rounded-xl">
+    <div className="w-full h-full relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={15}

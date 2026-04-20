@@ -4,6 +4,7 @@ import { Check, Minus, Plus, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import WidgetLayout from './WidgetLayout';
+import SecondaryBtn from '../../shared/secondaryBtn';
 
 const competitorIcon = new L.DivIcon({
   html: `
@@ -264,7 +265,7 @@ export default function WidgetCompetitorSelection({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-125 rounded-xl">
+    <div className="w-full h-full relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={15}
@@ -299,22 +300,22 @@ export default function WidgetCompetitorSelection({
       `}</style>
 
       {/* Map Controls - Moved to left side */}
-      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
-        <button
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 rounded-xl">
+        <SecondaryBtn
+          className="bg-white"
           onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
         >
           <Minus size={18} />
-        </button>
-        <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
+        </SecondaryBtn>
+        <div className="px-3 h-10 flex items-center shadow-[inset_0_-3px_2px_rgba(0,0,0,0.07)] bg-white rounded-md justify-center text-[14px] font-bold text-slate-900 min-w-20">
           {Math.round(radius)} km
         </div>
-        <button
+        <SecondaryBtn
+          className="bg-white"
           onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
         >
           <Plus size={18} />
-        </button>
+        </SecondaryBtn>
       </div>
 
       <style>{`

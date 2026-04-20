@@ -1,9 +1,17 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Check, Crosshair, Minus, Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
-import WidgetLayout from './WidgetLayout';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Check, Crosshair, Minus, Plus } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
+import WidgetLayout from "./WidgetLayout";
+import SecondaryBtn from "../../shared/secondaryBtn";
 
 // Main location marker with label tooltip
 const createMainIcon = (name: string, address: string) =>
@@ -20,7 +28,7 @@ const createMainIcon = (name: string, address: string) =>
             </div>
         </div>
     `,
-    className: 'main-marker-icon',
+    className: "main-marker-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 16],
   });
@@ -32,7 +40,7 @@ const competitorIcon = new L.DivIcon({
             <div class="w-4 h-4 bg-[#D62575] rounded-full border-2 border-white shadow-md"></div>
         </div>
     `,
-  className: 'competitor-marker-icon',
+  className: "competitor-marker-icon",
   iconSize: [16, 16],
   iconAnchor: [8, 8],
 });
@@ -54,7 +62,7 @@ function MapBoundsUpdater({
       }, 300);
       return () => clearTimeout(timeoutId);
     } catch (e) {
-      console.warn('MapBoundsUpdater error', e);
+      console.warn("MapBoundsUpdater error", e);
     }
   }, [locations, map]);
   return null;
@@ -78,41 +86,41 @@ interface WidgetSelectedLocationsProps {
 export default function WidgetSelectedLocations({
   locations = [
     {
-      id: '1',
-      name: 'Shawarma Palace',
-      address: '456 Elm Street.',
+      id: "1",
+      name: "Shawarma Palace",
+      address: "456 Elm Street.",
       lat: 47.6062,
       lng: -122.3321,
       radius: 1000,
     },
     {
-      id: '2',
-      name: 'Shawarma King',
-      address: '0.3 km away',
+      id: "2",
+      name: "Shawarma King",
+      address: "0.3 km away",
       lat: 47.6082,
       lng: -122.3351,
       radius: 500,
     },
     {
-      id: '3',
-      name: 'Falafel Palace',
-      address: '0.6 km away',
+      id: "3",
+      name: "Falafel Palace",
+      address: "0.6 km away",
       lat: 47.6042,
       lng: -122.3291,
       radius: 500,
     },
     {
-      id: '4',
-      name: 'Mediterranean Grill',
-      address: '0.9 km away',
+      id: "4",
+      name: "Mediterranean Grill",
+      address: "0.9 km away",
       lat: 47.6102,
       lng: -122.3301,
       radius: 500,
     },
     {
-      id: '5',
-      name: 'Gyro Spot',
-      address: '0.4 km away',
+      id: "5",
+      name: "Gyro Spot",
+      address: "0.4 km away",
       lat: 47.6032,
       lng: -122.3341,
       radius: 500,
@@ -126,8 +134,8 @@ export default function WidgetSelectedLocations({
   const competitorCount = locations.length - 1;
 
   const fillRedOptions = {
-    color: '#D62575',
-    fillColor: '#D62575',
+    color: "#D62575",
+    fillColor: "#D62575",
     fillOpacity: 0.15,
     weight: 1.5,
   };
@@ -142,10 +150,10 @@ export default function WidgetSelectedLocations({
           </div>
           <div>
             <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
-              {mainLocation?.name || 'Location'}
+              {mainLocation?.name || "Location"}
             </h3>
             <p className="text-[14px] text-slate-400 font-medium">
-              {mainLocation?.address || 'Address'}
+              {mainLocation?.address || "Address"}
             </p>
           </div>
         </div>
@@ -228,7 +236,7 @@ export default function WidgetSelectedLocations({
   );
 
   const rightContent = (
-    <div className="w-full h-full relative min-h-[500px] rounded-[12px] overflow-hidden">
+    <div className="w-full h-full relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={[mainLocation.lat, mainLocation.lng]}
         zoom={14}
@@ -277,22 +285,22 @@ export default function WidgetSelectedLocations({
       `}</style>
 
       {/* Map Radius Controls - Moved to left side */}
-      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-2xl border border-white/20">
-        <button
-          onClick={() => setRadius((prev) => Math.max(0.5, prev - 0.5))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+      <div className="absolute bottom-6 left-6 z-1000 flex items-center gap-2 rounded-xl">
+        <SecondaryBtn
+          className="bg-white"
+          onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
         >
           <Minus size={18} />
-        </button>
-        <div className="px-6 h-10 flex items-center justify-center text-[14px] font-bold text-slate-900 min-w-20">
-          {radius} km
+        </SecondaryBtn>
+        <div className="px-3 h-10 flex items-center shadow-[inset_0_-3px_2px_rgba(0,0,0,0.07)] bg-white rounded-md justify-center text-[14px] font-bold text-slate-900 min-w-20">
+          {Math.round(radius)} km
         </div>
-        <button
-          onClick={() => setRadius((prev) => Math.min(5, prev + 0.5))}
-          className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-all active:scale-90"
+        <SecondaryBtn
+          className="bg-white"
+          onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
         >
           <Plus size={18} />
-        </button>
+        </SecondaryBtn>
       </div>
     </div>
   );
