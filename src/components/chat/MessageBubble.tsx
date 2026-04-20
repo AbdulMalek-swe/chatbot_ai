@@ -10,7 +10,9 @@ import {
     WidgetRadiusSelection, 
     WidgetRadiusHeatmap,
     WidgetCompetitorSelection,
-    WidgetSelectedLocations
+    WidgetSelectedLocations,
+    WidgetAccountConnect,
+    WidgetUploadCreative
 } from './widgets';
 import { useEffect, useState } from 'react';
 
@@ -101,7 +103,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     const coordinates = extractCoordinates();
 
     const hasText = !!message.content?.trim() || !!message.thinking || isSynthesizing;
-    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection") || coordinates.length > 0 || !!message.map_data;
+    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection" || message.widget === "account_connect" || message.widget === "upload_creatives" || message.widget === "selected_locations") || coordinates.length > 0 || !!message.map_data;
 
     const thinkingPart = message.thinking && isAI && (
         <div className="p-px rounded-2xl bg-gradient-moving shadow-xl overflow-hidden mt-2 w-full">
@@ -196,6 +198,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             locations={message.points}
                             onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
+                    )}
+                    {message.widget === "account_connect" && (
+                        <WidgetAccountConnect onConfirm={canConfirm ? handleWidgetConfirm : undefined} />
+                    )}
+                    {message.widget === "upload_creatives" && (
+                        <WidgetUploadCreative onConfirm={canConfirm ? handleWidgetConfirm : undefined} />
                     )}
                 </>
             )}

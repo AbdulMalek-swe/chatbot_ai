@@ -193,6 +193,7 @@ export const swarma: MockChatMessage[] = [
     id: "21",
     role: "assistant",
     content: "Let’s connect your Meta ad account.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -235,6 +236,7 @@ export const swarma: MockChatMessage[] = [
     id: "27",
     role: "assistant",
     content: "Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -391,6 +393,7 @@ export const vibe: MockChatMessage[] = [
     id: "14",
     role: "assistant",
     content: "Great — we’ve locked in the audience. Please connect your Meta account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -427,6 +430,7 @@ export const vibe: MockChatMessage[] = [
     id: "20",
     role: "assistant",
     content: "Plan ready. Objective: Traffic. Audience: 2,150 tattoo artists. Ad format: Carousel. Please upload your creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -544,6 +548,7 @@ export const rock_bank: MockChatMessage[] = [
     id: "12",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -580,6 +585,7 @@ export const rock_bank: MockChatMessage[] = [
     id: "18",
     role: "assistant",
     content: "Plan ready. Objective: Engagement. Audience: 11,200 punk fans. Targeting: selected venues + 500 m radius. Ad format: Video. Please upload your creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -705,6 +711,7 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "14",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -741,6 +748,7 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "20",
     role: "assistant",
     content: "Plan ready. Objective: Lead Generation. Audience: 14,600 people. Targeting: top 50 neighborhoods + 1 km radius. Ad format: Carousel. Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -865,6 +873,7 @@ export const game: MockChatMessage[] = [
     id: "14",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -889,6 +898,7 @@ export const game: MockChatMessage[] = [
     id: "18",
     role: "assistant",
     content: "Plan ready. Objective: App Promotion. Audience: 9,300 gamers. Targeting: top 40 gaming spots + 50 m radius. Ad format: Video. Link attached. Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -1001,6 +1011,7 @@ export const matcha: MockChatMessage[] = [
     id: "14",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -1037,6 +1048,7 @@ export const matcha: MockChatMessage[] = [
     id: "20",
     role: "assistant",
     content: "Plan ready. Objective: Sales. Audience: 12,400 matcha drinkers. Targeting: top 60 spots + 1 km radius. Ad format: Carousel. Link attached. Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -1124,6 +1136,7 @@ export const gamble: MockChatMessage[] = [
     id: "10",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -1160,6 +1173,7 @@ export const gamble: MockChatMessage[] = [
     id: "16",
     role: "assistant",
     content: "Plan ready. Objective: Sales. Audience: 4,800 fans. Targeting: Bell Centre + Casino de Montréal + 1 km radius. Ad format: Video. Link attached. Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
@@ -1258,6 +1272,7 @@ export const ai: MockChatMessage[] = [
     id: "12",
     role: "assistant",
     content: "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+    widget: "account_connect",
     created_at: new Date().toISOString()
   },
   {
@@ -1294,6 +1309,7 @@ export const ai: MockChatMessage[] = [
     id: "18",
     role: "assistant",
     content: "Plan ready. Objective: Sales. Audience: 6,900 service pros. Targeting: top 55 trade spots + 1 km radius. Ad format: Carousel. Link attached. Please upload creatives.",
+    widget: "upload_creatives",
     created_at: new Date().toISOString()
   },
   {
