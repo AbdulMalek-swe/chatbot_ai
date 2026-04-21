@@ -118,7 +118,7 @@ const Sidebar = () => {
         <PrimaryBtn
           onClick={handleNewChat}
           leftSection={<Plus size={18} />}
-          className={`w-full ${isCollapsed ? 'px-0! justify-center!' : 'justify-start!'}`}
+          className={`w-full ${isCollapsed ? 'px-0! justify-center! ' : 'justify-start! text-xs!'}`}
         >
           {!isCollapsed && <span>New Chat</span>}
         </PrimaryBtn>
