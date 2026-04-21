@@ -1,10 +1,9 @@
-import { Code, Loader2, Zap } from 'lucide-react';
+import { Loader2, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../api/client';
 import { ChatInput, MessageList, Sidebar } from '../components/chat';
 import PrimaryBtn from '../components/shared/PrimaryBtn';
-import { chat_data, findMockResponse, findNextUserMessage } from '../constant/data';
+import { chat_data, findMockResponse } from '../constant/data';
 import { useChat } from '../contexts/ChatContext';
 
 const ChatPage = () => {
@@ -19,9 +18,6 @@ const ChatPage = () => {
     resetChat,
   } = useChat();
   const [mounted, setMounted] = useState(false);
-  const [campaignJson, setCampaignJson] = useState<any>(null);
-  const [showDebug, setShowDebug] = useState(false);
-  const [debugLoading, setDebugLoading] = useState(false);
 
   // NEW LOGIC: Unified message state
   const [messages, setMessages] = useState<any[]>([]);
@@ -138,21 +134,6 @@ const ChatPage = () => {
     }, 800);
   };
 
-  const fetchCampaignStatus = async () => {
-    if (!activeThreadId) return;
-    setDebugLoading(true);
-    try {
-      const response = await api.get(`/chat/campaign/status/${activeThreadId}`);
-      setCampaignJson(response.data);
-      setShowDebug(true);
-    } catch (error) {
-      console.error('Failed to fetch campaign status', error);
-      alert('No campaign found or error fetching status.');
-    } finally {
-      setDebugLoading(false);
-    }
-  };
-
   const trendingPrompts = [
     'I own a shawarma shop in a very busy area downtown.',
     'I just vibecoded a CRM built for tattoo artists.',
@@ -173,20 +154,6 @@ const ChatPage = () => {
                 beta
               </span>
               <div className="flex items-center gap-3">
-                {activeThreadId && (
-                  <button
-                    onClick={fetchCampaignStatus}
-                    disabled={debugLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/50 border border-black/5 text-slate-600 hover:bg-white transition-all font-bold text-[10px] uppercase tracking-wider backdrop-blur-md"
-                  >
-                    {debugLoading ? (
-                      <Loader2 size={12} className="animate-spin" />
-                    ) : (
-                      <Code size={12} />
-                    )}
-                    {debugLoading ? 'Syncing...' : 'Debug'}
-                  </button>
-                )}
                 <PrimaryBtn>
                   <img src="/upgrade.png" alt="Upgrade" className="w-7 h-7" />
                   Upgrade
@@ -242,7 +209,12 @@ const ChatPage = () => {
           ) : (
             <div className="flex-1 flex flex-col overflow-hidden min-h-0 relative">
               <div className="flex-1 overflow-y-auto custom-scrollbar  pt-4">
-                <MessageList messages={messages} streaming={isLoading} isNewChat={isNewChat} onSendMessage={handleSendMessage} />
+                <MessageList
+                  messages={messages}
+                  streaming={isLoading}
+                  isNewChat={isNewChat}
+                  onSendMessage={handleSendMessage}
+                />
               </div>
 
               <ChatInput
