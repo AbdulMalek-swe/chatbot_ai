@@ -16,12 +16,12 @@ import WidgetLayout from "./WidgetLayout";
 import SecondaryBtn from "../../shared/secondaryBtn";
 
 // Custom Marker to match the screenshot style
-const customIcon = new L.DivIcon({
+const createCustomIcon = (name: string, address: string) => new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Marker" />
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
-                Shawarma Palace at 456 Elm Street.
+                ${name} at ${address}
                 <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 border-r border-b border-slate-100 rotate-45"></div>
             </div>
         </div>
@@ -66,6 +66,8 @@ function MapRadiusUpdater({
 
 interface WidgetRadiusSelectionProps {
   address?: string;
+  businessName?: string;
+  center?: [number, number];
   onConfirm?: (radius: number) => void;
   initialRadius?: number;
   aiText?: React.ReactNode;
@@ -74,6 +76,9 @@ interface WidgetRadiusSelectionProps {
 }
 
 export default function WidgetRadiusSelection({
+  address = '456 Elm Street.',
+  businessName = 'Your Business',
+  center = [47.6062, -122.3321],
   onConfirm,
   initialRadius = 1,
   aiText,
@@ -81,7 +86,6 @@ export default function WidgetRadiusSelection({
   children,
 }: WidgetRadiusSelectionProps) {
   const [radius, setRadius] = useState(initialRadius);
-  const center: [number, number] = [47.6062, -122.3321];
 
   const fillRedOptions = {
     color: "#D62575",
@@ -101,9 +105,9 @@ export default function WidgetRadiusSelection({
             </div>
             <div>
               <p className="text-[#151515] font-inter font-semibold text-md">
-                Campaign Direction
+                {businessName}
               </p>
-              <p className="text-sm text-[#62646A]">456 Elm Street.</p>
+              <p className="text-sm text-[#62646A]">{address}</p>
             </div>
           </div>
         </div>
@@ -178,7 +182,7 @@ export default function WidgetRadiusSelection({
         />
         <ZoomControl position="bottomright" />
         <MapRadiusUpdater center={center} radius={radius} />
-        <Marker position={center} icon={customIcon} />
+        <Marker position={center} icon={createCustomIcon(businessName, address)} />
         <Circle
           center={center}
           pathOptions={fillRedOptions}

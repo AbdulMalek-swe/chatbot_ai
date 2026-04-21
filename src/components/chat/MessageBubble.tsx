@@ -52,15 +52,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     const isFirstAI = isAI && assistantMessages.length > 0 && assistantMessages[0].id === message.id;
     const isLatestMessage = messages[messages.length - 1]?.id === message.id;
     const isSynthesizing = isAI && isLatestMessage && streaming && !message.content && !message.thinking && !message.poi_data && !message.map_data;
-    const extractCoordinates = () => {
+    const extractCoordinatesForMessage = (msg: ChatMessage) => {
         const coords: Array<{ lat: number, lng: number, name?: string }> = [];
-        if (message.map_data?.pois_targeted) {
-            message.map_data.pois_targeted.forEach((p: any) => {
+        if (msg.map_data?.pois_targeted) {
+            msg.map_data.pois_targeted.forEach((p: any) => {
                 coords.push({ lat: p.lat, lng: p.lng, name: p.label || p.name || `POI (${p.radius_km}km)` });
             });
         }
 
-        const poiData = message.poi_data || (message.campaign_plan?.targetable_poi_coordinates);
+        const poiData = msg.poi_data || (msg.campaign_plan?.targetable_poi_coordinates);
 
         if (coords.length === 0 && poiData && Array.isArray(poiData)) {
             poiData.forEach((p: any) => {
@@ -72,8 +72,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
             });
         }
 
-        if (coords.length === 0 && message.campaign_plan?.geo_targets) {
-            message.campaign_plan.geo_targets.forEach((t: any) => {
+        if (coords.length === 0 && msg.campaign_plan?.geo_targets) {
+            msg.campaign_plan.geo_targets.forEach((t: any) => {
                 const lat = parseFloat(t.latitude || t.lat);
                 const lng = parseFloat(t.longitude || t.lng);
                 if (!isNaN(lat) && !isNaN(lng)) {
@@ -81,10 +81,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                 }
             });
         }
-        if (coords.length === 0 && message.content) {
+        if (coords.length === 0 && msg.content) {
             const latLngRegex = /(?:lat|latitude)[:\s,]*(-?\d+\.\d+)[:\s,]*?(?:lng|longitude)[:\s]*(-?\d+\.\d+)|(?:\()(-?\d+\.\d+)[:\s,]*(-?\d+\.\d+)(?:\))/gi;
             let match;
-            while ((match = latLngRegex.exec(message.content)) !== null) {
+            while ((match = latLngRegex.exec(msg.content)) !== null) {
                 const lat = parseFloat(match[1] || match[3]);
                 const lng = parseFloat(match[2] || match[4]);
                 if (!isNaN(lat) && !isNaN(lng)) {
@@ -99,6 +99,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
         return coords;
     };
+
+    const extractCoordinates = () => extractCoordinatesForMessage(message);
 
     const coordinates = extractCoordinates();
 
@@ -152,14 +154,107 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
     const isSplitWidget = isAI && (message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection" || message.widget === "selected_locations");
 
+    const getContext = () => {
+        let name = "Your Business";
+        let address = "Current Location";
+        
+        let businessLat = 47.6062;
+        let businessLng = -122.3321;
+        let hasCustomCoords = false;
+
+        const currentIndex = messages.findIndex(m => m.id === message.id);
+        const scanUntil = currentIndex !== -1 ? currentIndex : messages.length - 1;
+
+        // Scan history backwards to find name and address
+        for (let i = scanUntil; i >= 0; i--) {
+            const m = messages[i];
+            
+            // 1. Try points
+            if (m.points && m.points.length > 0) {
+                const p = m.points[0];
+                if (p.name && !["Audience Size", "Confidence", "Minimum Budget", "Reach Estimate"].includes(p.name)) {
+                    if (name === "Your Business") name = p.name;
+                }
+                if (p.type && !["Audience Size", "Confidence", "Minimum Budget", "Reach Estimate"].includes(p.type)) {
+                    if (name === "Your Business") name = p.type;
+                }
+                if (p.address && address === "Current Location") address = p.address;
+                
+                if (!hasCustomCoords && p.lat && p.lng) {
+                    businessLat = p.lat;
+                    businessLng = p.lng;
+                    hasCustomCoords = true;
+                }
+            }
+
+            // 2. Try coordinates from map_data or content
+            if (!hasCustomCoords) {
+                const coords = extractCoordinatesForMessage(m);
+                if (coords.length > 0) {
+                    businessLat = coords[0].lat;
+                    businessLng = coords[0].lng;
+                    hasCustomCoords = true;
+                    if (coords[0].name && coords[0].name !== 'Position Sync' && name === "Your Business") name = coords[0].name;
+                }
+            }
+
+            // 3. Look for user responses to assistant questions
+            if (i > 0) {
+                const prevM = messages[i - 1];
+                if (prevM.role === 'assistant') {
+                    const content = prevM.content.toLowerCase();
+                    if (content.includes("name of your") || content.includes("what is the name")) {
+                        if (name === "Your Business") name = m.content.replace(/[.]$/, "");
+                    }
+                    if (content.includes("exact address") || content.includes("what city") || content.includes("what is the address")) {
+                        if (address === "Current Location") address = m.content.replace(/[.]$/, "");
+                        
+                        // Check for city fallbacks if no coords yet
+                        if (!hasCustomCoords) {
+                             const cityContent = m.content.toLowerCase();
+                             if (cityContent.includes("seattle")) { businessLat = 47.6062; businessLng = -122.3321; hasCustomCoords = true; }
+                             else if (cityContent.includes("portland")) { businessLat = 45.5122; businessLng = -122.6587; hasCustomCoords = true; }
+                             else if (cityContent.includes("austin")) { businessLat = 30.2672; businessLng = -97.7431; hasCustomCoords = true; }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Final Heuristic: if name is still default, look at first message
+        if (name === "Your Business" && messages.length > 0) {
+            const firstMsg = messages[0].content;
+            const match = firstMsg.match(/i (?:own|manage|built|vibecoded|have) (?:a|an)?\s*([^.,?!]+)/i);
+            if (match && match[1]) {
+                const candidate = match[1].trim();
+                name = candidate.split(' ').slice(0, 4).join(' ').replace(/\s+/g, ' ');
+                // Capitalize
+                name = name.charAt(0).toUpperCase() + name.slice(1);
+            }
+        }
+
+        return { businessName: name, businessAddress: address, center: [businessLat, businessLng] as [number, number] };
+    };
+
+    const { businessName, businessAddress, center } = getContext();
+
     const widgetContent = (
         <div className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}>
             {isAI && (
                 <>
-                    {message.widget === "pin_point" && <CampaignDirection widget={message.points} onConfirm={canConfirm ? handleWidgetConfirm : undefined} />}
+                    {message.widget === "pin_point" && (
+                        <CampaignDirection 
+                            widget={message.points} 
+                            businessName={businessName}
+                            businessAddress={businessAddress}
+                            onConfirm={canConfirm ? handleWidgetConfirm : undefined} 
+                        />
+                    )}
                     {message.widget === "map_selection" && (
                         <LocationMapWidget
-                            address={messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            address={businessAddress}
+                            businessName={businessName}
+                            center={center}
                             onConfirm={canConfirm ? (val) => {
                                 if (onSendMessage) onSendMessage(val);
                                 else sendMessage(val);
@@ -168,7 +263,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     )}
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
-                            address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            address={businessAddress}
+                            businessName={businessName}
+                            center={center}
                             onConfirm={canConfirm ? (radius) => {
                                 const msg = `${radius} km is perfect.`;
                                 if (onSendMessage) onSendMessage(msg);
@@ -178,6 +275,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     )}
                     {message.widget === "radius_heatmap" && (
                         <WidgetRadiusHeatmap
+                            businessName={businessName}
+                            businessAddress={businessAddress}
+                            center={center}
                             onConfirm={canConfirm ? (radius) => {
                                 const msg = `${radius} km is perfect.`;
                                 if (onSendMessage) onSendMessage(msg);
@@ -190,6 +290,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             points={message.points}
                             title={(message as any).widget_title}
                             suggestions={(message as any).widget_suggestions}
+                            businessName={businessName}
+                            businessAddress={businessAddress}
+                            center={center}
                             onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
                     )}
@@ -250,7 +353,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                 <div className="w-full">
                     {message.widget === "radius_selection" && (
                         <WidgetRadiusSelection
-                            address={messages[messages.indexOf(message) - 3]?.content || messages[messages.indexOf(message) - 1]?.content || "Current Location"}
+                            address={businessAddress}
+                            businessName={businessName}
+                            center={center}
                             aiText={
                                 <div className="space-y-4">
                                     {thinkingPart}
@@ -269,6 +374,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     )}
                     {message.widget === "radius_heatmap" && (
                         <WidgetRadiusHeatmap
+                            businessName={businessName}
+                            businessAddress={businessAddress}
+                            center={center}
                             aiText={
                                 <div className="space-y-4">
                                     {thinkingPart}
@@ -290,6 +398,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             points={message.points}
                             title={(message as any).widget_title}
                             suggestions={(message as any).widget_suggestions}
+                            businessName={businessName}
+                            businessAddress={businessAddress}
+                            center={center}
                             aiText={
                                 <div className="space-y-4">
                                     {thinkingPart}
@@ -305,6 +416,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     {message.widget === "selected_locations" && (
                         <WidgetSelectedLocations
                             locations={message.points}
+                            center={center}
+                            businessName={businessName}
+                            businessAddress={businessAddress}
                             aiText={
                                 <div className="space-y-4">
                                     {thinkingPart}

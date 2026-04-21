@@ -18,13 +18,13 @@ const competitorIcon = new L.DivIcon({
   iconAnchor: [6, 6],
 });
 
-const mainIcon = new L.DivIcon({
+const createMainIcon = (name: string, address: string) => new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
             <div class="absolute w-12 h-12 bg-[#D62575]/20 rounded-full animate-ping"></div>
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Main Marker" />
             <div class="absolute -top-11 whitespace-nowrap bg-white px-3 py-2 rounded-xl shadow-xl border border-slate-100 text-[13px] font-bold text-slate-800 z-20">
-                Shawarma Palace at 456 Elm Street.
+                ${name} at ${address}
                 <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-r border-b border-slate-100 rotate-45"></div>
             </div>
         </div>
@@ -70,6 +70,9 @@ interface WidgetCompetitorSelectionProps {
   showLogo?: boolean;
   children?: React.ReactNode;
   onConfirm?: () => void;
+  businessName?: string;
+  businessAddress?: string;
+  center?: [number, number];
 }
 
 export default function WidgetCompetitorSelection({
@@ -80,8 +83,10 @@ export default function WidgetCompetitorSelection({
   showLogo = false,
   children,
   onConfirm,
+  businessName = 'Shawarma Palace',
+  businessAddress = '456 Elm Street.',
+  center = [47.6062, -122.3321],
 }: WidgetCompetitorSelectionProps) {
-  const center: [number, number] = [47.6062, -122.3321];
   const [radius, setRadius] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -166,10 +171,10 @@ export default function WidgetCompetitorSelection({
           </div>
           <div>
             <h3 className="text-[20px] font-bold text-slate-900 leading-tight">
-              Shawarma Palace
+              {businessName}
             </h3>
             <p className="text-[14px] text-slate-400 font-medium">
-              456 Elm Street.
+              {businessAddress}
             </p>
           </div>
         </div>
@@ -293,7 +298,7 @@ export default function WidgetCompetitorSelection({
         <ZoomControl position="bottomright" />
         <MapBoundsUpdater center={center} radius={radius} />
 
-        <Marker position={center} icon={mainIcon} />
+        <Marker position={center} icon={createMainIcon(businessName, businessAddress)} />
 
         <Circle
           center={center}

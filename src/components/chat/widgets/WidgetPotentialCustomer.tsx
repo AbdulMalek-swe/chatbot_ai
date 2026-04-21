@@ -7,12 +7,12 @@ import Upload from '../../shared/Upload';
 import WidgetLayout from './WidgetLayout';
 
 // Custom Marker to match the screenshot style
-const customIcon = new L.DivIcon({
+const createCustomIcon = (name: string, address: string) => new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Marker" />
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
-                Shawarma Palace at 456 Elm Street.
+                ${name} at ${address}
                 <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 border-r border-b border-slate-200 rotate-45"></div>
             </div>
         </div>
@@ -56,7 +56,9 @@ function MapRadiusUpdater({
 }
 
 interface WidgetPotentialCustomerProps {
+  businessName?: string;
   address?: string;
+  center?: [number, number];
   onConfirm?: (radius: number) => void;
   initialRadius?: number;
   aiText?: React.ReactNode;
@@ -65,6 +67,9 @@ interface WidgetPotentialCustomerProps {
 }
 
 export default function WidgetPotentialCustomer({
+  businessName = 'Your Business',
+  address = '456 Elm Street.',
+  center = [47.6062, -122.3321],
   onConfirm,
   initialRadius = 1,
   aiText,
@@ -72,7 +77,6 @@ export default function WidgetPotentialCustomer({
   children,
 }: WidgetPotentialCustomerProps) {
   const [radius, setRadius] = useState(initialRadius);
-  const center: [number, number] = [47.6062, -122.3321];
 
   const leftContent = (
     <div className="p-6 h-full flex flex-col bg-white">
@@ -87,8 +91,8 @@ export default function WidgetPotentialCustomer({
         <div className="flex flex-col gap-4 bg-[#F7F7F7] rounded-xl pt-3 pb-6 px-2 w-100">
           <Upload
             imgSrc="/locationIcon.png"
-            title="Shawarma Palace"
-            text="456 Elm Street. (1 km zone)"
+            title={businessName}
+            text={`${address} (${radius} km zone)`}
             btnLabel="Edit"
             btnOnClick={() => console.log('clicked')}
             btnLeftSection={<Edit size={16} />}
@@ -130,7 +134,7 @@ export default function WidgetPotentialCustomer({
         />
         <ZoomControl position="bottomright" />
         <MapRadiusUpdater center={center} radius={radius} />
-        <Marker position={center} icon={customIcon} />
+        <Marker position={center} icon={createCustomIcon(businessName, address)} />
         <Circle
           center={center}
           radius={radius * 1000}

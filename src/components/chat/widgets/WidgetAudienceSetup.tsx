@@ -18,12 +18,12 @@ const competitorIcon = new L.DivIcon({
 });
 
 // Main shop icon (pink) to match the Frame exactly
-const mainIcon = new L.DivIcon({
+const createMainIcon = (name: string, address: string) => new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
             <img src="/indicator.svg" class="w-6 h-6 relative z-10" alt="Main Marker" />
             <div class="absolute top-[-38px] whitespace-nowrap bg-white px-3 py-1.5 rounded-lg shadow-sm border border-slate-100 text-[11px] font-bold text-slate-800">
-                Shawarma Palace at 456 Elm Street.
+                ${name} at ${address}
                 <div class="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r border-b border-slate-100 rotate-45"></div>
             </div>
         </div>
@@ -65,8 +65,15 @@ function MapBoundsUpdater({
   return null;
 }
 
-export default function WidgetAudienceSetup() {
-  const center: [number, number] = [47.6062, -122.3321];
+export default function WidgetAudienceSetup({
+  businessName = 'Your Business',
+  businessAddress = '456 Elm Street.',
+  center = [47.6062, -122.3321],
+}: { 
+  businessName?: string, 
+  businessAddress?: string, 
+  center?: [number, number] 
+}) {
   const [radius, setRadius] = useState(500);
 
   const competitors = [
@@ -98,10 +105,10 @@ export default function WidgetAudienceSetup() {
           </div>
           <div>
             <h3 className="text-[17px] font-bold text-slate-900 leading-tight">
-              Shawarma Palace
+              {businessName}
             </h3>
             <p className="text-[13px] text-slate-400 font-medium">
-              456 Elm Street.
+              {businessAddress}
             </p>
           </div>
         </div>
@@ -158,7 +165,7 @@ export default function WidgetAudienceSetup() {
         <ZoomControl position="bottomright" />
 
         {/* Main Marker with Circle Labels */}
-        <Marker position={center} icon={mainIcon} />
+        <Marker position={center} icon={createMainIcon(businessName, businessAddress)} />
 
         {/* Main Radius */}
         <Circle

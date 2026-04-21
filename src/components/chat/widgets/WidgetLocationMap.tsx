@@ -30,12 +30,16 @@ function MapCenter({ center }: { center: [number, number] }) {
 
 export default function LocationMapWidget({
   address,
+  businessName,
+  center = [47.6062, -122.3321],
   onConfirm,
 }: {
   address?: string;
+  businessName?: string;
+  center?: [number, number];
   onConfirm?: (val: string) => void;
 }) {
-  const center: [number, number] = [47.6062, -122.3321];
+  // Center is now passed as a prop
 
   return (
     <WidgetLayout mode="single">
@@ -48,7 +52,7 @@ export default function LocationMapWidget({
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-md font-semibold text-[#151515] font-inter">
-                Location Locked
+                {businessName || 'Location Locked'}
               </h4>
               <p className="text-[14px] font-normal text-[#62646A] truncate">
                 {address || 'Detecting Location...'}

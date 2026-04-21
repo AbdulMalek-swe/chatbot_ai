@@ -62,7 +62,17 @@ function Button({
   );
 }
 
-export default function CampaignDirection({ widget, onConfirm }: { widget: any; onConfirm?: () => void }) {
+export default function CampaignDirection({ 
+  widget, 
+  businessName = 'Campaign Direction',
+  businessAddress = '456 Elm Street.',
+  onConfirm 
+}: { 
+  widget: any; 
+  businessName?: string;
+  businessAddress?: string;
+  onConfirm?: () => void 
+}) {
   return (
     <WidgetLayout mode="single">
       <Card className="w-full border rounded-xl shadow-md">
@@ -74,9 +84,9 @@ export default function CampaignDirection({ widget, onConfirm }: { widget: any; 
               </div>
               <div>
                 <p className="text-[#151515] font-inter font-semibold text-md">
-                  Campaign Direction
+                  {businessName}
                 </p>
-                <p className="text-sm text-[#62646A]">456 Elm Street.</p>
+                <p className="text-sm text-[#62646A]">{businessAddress}</p>
               </div>
             </div>
           </div>

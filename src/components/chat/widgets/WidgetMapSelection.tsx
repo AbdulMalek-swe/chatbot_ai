@@ -32,9 +32,8 @@ function MapCenter({ center }: { center: [number, number] }) {
   return null;
 }
 
-export default function WidgetMapSelection({ address }: { address?: string }) {
-  // Mock coordinates for "456 Elm Street, Seattle"
-  const center: [number, number] = [47.6062, -122.3321];
+export default function WidgetMapSelection({ address, center = [47.6062, -122.3321], onConfirm }: { address?: string, center?: [number, number], onConfirm?: (val: string) => void }) {
+  // Center is now passed as a prop
 
   return (
     <div className="w-full max-w-[630px] bg-[#DAD9CD]/10 rounded-xl overflow-hidden border border-slate-200 shadow-2xl animate-fade-up">
@@ -96,7 +95,10 @@ export default function WidgetMapSelection({ address }: { address?: string }) {
             <X size={16} />
             Cancel
           </button>
-          <button className="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[13px] hover:bg-black transition-all active:scale-95 shadow-[0_10px_20px_-10px_rgba(0,0,0,0.5)]">
+          <button 
+            onClick={() => onConfirm?.(address || "Location Confirmed")}
+            className={`flex items-center gap-2 px-8 py-2.5 rounded-xl bg-slate-900 text-white font-bold text-[13px] hover:bg-black transition-all active:scale-95 shadow-[0_10px_20px_-10px_rgba(0,0,0,0.5)] ${!onConfirm ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
             <Check size={16} className="text-primary-400" />
             Confirm
           </button>

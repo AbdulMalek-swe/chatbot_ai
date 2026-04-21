@@ -79,61 +79,32 @@ interface Location {
 
 interface WidgetSelectedLocationsProps {
   locations?: Location[];
+  businessName?: string;
+  businessAddress?: string;
+  center?: [number, number];
   aiText?: React.ReactNode;
   showLogo?: boolean;
   onConfirm?: () => void;
 }
 
 export default function WidgetSelectedLocations({
-  locations = [
-    {
-      id: "1",
-      name: "Shawarma Palace",
-      address: "456 Elm Street.",
-      lat: 47.6062,
-      lng: -122.3321,
-      radius: 1000,
-    },
-    {
-      id: "2",
-      name: "Shawarma King",
-      address: "0.3 km away",
-      lat: 47.6082,
-      lng: -122.3351,
-      radius: 500,
-    },
-    {
-      id: "3",
-      name: "Falafel Palace",
-      address: "0.6 km away",
-      lat: 47.6042,
-      lng: -122.3291,
-      radius: 500,
-    },
-    {
-      id: "4",
-      name: "Mediterranean Grill",
-      address: "0.9 km away",
-      lat: 47.6102,
-      lng: -122.3301,
-      radius: 500,
-    },
-    {
-      id: "5",
-      name: "Gyro Spot",
-      address: "0.4 km away",
-      lat: 47.6032,
-      lng: -122.3341,
-      radius: 500,
-    },
-  ],
+  locations = [],
+  businessName = 'Your Business',
+  businessAddress = 'Address',
+  center = [47.6062, -122.3321],
   aiText,
   showLogo = false,
   onConfirm,
 }: WidgetSelectedLocationsProps) {
   const [radius, setRadius] = useState(1);
-  const mainLocation = locations[0];
-  const competitorCount = locations.length - 1;
+  const mainLocation = locations[0] || { 
+    id: '0', 
+    name: businessName, 
+    address: businessAddress, 
+    lat: center[0], 
+    lng: center[1] 
+  };
+  const competitorCount = Math.max(0, locations.length - 1);
 
   const fillRedOptions = {
     color: "#D62575",
