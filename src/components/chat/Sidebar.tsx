@@ -92,7 +92,12 @@ const Sidebar = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="text-2xl font-bold tracking-tight">punk</span>
+              <span
+                className="text-3xl font-normal font-ocrx leading-5 lowercase"
+              
+              >
+                punk
+              </span>
             </button>
           )}
           <button
@@ -161,7 +166,9 @@ const Sidebar = () => {
       <div className="flex-1 flex flex-col mt-10 min-h-0 overflow-hidden">
         {!isCollapsed && (
           <div className="px-6 mb-2">
-            <h3 className="text-lg  text-[#151515] font-normal">Chat History</h3>
+            <h3 className="text-lg  text-[#151515] font-normal">
+              Chat History
+            </h3>
             <div className="h-px bg-slate-100 w-full mt-4"></div>
           </div>
         )}
