@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
 import { findNextUserMessage } from '../../constant/data';
-import { Cpu } from 'lucide-react';
+import { Cpu, Check, FileText, Image, Video, ExternalLink, Globe, MapPin } from 'lucide-react';
 import { 
     WidgetMessageMap as MessageMap, 
     WidgetPinPoint as CampaignDirection, 
@@ -148,7 +148,58 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     <StreamingMarkdown content={message.content} setWidgetShow={setWidgetShow} />
                 </div>
             ) : (
-                <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>{message.content}</div>
+                <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>
+                    {message.content === '[Connects account]' ? (
+                        <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm">
+                            <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-slate-200">
+                                <Globe size={24} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[15px] font-bold text-slate-900 font-inter">Meta Ads Connected</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
+                                    <span className="text-[12px] font-medium text-slate-500">Verified & Synchronized</span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : message.content.startsWith('[Uploads') ? (
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-slate-200">
+                                    <FileText size={24} />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[15px] font-bold text-slate-900 font-inter">Assets Uploaded Successfully</span>
+                                    <span className="text-[12px] font-medium text-slate-500">
+                                        {message.content.replace('[Uploads ', '').replace(']', '')}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : message.content.includes('km is perfect') ? (
+                        <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm">
+                            <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-slate-200">
+                                <MapPin size={24} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[15px] font-bold text-slate-900 font-inter">Target Radius Set</span>
+                                <span className="text-[12px] font-medium text-slate-500">{message.content}</span>
+                            </div>
+                        </div>
+                    ) : message.content === "Yes, that's me." || message.content === "Yes, that’s me." ? (
+                        <div className="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm">
+                            <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-lg shadow-slate-200">
+                                <Check size={24} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-[15px] font-bold text-slate-900 font-inter">Location Verified</span>
+                                <span className="text-[12px] font-medium text-slate-500">Business position confirmed on map</span>
+                            </div>
+                        </div>
+                    ) : (
+                        message.content
+                    )}
+                </div>
             )}
         </div>
     );

@@ -157,12 +157,20 @@ export default function WidgetRadiusHeatmap({
   children,
 }: WidgetRadiusHeatmapProps) {
   const [radius, setRadius] = useState(initialRadius);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const fillRedOptions = {
     color: '#D62575',
     fillColor: '#D6257530',
     fillOpacity: 0.4,
     weight: 2,
+  };
+
+  const handleConfirm = () => {
+    setIsConfirmed(true);
+    setTimeout(() => {
+        onConfirm?.(radius);
+    }, 800);
   };
 
   const leftContent = (
@@ -191,7 +199,7 @@ export default function WidgetRadiusHeatmap({
           Location Confirmed
         </div>
         <div className="flex items-center gap-3 text-slate-900 font-bold text-[15px]">
-          <Check size={18} className="text-slate-900" strokeWidth={3} />
+          <Check size={18} className={isConfirmed ? "text-primary-500" : "text-slate-900"} strokeWidth={3} />
           Targeting Area Identified
         </div>
       </div>
@@ -201,23 +209,29 @@ export default function WidgetRadiusHeatmap({
       {/* Radius Section */}
       <div className="flex-1 flex flex-col">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-5 h-5 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
+          {!isConfirmed ? (
+            <div className="w-5 h-5 rounded-full border-2 border-slate-900 border-t-transparent animate-spin" />
+          ) : (
+            <Check size={20} className="text-primary-500" strokeWidth={3} />
+          )}
           <span className="text-[16px] font-bold text-slate-900">
-            Radius Selection
+            {isConfirmed ? "Radius Locked" : "Radius Selection"}
           </span>
         </div>
 
         <p className="text-[15px] text-slate-600 leading-relaxed font-medium mb-8">
-          Select the radius around your shop to identify potential customers.
-          The heat zones indicate areas with high visitor density from your
-          competitors.
+          {isConfirmed 
+            ? `Excellent. A ${Math.round(radius)}km radius has been set around ${businessName}. Heat zones have been synchronized with your campaign plan.`
+            : "Select the radius around your shop to identify potential customers. The heat zones indicate areas with high visitor density from your competitors."}
         </p>
 
         {/* Controls */}
         <div className="flex items-center justify-between mt-auto pb-4">
           <div className="flex items-center gap-2">
             <SecondaryBtn
-              onClick={() => setRadius((prev) => Math.max(1, prev - 1))}
+              onClick={() => !isConfirmed && setRadius((prev) => Math.max(1, prev - 1))}
+              disabled={isConfirmed}
+              className={isConfirmed ? "opacity-50" : ""}
             >
               <Minus size={18} />
             </SecondaryBtn>
@@ -225,15 +239,20 @@ export default function WidgetRadiusHeatmap({
               {Math.round(radius)} km
             </div>
             <SecondaryBtn
-              onClick={() => setRadius((prev) => Math.min(20, prev + 1))}
+              onClick={() => !isConfirmed && setRadius((prev) => Math.min(20, prev + 1))}
+              disabled={isConfirmed}
+              className={isConfirmed ? "opacity-50" : ""}
             >
               <Plus size={18} />
             </SecondaryBtn>
           </div>
 
           <div className="flex items-center gap-3">
-            <PrimaryBtn className={`px-8! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`} onClick={() => onConfirm?.(radius)}>
-              Confirm Radius
+            <PrimaryBtn 
+                className={`px-8! ${(!onConfirm || isConfirmed) ? 'opacity-50 cursor-not-allowed!' : ''} ${isConfirmed ? 'bg-primary-500! border-primary-500!' : ''}`} 
+                onClick={() => !isConfirmed && handleConfirm()}
+            >
+              {isConfirmed ? "Confirmed" : "Confirm Radius"}
             </PrimaryBtn>
           </div>
         </div>
