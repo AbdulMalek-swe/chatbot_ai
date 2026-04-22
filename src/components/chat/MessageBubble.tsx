@@ -168,8 +168,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     <div
       className={`w-full ${
         isAI
-          ? 'text-[15px] sm:text-2xl leading-relaxed font-medium tracking-tight text-foreground/90'
-          : 'font-inter font-normal text-2xl leading-6 tracking-[0px] text-foreground'
+          ? 'text-md  leading-relaxed font-medium tracking-tight text-foreground/90'
+          : 'font-inter font-normal text-md  leading-6 tracking-[0px] text-foreground'
       }`}
     >
       {isSynthesizing ? (
