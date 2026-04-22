@@ -15,6 +15,7 @@ import {
     WidgetUploadCreative
 } from './widgets';
 import { useEffect, useState } from 'react';
+import WIdgetQuickQuestion from './widgets/WIdgetQuickQuestion';
 
 
 interface MessageBubbleProps {
@@ -105,7 +106,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     const coordinates = extractCoordinates();
 
     const hasText = !!message.content?.trim() || !!message.thinking || isSynthesizing;
-    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection" || message.widget === "account_connect" || message.widget === "upload_creatives" || message.widget === "selected_locations") || coordinates.length > 0 || !!message.map_data;
+    const hasWidget = !!(message.widget === "pin_point" || message.widget === "map_selection" || message.widget === "radius_selection" || message.widget === "radius_heatmap" || message.widget === "competitor_selection" || message.widget === "account_connect" || message.widget === "upload_creatives" || message.widget === "selected_locations" || message.widget === "QuickQuestion") || coordinates.length > 0 || !!message.map_data;
 
     const thinkingPart = message.thinking && isAI && (
         <div className="p-px rounded-2xl bg-gradient-moving shadow-xl overflow-hidden mt-2 w-full">
@@ -123,8 +124,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
     const mainContentPart = (
         <div className={`w-full ${isAI 
-            ? 'text-[15px] sm:text-[16px] leading-relaxed font-medium tracking-tight text-foreground/90' 
-            : 'font-inter font-normal text-[16px] leading-[24px] tracking-[0px] text-foreground'}`}>
+            ? 'text-[15px] sm:text-2xl leading-relaxed font-medium tracking-tight text-foreground/90' 
+            : 'font-inter font-normal text-2xl leading-6 tracking-[0px] text-foreground'}`}>
             {isSynthesizing ? (
                 <div className="flex flex-col gap-3 py-4">
                     {currentStepLabel ? (
@@ -359,6 +360,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                     {message.widget === "upload_creatives" && (
                         <WidgetUploadCreative onConfirm={canConfirm ? handleWidgetConfirm : undefined} />
                     )}
+                     {message.widget === "QuickQuestion" && (
+                        <WIdgetQuickQuestion
+                         />
+                    )}
+
                 </>
             )}
 
@@ -391,7 +397,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     if (!isAI) {
         return (
             <div className="group w-full animate-fade-in font-body flex justify-end mb-6 max-w-4xl mx-auto">
-                <div className="max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-[16px] rounded-tr-[4px] rounded-br-[16px] rounded-bl-[16px] p-4 text-left">
+                <div className="max-w-2xl bg-white shadow-sm border border-slate-200/50 rounded-tl-2xl rounded-tr-sm rounded-br-2xl rounded-bl-2xl p-4 text-left">
                     {mainContentPart}
                 </div>
             </div>
@@ -479,6 +485,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
                             showLogo={isFirstAI}
                             onConfirm={canConfirm ? handleWidgetConfirm : undefined}
                         />
+                    )}
+                      {message.widget === "QuickQuestion" && (
+                        <WIdgetQuickQuestion />
                     )}
 
                 </div>
