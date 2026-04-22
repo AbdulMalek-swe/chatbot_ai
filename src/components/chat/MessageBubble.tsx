@@ -4,8 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { findNextUserMessage } from '../../constant/data';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
-import { findNextUserMessage } from '../../constant/data';
-import { Cpu, Check, FileText, Globe, MapPin } from 'lucide-react';
 import { 
     WidgetMessageMap as MessageMap, 
     WidgetPinPoint as CampaignDirection, 
