@@ -4,16 +4,18 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { findNextUserMessage } from '../../constant/data';
 import { type ChatMessage, useChat } from '../../contexts/ChatContext';
-import {
-  WidgetPinPoint as CampaignDirection,
-  WidgetLocationMap as LocationMapWidget,
-  WidgetMessageMap as MessageMap,
-  WidgetAccountConnect,
-  WidgetCompetitorSelection,
-  WidgetRadiusHeatmap,
-  WidgetRadiusSelection,
-  WidgetSelectedLocations,
-  WidgetUploadCreative,
+import { findNextUserMessage } from '../../constant/data';
+import { Cpu, Check, FileText, Globe, MapPin } from 'lucide-react';
+import { 
+    WidgetMessageMap as MessageMap, 
+    WidgetPinPoint as CampaignDirection, 
+    WidgetLocationMap as LocationMapWidget, 
+    WidgetRadiusSelection, 
+    WidgetRadiusHeatmap,
+    WidgetCompetitorSelection,
+    WidgetSelectedLocations,
+    WidgetAccountConnect,
+    WidgetUploadCreative
 } from './widgets';
 import WIdgetQuickQuestion from './widgets/WIdgetQuickQuestion';
 
@@ -25,41 +27,25 @@ interface MessageBubbleProps {
   onSendMessage?: (content: string) => void;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({
-  message,
-  allMessages,
-  children,
-  isNewChat = true,
-  onSendMessage,
-}) => {
-  const isAI = message.role === 'assistant';
-  const {
-    streaming,
-    messages: contextMessages,
-    currentStepLabel,
-    sendMessage,
-  } = useChat();
-  const messages = allMessages || contextMessages;
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, children, isNewChat = true, onSendMessage }) => {
+    const isAI = message.role === 'assistant';
+    const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
+    const messages = allMessages || contextMessages;
+    const messageIndex = messages.indexOf(message);
+    const hasSubsequentUserMessage = messages.slice(messageIndex + 1).some(m => m.role === 'user');
+    const canConfirm = isNewChat && !streaming && !hasSubsequentUserMessage;
 
-  // Determine if this widget's confirm button should be active
-  const messageIndex = messages.indexOf(message);
-  const hasSubsequentUserMessage = messages
-    .slice(messageIndex + 1)
-    .some((m) => m.role === 'user');
-  const canConfirm = isNewChat && !streaming && !hasSubsequentUserMessage;
-
-  // Generic confirm handler: finds next user message from mock data and sends it
-  const handleWidgetConfirm = () => {
-    const nextUserMsg = findNextUserMessage(message.content);
-    if (nextUserMsg) {
-      if (onSendMessage) {
-        onSendMessage(nextUserMsg);
-      } else {
-        sendMessage(nextUserMsg);
-      }
-    }
-  };
-  const [widgetShow, setWidgetShow] = useState(false);
+    const handleWidgetConfirm = () => {
+        const nextUserMsg = findNextUserMessage(message.content);
+        if (nextUserMsg) {
+            if (onSendMessage) {
+                onSendMessage(nextUserMsg);
+            } else {
+                sendMessage(nextUserMsg);
+            }
+        }
+    };
+    const [widgetShow, setWidgetShow] = useState(false);
 
   const assistantMessages = messages.filter((m) => m.role === 'assistant');
   const isFirstAI =
