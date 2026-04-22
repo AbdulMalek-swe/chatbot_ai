@@ -418,9 +418,17 @@ export const vibe: MockChatMessage[] = [
     id: "6",
     role: "assistant",
     content:
-      "Location locked to Portland metro area (within 20 km to cover the full city). Now pulling tattoo shops across the metro so we can find the artists who visit them heavily. Here are the tattoo shops I found in Portland. Do you want to deselect any, or should I go ahead and find everyone who has been there recently?",
+      "Location locked to Portland metro area (within 20 km to cover the full city). Now pulling tattoo shops across the metro so we can find the artists who visit them heavily.",
     widget: "map_selection",
     widget_title: "Split Map View",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "7",
+    role: "assistant",
+    content:
+      "Here are the tattoo shops I found in Portland. Do you want to deselect any, or should I go ahead and find everyone who has been there recently?",
+    widget: "competitor_selection",
     points: [
       {
         id: "1",
@@ -458,13 +466,13 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "7",
+    id: "8",
     role: "user",
     content: "Target all of them.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "8",
+    id: "9",
     role: "assistant",
     content:
       "All tattoo shops selected. What radius around each shop would you like me to use, and how far back should I look? I recommend 50 m around each shop and the last 30 days to focus on real artists (not one-time clients).",
@@ -472,26 +480,26 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "9",
+    id: "10",
     role: "user",
     content: "50 m around each shop and the last 30 days.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "10",
+    id: "11",
     role: "assistant",
     content:
       "Radius and lookback window set. Any specific demographics for the artists? (I recommend 18-45, but you can narrow it.)",
     created_at: new Date().toISOString(),
   },
   {
-    id: "11",
+    id: "12",
     role: "user",
     content: "18-45 is good.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "12",
+    id: "13",
     role: "assistant",
     content:
       "Demographics applied. Running Target People mode on Meta… Map updates with heatmap showing high-frequency zones and exact count.",
@@ -499,7 +507,7 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "13",
+    id: "14",
     role: "assistant",
     content:
       "Great news! I found 2,150 potential tattoo artists (94% confidence) who visited shops 3+ days a week in the last 30 days. These are the exact high-frequency artists you described. When the campaign runs, they will be the ones seeing your ads — this is Target People mode. To reach all of them effectively, you’ll need a minimum of $500 on this Meta campaign. If $500 feels too high, you can make changes to your audience. Does the audience and map look good as-is, or would you like to change anything?",
@@ -527,13 +535,13 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "14",
+    id: "15",
     role: "user",
     content: "Yes, looks perfect.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "15",
+    id: "16",
     role: "assistant",
     content:
       "Great — we’ve locked in the audience to reach. Before we can send off this ad to your audience, we need to set up the campaign requirements from Meta.",
@@ -542,40 +550,40 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "16",
+    id: "17",
     role: "user",
     content: "[Connects account]",
     created_at: new Date().toISOString(),
   },
   {
-    id: "17",
+    id: "18",
     role: "assistant",
     content:
       "Meta account connected. $500 is the minimum to reach all 2,150 artists. Spending more will also help Meta build strong lookalike audiences from this data. What’s your monthly budget for this campaign?",
     created_at: new Date().toISOString(),
   },
   {
-    id: "18",
+    id: "19",
     role: "user",
     content: "$900 per month.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "19",
+    id: "20",
     role: "assistant",
     content:
       "Budget set. Now that we’ve identified the right group, let’s figure out exactly what we’re going to say to them and how the ad should look. Quick questions: What’s the main creative direction? Preferred ad format? Campaign name?",
     created_at: new Date().toISOString(),
   },
   {
-    id: "20",
+    id: "21",
     role: "user",
     content:
       "Creative direction: Tattoo artist CRM that tracks clients, healing, and rebooking — built for you. Carousel format. Campaign name: Portland Tattoo Artists CRM Traffic.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "21",
+    id: "22",
     role: "assistant",
     content:
       "Plan ready. Objective: Traffic (to website). Audience: 2,150 Target People — high-frequency tattoo artists. Targeting: All Portland tattoo shops + 50 m radius. Creative direction: Tattoo artist CRM that tracks clients, healing, and rebooking — built for you. Ad format: Carousel.",
@@ -609,7 +617,7 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "22",
+    id: "23",
     role: "assistant",
     content:
       "Ad Creative Step (Manual Only): Please upload your creatives (plus CRM screenshots or short clips so artists can instantly see how it works).",
@@ -617,26 +625,26 @@ export const vibe: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: "23",
+    id: "24",
     role: "user",
     content: "[Uploads creatives + CRM screenshots]",
     created_at: new Date().toISOString(),
   },
   {
-    id: "24",
+    id: "25",
     role: "assistant",
     content:
       "Creatives uploaded and attached. All right, everything is set. We have your audience, messaging, and creative ready to go. Give me the green light and I’ll activate this campaign through your Meta ad account. Type 'PUSH LIVE' to launch it now.",
     created_at: new Date().toISOString(),
   },
   {
-    id: "25",
+    id: "26",
     role: "user",
     content: "PUSH LIVE",
     created_at: new Date().toISOString(),
   },
   {
-    id: "26",
+    id: "27",
     role: "assistant",
     content:
       "Campaign pushed LIVE on Meta! Meta Campaign ID: 2385xxxxxxxxxx. You can now track real-time results (impressions, reach, link clicks, cost, conversions) directly in the Campaigns tab inside Punk AI. Want me to keep an eye on it for the first 24–48 hours and send you a quick performance summary?",
