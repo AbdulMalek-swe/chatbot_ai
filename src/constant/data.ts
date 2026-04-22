@@ -287,27 +287,31 @@ export const swarma: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
-    id: '25',
-    role: 'assistant',
-    content: 'Now that we’ve identified the right group, let’s figure out exactly what we’re going to say to them and how the ad should look.',
-    widget: 'QuickQuestion',
+    id: "25",
+    role: "assistant",
+    content:
+      "Now that we’ve identified the right group, let’s figure out exactly what we’re going to say to them and how the ad should look.",
+    widget: "QuickQuestion",
     points: [
       {
-        id: '1',
-        type: 'Question 1',
-        content: 'What’s the main message or creative direction you want? (Example: “New menu just dropped + big discounts — come try us instead”)',
+        id: "1",
+        type: "Question 1",
+        content:
+          "What’s the main message or creative direction you want? (Example: “New menu just dropped + big discounts — come try us instead”)",
         created_at: new Date().toISOString(),
       },
       {
-        id: '2',
-        type: 'Question 2',
-        content: 'Preferred ad format? (Single image, carousel, short video, etc.)',
+        id: "2",
+        type: "Question 2",
+        content:
+          "Preferred ad format? (Single image, carousel, short video, etc.)",
         created_at: new Date().toISOString(),
       },
       {
-        id: '3',
-        type: 'Question 3',
-        content: 'Campaign name? (Something like “Shawarma Palace – Competitor Steal”)',
+        id: "3",
+        type: "Question 3",
+        content:
+          "Campaign name? (Something like “Shawarma Palace – Competitor Steal”)",
         created_at: new Date().toISOString(),
       },
     ],
@@ -1001,10 +1005,17 @@ export const realEstateLeads: MockChatMessage[] = [
     created_at: new Date().toISOString(),
   },
   {
+    id: "11",
+    role: "assistant",
+    content: "Demographics applied. Running Target People mode on Meta…",
+    widget: "radius_heatmap",
+    created_at: new Date().toISOString(),
+  },
+  {
     id: "12",
     role: "assistant",
     content:
-      "Demographics applied. Running Target People mode… Found 14,600 potential sellers (92% confidence) in those neighborhoods. Minimum budget required is $800. Does the audience look good?",
+      "Great news! I found 14,600 potential customers (92% confidence) in those 50 neighborhoods who match the profile of people likely to be thinking about selling. These are real people who live or spend time in areas with active home sales. When the campaign runs, they will be the ones seeing your free home valuation ads — this is Target People mode. To reach all of them effectively, you’ll need a minimum of $800 on this Meta campaign. If $800 feels too high, you can make changes to your audience. Does the audience and map look good as-is, or would you like to make changes?",
     created_at: new Date().toISOString(),
   },
   {
@@ -1017,8 +1028,9 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "14",
     role: "assistant",
     content:
-      "Great — we’ve identified the right audience. Please connect your Meta ad account to proceed.",
+      "Great — we’ve now identified the right group. Before we can send off this ad to your audience, we need to set up the campaign requirements from Meta.",
     widget: "account_connect",
+    widget_title: "Meta Account Validation",
     created_at: new Date().toISOString(),
   },
   {
@@ -1031,7 +1043,7 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "16",
     role: "assistant",
     content:
-      "Meta account connected. What’s your monthly budget for this campaign?",
+      "Meta account connected. $800 is the minimum to reach all 14,600 people. Spending more will also help Meta build strong lookalike audiences from this data. What’s your monthly budget for this campaign?",
     created_at: new Date().toISOString(),
   },
   {
@@ -1043,8 +1055,36 @@ export const realEstateLeads: MockChatMessage[] = [
   {
     id: "18",
     role: "assistant",
+    content: "Budget set.",
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: "18.5",
+    role: "assistant",
     content:
-      "Budget set. Now let’s define your ad creative. What’s the headline, format, and campaign name?",
+      "Now that we’ve found the right people, let’s figure out exactly what we’re going to say to them and how the ad should look.",
+    widget: "QuickQuestion",
+    points: [
+      {
+        id: "1",
+        type: "Question 1",
+        content:
+          "What’s the main creative direction or headline for the free home valuation offer?",
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: "2",
+        type: "Question 2",
+        content: "Preferred ad format? (Single image, carousel, video, etc.)",
+        created_at: new Date().toISOString(),
+      },
+      {
+        id: "3",
+        type: "Question 3",
+        content: "Campaign name?",
+        created_at: new Date().toISOString(),
+      },
+    ],
     created_at: new Date().toISOString(),
   },
   {
@@ -1072,7 +1112,7 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "22",
     role: "assistant",
     content:
-      "Creatives uploaded. Lead form configured to collect name, email, phone, and property address. Type 'PUSH LIVE' to launch.",
+      "Creatives uploaded and attached. Lead Form is now configured and ready. All right, everything is set. We have your audience, messaging, and creative ready to go. Give me the green light and I’ll activate this campaign through your Meta ad account. Type “PUSH LIVE” to launch it now.",
     created_at: new Date().toISOString(),
   },
   {
@@ -1085,7 +1125,7 @@ export const realEstateLeads: MockChatMessage[] = [
     id: "24",
     role: "assistant",
     content:
-      "Campaign pushed LIVE on Meta! You can now track impressions, reach, leads, and cost per lead. Want me to monitor performance and send a report after 48 hours?",
+      "Campaign pushed LIVE on Meta! Meta Campaign ID: 2385xxxxxxxxxx. You can now track real-time results (impressions, reach, leads generated, cost per lead) directly in the Campaigns tab inside Punk AI. Want me to monitor it for the first 24–48 hours and send you a quick performance summary with the number of leads captured?",
     created_at: new Date().toISOString(),
   },
 ];
