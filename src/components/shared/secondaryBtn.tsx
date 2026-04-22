@@ -6,6 +6,7 @@ interface SecondaryBtnProps {
   onClick?: () => void;
   leftSection?: ReactNode | null;
   altered?: boolean;
+  disabled?: boolean;
 }
 
 const cn = (...classes: (string | undefined)[]) =>
@@ -16,6 +17,7 @@ const SecondaryBtn = ({
   className,
   onClick,
   leftSection = null,
+  disabled = false,
 }: SecondaryBtnProps) => {
   return (
     <button
@@ -24,6 +26,7 @@ const SecondaryBtn = ({
         className,
       )}
       onClick={onClick}
+      disabled={disabled}
     >
       {leftSection && <span>{leftSection}</span>}
       {children}
