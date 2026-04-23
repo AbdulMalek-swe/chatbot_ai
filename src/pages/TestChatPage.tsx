@@ -38,7 +38,7 @@ const TestChatPage = () => {
   const { threadId: paramsThreadId } = useParams<{ threadId: string }>();
   const { loading, streaming, setActiveThread, activeThreadId, resetChat } =
     useChat();
-  const mounted = true;
+  const [mounted, setMounted] = useState(false);
 
   // LOGIC: Unified message state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -47,6 +47,14 @@ const TestChatPage = () => {
   const [currentMockIndex, setCurrentMockIndex] = useState<number>(-1);
   const [isNewChat, setIsNewChat] = useState(true);
   const lastThreadId = useRef<string | undefined>(paramsThreadId);
+
+  useEffect(() => {
+    console.log("[TestChatPage] route thread changed", {
+      paramsThreadId,
+      activeThreadId,
+      lastThreadId: lastThreadId.current,
+    });
+  }, [paramsThreadId, activeThreadId]);
 
   // Sync with chat_data when threadId changes
   useEffect(() => {
@@ -60,12 +68,18 @@ const TestChatPage = () => {
           setActiveFlow(mappedThread);
           setCurrentMockIndex(mappedThread.length - 1);
           setIsNewChat(false); // Loading history
+          console.log("[TestChatPage] loaded thread history", {
+            paramsThreadId,
+            threadIndex,
+            messageCount: mappedThread.length,
+          });
         }
       } else {
         setMessages([]);
         setActiveFlow(null);
         setCurrentMockIndex(-1);
         setIsNewChat(true); // New chat
+        console.log("[TestChatPage] reset to new chat state");
       }
     };
 
@@ -73,6 +87,7 @@ const TestChatPage = () => {
   }, [paramsThreadId]);
 
   useEffect(() => {
+    setMounted(true);
     const urlChanged = paramsThreadId !== lastThreadId.current;
 
     if (urlChanged) {
@@ -142,6 +157,13 @@ const TestChatPage = () => {
 
   const handleSendMessage = (content: string) => {
     if (!content.trim()) return;
+    console.log("[TestChatPage] handleSendMessage", {
+      content,
+      paramsThreadId,
+      hasActiveFlow: Boolean(activeFlow),
+      currentMockIndex,
+    });
+
     setIsNewChat(true); // User is actively chatting, mark as new
 
     // Add user message immediately
@@ -170,6 +192,9 @@ const TestChatPage = () => {
           expectedUserIndex !== -1 &&
           isSimilarMessage(content, activeFlow[expectedUserIndex].content)
         ) {
+          console.log("[TestChatPage] matched expected next user turn", {
+            expectedUserIndex,
+          });
           mock = collectAssistantResponses(activeFlow, expectedUserIndex + 1);
         }
 
@@ -185,6 +210,9 @@ const TestChatPage = () => {
           }
 
           if (matchIndex !== -1) {
+            console.log("[TestChatPage] matched forward-scanned user turn", {
+              matchIndex,
+            });
             mock = collectAssistantResponses(activeFlow, matchIndex + 1);
           }
         }
@@ -208,6 +236,11 @@ const TestChatPage = () => {
               mappedFlow[i].role === "user" &&
               isSimilarMessage(content, mappedFlow[i].content)
             ) {
+              console.log("[TestChatPage] matched message in current thread", {
+                matchedIndex: i,
+                startIndex,
+                threadId: paramsThreadId,
+              });
               mock = collectAssistantResponses(mappedFlow, i + 1);
               break;
             }
@@ -217,6 +250,13 @@ const TestChatPage = () => {
           if (result) {
             const mappedFlow = toChatFlow(result.fullChat);
             setActiveFlow(mappedFlow);
+            console.log(
+              "[TestChatPage] fallback global mock response matched",
+              {
+                resultCurrentIndex: result.currentIndex,
+                flowLength: mappedFlow.length,
+              },
+            );
             mock = collectAssistantResponses(mappedFlow, result.currentIndex);
           }
         }
@@ -225,6 +265,10 @@ const TestChatPage = () => {
       // 3. Update messages with the found response or a fallback
       if (mock) {
         setCurrentMockIndex(mock.newIndex);
+        console.log("[TestChatPage] assistant response resolved", {
+          responseCount: mock.answers.length,
+          newIndex: mock.newIndex,
+        });
         const newMessages = mock.answers.map((ans, idx: number) => ({
           ...ans,
           id: (Date.now() + idx + 1).toString(),
@@ -232,6 +276,7 @@ const TestChatPage = () => {
         }));
         setMessages((prev) => [...prev, ...newMessages]);
       } else {
+        console.log("[TestChatPage] no mock match, using generic fallback");
         setMessages((prev) => [
           ...prev,
           {
