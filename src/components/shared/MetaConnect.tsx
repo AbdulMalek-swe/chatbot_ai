@@ -12,7 +12,7 @@ function MetaConnect({ onConnect }: MetaConnectProps) {
         title=" META ACCOUNT VALIDATION"
         text="Connect Meta Account"
         btnLabel="Connect"
-        className="w-xl! p-4!"
+        className="w-lg! p-4!"
         btnClassName="text-[12px] font-normal! py-2.5! px-4!"
         btnOnClick={onConnect}
       />
