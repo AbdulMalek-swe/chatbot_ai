@@ -210,7 +210,6 @@ export const swarma: MockChatMessage[] = [
   },
   {
     id: "18",
-
     role: "user",
     content: "50 meters around each shop and the last 30 days.",
     created_at: new Date().toISOString(),
