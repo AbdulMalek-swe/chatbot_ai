@@ -26,7 +26,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             />
 
             {/* Header */}
-            <header className="relative z-20 flex items-center justify-between px-8 py-6 w-full max-w-[1440px] mx-auto bg-[#0d0d12] border-b-2 border-slate-800">
+            <header className="relative z-20 flex items-center justify-between px-8 py-6 w-full max-w-360 mx-auto bg-[#0d0d12] border-b-2 border-slate-800">
                 <Link to="/" className="flex items-center gap-2">
                     <img src="/logo.png" alt="Punk Logo" className="w-8 h-8" />
                     <span className="text-white text-2xl font-bold tracking-tight">punk</span>
