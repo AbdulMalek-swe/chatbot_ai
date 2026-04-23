@@ -11,7 +11,7 @@ import { AdsProvider } from './contexts/AdsContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ChatProvider } from './contexts/ChatContext';
 import './index.css';
-import { CampaignPage, ChatPage, ProfilePage } from './pages';
+import { CampaignPage, ChatPage, ProfilePage, TestChatPage } from './pages';
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
                 <Route path="/chat/:threadId" element={<ChatPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/campaigns" element={<CampaignPage />} />
+                <Route path='/test-chat' element={<TestChatPage />} />
               </Route>
 
               {/* Default Route */}

@@ -1,21 +1,21 @@
-import { Cpu } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { findNextUserMessage } from '../../constant/data';
-import { type ChatMessage, useChat } from '../../contexts/ChatContext';
-import { 
-    WidgetMessageMap as MessageMap, 
-    WidgetPinPoint as CampaignDirection, 
-    WidgetLocationMap as LocationMapWidget, 
-    WidgetRadiusSelection, 
-    WidgetRadiusHeatmap,
-    WidgetCompetitorSelection,
-    WidgetSelectedLocations,
-    WidgetAccountConnect,
-    WidgetUploadCreative
-} from './widgets';
-import WIdgetQuickQuestion from './widgets/WIdgetQuickQuestion';
+import { Cpu } from "lucide-react";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { findNextUserMessage } from "../../constant/data";
+import { type ChatMessage, useChat } from "../../contexts/ChatContext";
+import {
+  WidgetMessageMap as MessageMap,
+  WidgetPinPoint as CampaignDirection,
+  WidgetLocationMap as LocationMapWidget,
+  WidgetRadiusSelection,
+  WidgetRadiusHeatmap,
+  WidgetCompetitorSelection,
+  WidgetSelectedLocations,
+  WidgetAccountConnect,
+  WidgetUploadCreative,
+} from "./widgets";
+import WIdgetQuickQuestion from "./widgets/WIdgetQuickQuestion";
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -25,27 +25,40 @@ interface MessageBubbleProps {
   onSendMessage?: (content: string) => void;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, children, isNewChat = true, onSendMessage }) => {
-    const isAI = message.role === 'assistant';
-    const { streaming, messages: contextMessages, currentStepLabel, sendMessage } = useChat();
-    const messages = allMessages || contextMessages;
-    const messageIndex = messages.indexOf(message);
-    const hasSubsequentUserMessage = messages.slice(messageIndex + 1).some(m => m.role === 'user');
-    const canConfirm = isNewChat && !streaming && !hasSubsequentUserMessage;
+const MessageBubble: React.FC<MessageBubbleProps> = ({
+  message,
+  allMessages,
+  children,
+  isNewChat = true,
+  onSendMessage,
+}) => {
+  const isAI = message.role === "assistant";
+  const {
+    streaming,
+    messages: contextMessages,
+    currentStepLabel,
+    sendMessage,
+  } = useChat();
+  const messages = allMessages || contextMessages;
+  const messageIndex = messages.indexOf(message);
+  const hasSubsequentUserMessage = messages
+    .slice(messageIndex + 1)
+    .some((m) => m.role === "user");
+  const canConfirm = isNewChat && !streaming && !hasSubsequentUserMessage;
 
-    const handleWidgetConfirm = () => {
-        const nextUserMsg = findNextUserMessage(message.content);
-        if (nextUserMsg) {
-            if (onSendMessage) {
-                onSendMessage(nextUserMsg);
-            } else {
-                sendMessage(nextUserMsg);
-            }
-        }
-    };
-    const [widgetShow, setWidgetShow] = useState(false);
+  const handleWidgetConfirm = () => {
+    const nextUserMsg = findNextUserMessage(message.content);
+    if (nextUserMsg) {
+      if (onSendMessage) {
+        onSendMessage(nextUserMsg);
+      } else {
+        sendMessage(nextUserMsg);
+      }
+    }
+  };
+  const [widgetShow, setWidgetShow] = useState(false);
 
-  const assistantMessages = messages.filter((m) => m.role === 'assistant');
+  const assistantMessages = messages.filter((m) => m.role === "assistant");
   const isFirstAI =
     isAI &&
     assistantMessages.length > 0 &&
@@ -104,7 +117,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
           coords.push({
             lat,
             lng,
-            name: 'Position Sync',
+            name: "Position Sync",
           });
         }
       }
@@ -121,15 +134,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     !!message.content?.trim() || !!message.thinking || isSynthesizing;
   const hasWidget =
     !!(
-      message.widget === 'pin_point' ||
-      message.widget === 'map_selection' ||
-      message.widget === 'radius_selection' ||
-      message.widget === 'radius_heatmap' ||
-      message.widget === 'competitor_selection' ||
-      message.widget === 'account_connect' ||
-      message.widget === 'upload_creatives' ||
-      message.widget === 'selected_locations' ||
-      message.widget === 'QuickQuestion'
+      message.widget === "pin_point" ||
+      message.widget === "map_selection" ||
+      message.widget === "radius_selection" ||
+      message.widget === "radius_heatmap" ||
+      message.widget === "competitor_selection" ||
+      message.widget === "account_connect" ||
+      message.widget === "upload_creatives" ||
+      message.widget === "selected_locations" ||
+      message.widget === "QuickQuestion"
     ) ||
     coordinates.length > 0 ||
     !!message.map_data;
@@ -152,8 +165,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     <div
       className={`w-full ${
         isAI
-          ? 'text-md  leading-relaxed font-medium tracking-tight text-foreground/90'
-          : 'font-inter font-normal text-md  leading-6 tracking-[0px] text-foreground'
+          ? "text-md  leading-relaxed font-medium tracking-tight text-foreground/90"
+          : "font-inter font-normal text-md  leading-6 tracking-[0px] text-foreground"
       }`}
     >
       {isSynthesizing ? (
@@ -170,11 +183,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               <div className="h-2 bg-slate-200 rounded-full w-[90%] animate-pulse"></div>
               <div
                 className="h-2 bg-slate-200 rounded-full w-[70%] animate-pulse"
-                style={{ animationDelay: '200ms' }}
+                style={{ animationDelay: "200ms" }}
               ></div>
               <div
                 className="h-2 bg-slate-200 rounded-full w-[50%] animate-pulse"
-                style={{ animationDelay: '400ms' }}
+                style={{ animationDelay: "400ms" }}
               ></div>
             </>
           )}
@@ -187,7 +200,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
           />
         </div>
       ) : (
-        <div className={`whitespace-pre-wrap ${!isAI ? 'text-left' : ''}`}>
+        <div className={`whitespace-pre-wrap ${!isAI ? "text-left" : ""}`}>
           {message.content}
         </div>
       )}
@@ -196,14 +209,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
   const isSplitWidget =
     isAI &&
-    (message.widget === 'radius_selection' ||
-      message.widget === 'radius_heatmap' ||
-      message.widget === 'competitor_selection' ||
-      message.widget === 'selected_locations');
+    (message.widget === "radius_selection" ||
+      message.widget === "radius_heatmap" ||
+      message.widget === "competitor_selection" ||
+      message.widget === "selected_locations");
 
   const getContext = () => {
-    let name = 'Your Business';
-    let address = 'Current Location';
+    let name = "Your Business";
+    let address = "Current Location";
 
     let businessLat = 47.6062;
     let businessLng = -122.3321;
@@ -222,26 +235,26 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
         if (
           p.name &&
           ![
-            'Audience Size',
-            'Confidence',
-            'Minimum Budget',
-            'Reach Estimate',
+            "Audience Size",
+            "Confidence",
+            "Minimum Budget",
+            "Reach Estimate",
           ].includes(p.name)
         ) {
-          if (name === 'Your Business') name = p.name;
+          if (name === "Your Business") name = p.name;
         }
         if (
           p.type &&
           ![
-            'Audience Size',
-            'Confidence',
-            'Minimum Budget',
-            'Reach Estimate',
+            "Audience Size",
+            "Confidence",
+            "Minimum Budget",
+            "Reach Estimate",
           ].includes(p.type)
         ) {
-          if (name === 'Your Business') name = p.type;
+          if (name === "Your Business") name = p.type;
         }
-        if (p.address && address === 'Current Location') address = p.address;
+        if (p.address && address === "Current Location") address = p.address;
 
         if (!hasCustomCoords && p.lat && p.lng) {
           businessLat = p.lat;
@@ -259,8 +272,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
           hasCustomCoords = true;
           if (
             coords[0].name &&
-            coords[0].name !== 'Position Sync' &&
-            name === 'Your Business'
+            coords[0].name !== "Position Sync" &&
+            name === "Your Business"
           )
             name = coords[0].name;
         }
@@ -269,34 +282,34 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
       // 3. Look for user responses to assistant questions
       if (i > 0) {
         const prevM = messages[i - 1];
-        if (prevM.role === 'assistant') {
+        if (prevM.role === "assistant") {
           const content = prevM.content.toLowerCase();
           if (
-            content.includes('name of your') ||
-            content.includes('what is the name')
+            content.includes("name of your") ||
+            content.includes("what is the name")
           ) {
-            if (name === 'Your Business') name = m.content.replace(/[.]$/, '');
+            if (name === "Your Business") name = m.content.replace(/[.]$/, "");
           }
           if (
-            content.includes('exact address') ||
-            content.includes('what city') ||
-            content.includes('what is the address')
+            content.includes("exact address") ||
+            content.includes("what city") ||
+            content.includes("what is the address")
           ) {
-            if (address === 'Current Location')
-              address = m.content.replace(/[.]$/, '');
+            if (address === "Current Location")
+              address = m.content.replace(/[.]$/, "");
 
             // Check for city fallbacks if no coords yet
             if (!hasCustomCoords) {
               const cityContent = m.content.toLowerCase();
-              if (cityContent.includes('seattle')) {
+              if (cityContent.includes("seattle")) {
                 businessLat = 47.6062;
                 businessLng = -122.3321;
                 hasCustomCoords = true;
-              } else if (cityContent.includes('portland')) {
+              } else if (cityContent.includes("portland")) {
                 businessLat = 45.5122;
                 businessLng = -122.6587;
                 hasCustomCoords = true;
-              } else if (cityContent.includes('austin')) {
+              } else if (cityContent.includes("austin")) {
                 businessLat = 30.2672;
                 businessLng = -97.7431;
                 hasCustomCoords = true;
@@ -308,14 +321,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     }
 
     // Final Heuristic: if name is still default, look at first message
-    if (name === 'Your Business' && messages.length > 0) {
+    if (name === "Your Business" && messages.length > 0) {
       const firstMsg = messages[0].content;
       const match = firstMsg.match(
         /i (?:own|manage|built|vibecoded|have) (?:a|an)?\s*([^.,?!]+)/i,
       );
       if (match && match[1]) {
         const candidate = match[1].trim();
-        name = candidate.split(' ').slice(0, 4).join(' ').replace(/\s+/g, ' ');
+        name = candidate.split(" ").slice(0, 4).join(" ").replace(/\s+/g, " ");
         // Capitalize
         name = name.charAt(0).toUpperCase() + name.slice(1);
       }
@@ -332,11 +345,11 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
   const widgetContent = (
     <div
-      className={`flex flex-col gap-6 w-full ${isAI ? 'items-start' : 'items-end'}`}
+      className={`flex flex-col gap-6 w-full ${isAI ? "items-start" : "items-end"}`}
     >
       {isAI && (
         <>
-          {message.widget === 'pin_point' && (
+          {message.widget === "pin_point" && (
             <CampaignDirection
               widget={message.points}
               businessName={businessName}
@@ -344,7 +357,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'map_selection' && (
+          {message.widget === "map_selection" && (
             <LocationMapWidget
               address={businessAddress}
               businessName={businessName}
@@ -359,7 +372,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               }
             />
           )}
-          {message.widget === 'radius_selection' && (
+          {message.widget === "radius_selection" && (
             <WidgetRadiusSelection
               address={businessAddress}
               businessName={businessName}
@@ -375,7 +388,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               }
             />
           )}
-          {message.widget === 'radius_heatmap' && (
+          {message.widget === "radius_heatmap" && (
             <WidgetRadiusHeatmap
               businessName={businessName}
               businessAddress={businessAddress}
@@ -391,7 +404,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               }
             />
           )}
-          {message.widget === 'competitor_selection' && (
+          {message.widget === "competitor_selection" && (
             <WidgetCompetitorSelection
               points={message.points}
               title={(message as any).widget_title}
@@ -402,23 +415,23 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'selected_locations' && (
+          {message.widget === "selected_locations" && (
             <WidgetSelectedLocations
               locations={message.points}
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'account_connect' && (
+          {message.widget === "account_connect" && (
             <WidgetAccountConnect
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'upload_creatives' && (
+          {message.widget === "upload_creatives" && (
             <WidgetUploadCreative
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'QuickQuestion' && (
+          {message.widget === "QuickQuestion" && (
             <WIdgetQuickQuestion
               widget={message.points}
               businessName={businessName}
@@ -431,15 +444,15 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
 
       {(coordinates.length > 0 || message.map_data) && (
         <div
-          className={`space-y-2 w-full flex flex-col ${isAI ? 'items-start' : 'items-end'}`}
+          className={`space-y-2 w-full flex flex-col ${isAI ? "items-start" : "items-end"}`}
         >
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-success-500/10 border border-success-500/20 w-fit">
             <div className="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
             <span className="text-[10px] font-black text-success-400 uppercase tracking-widest">
-              Geolocation Sync:{' '}
+              Geolocation Sync:{" "}
               {message.map_data
                 ? (message.map_data.total_count || 0).toLocaleString()
-                : coordinates.length}{' '}
+                : coordinates.length}{" "}
               data points mapped
             </span>
           </div>
@@ -475,7 +488,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
     return (
       <div className="group w-full font-body flex mb-10 max-w-8xl mx-auto px-4 sm:px-6">
         <div className="w-full">
-          {message.widget === 'radius_selection' && (
+          {message.widget === "radius_selection" && (
             <WidgetRadiusSelection
               address={businessAddress}
               businessName={businessName}
@@ -500,7 +513,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               {children}
             </WidgetRadiusSelection>
           )}
-          {message.widget === 'radius_heatmap' && (
+          {message.widget === "radius_heatmap" && (
             <WidgetRadiusHeatmap
               businessName={businessName}
               businessAddress={businessAddress}
@@ -525,7 +538,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               {children}
             </WidgetRadiusHeatmap>
           )}
-          {message.widget === 'competitor_selection' && (
+          {message.widget === "competitor_selection" && (
             <WidgetCompetitorSelection
               points={message.points}
               title={(message as any).widget_title}
@@ -545,7 +558,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               {children}
             </WidgetCompetitorSelection>
           )}
-          {message.widget === 'selected_locations' && (
+          {message.widget === "selected_locations" && (
             <WidgetSelectedLocations
               locations={message.points}
               center={center}
@@ -561,7 +574,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, allMessages, chi
               onConfirm={canConfirm ? handleWidgetConfirm : undefined}
             />
           )}
-          {message.widget === 'QuickQuestion' && (
+          {message.widget === "QuickQuestion" && (
             <WIdgetQuickQuestion
               widget={message.points}
               businessName={businessName}
@@ -607,25 +620,41 @@ const StreamingMarkdown = ({
   content,
   setWidgetShow,
 }: {
-  content: any;
-  setWidgetShow: (show: boolean) => any;
+  content: string;
+  setWidgetShow: (show: boolean) => void;
 }) => {
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState("");
+
   useEffect(() => {
-    let words = content.split(' ');
+    const normalizedContent = content ?? "";
+    const words = normalizedContent.split(/\s+/).filter(Boolean);
+
+    setDisplayedText("");
+
+    if (words.length === 0) {
+      setWidgetShow(true);
+      return;
+    }
+
     let index = 0;
     const interval = setInterval(() => {
-      setDisplayedText(
-        (prev: any) => prev + (index === 0 ? '' : ' ') + words[index],
-      );
+      setDisplayedText((prev) => {
+        const nextWord = words[index];
+        if (!nextWord) return prev;
+        return prev + (index === 0 ? "" : " ") + nextWord;
+      });
+
       index++;
-      if (index >= words.length - 1) {
+
+      if (index >= words.length) {
         setWidgetShow(true);
         clearInterval(interval);
       }
     }, 100); // speed control
+
     return () => clearInterval(interval);
-  }, [content]);
+  }, [content, setWidgetShow]);
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
