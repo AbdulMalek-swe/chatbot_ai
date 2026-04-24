@@ -70,10 +70,6 @@ export const swarma: Block[] = [
     role: "user",
     content: "456 Elm Street, Downtown Seattle.",
   },
-  {
-    id: "8",
-    
-  }
   // {
   //   id: "split-8-location",
   //   type: "split-map",
