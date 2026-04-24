@@ -36,11 +36,11 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
     return (
       <div className="grid grid-cols-2 gap-3 h-full px-2 w-full">
         {/* Left Panel: (AI Text + UI) or Custom Content */}
-        <div className="flex-1 flex flex-col gap-2 h-full rounded-xl shadow-sm border-2 border-[#ACACAC]  bg-[#CCCBC0] p-2 col-span-1 ">
+        <div className="flex-1 flex flex-col gap-2 h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-xl shadow-sm border-2 border-[#ACACAC] bg-[#CCCBC0] p-2 col-span-1">
           {aiText && (
-            <div className="flex items-start">
+            <div className="flex items-start w-full">
               {logoBlock}
-              <div className=" min-w-0">{aiText}</div>
+              <div className="flex-1 min-w-0">{aiText}</div>
             </div>
           )}
 
@@ -60,7 +60,7 @@ const WidgetLayout: React.FC<WidgetLayoutProps> = ({
 
         {/* Right Panel: Map or Visuals */}
         {rightContent && (
-          <div className="col-span-1  flex justify-end h-[90vh] rounded-xl sticky top-0">
+          <div className="col-span-1 h-[90vh] rounded-xl sticky top-0">
             {rightContent}
           </div>
         )}

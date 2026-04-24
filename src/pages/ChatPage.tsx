@@ -3,43 +3,30 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChatInput, MessageList, Sidebar } from '../components/chat';
 import PrimaryBtn from '../components/shared/PrimaryBtn';
-import { chat_data, findMockResponse } from '../constant/data';
 import { useChat } from '../contexts/ChatContext';
 
 const ChatPage = () => {
   const { threadId: paramsThreadId } = useParams<{ threadId: string }>();
   const navigate = useNavigate();
   const {
-    messages: contextMessages,
+    conversation,
     loading,
     streaming,
     setActiveThread,
     activeThreadId,
     resetChat,
+    sendMessage,
   } = useChat();
+  
   const [mounted, setMounted] = useState(false);
-
-  // NEW LOGIC: Unified message state
-  const [messages, setMessages] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeFlow, setActiveFlow] = useState<any[] | null>(null);
   const [isNewChat, setIsNewChat] = useState(true);
   const lastThreadId = useRef<string | undefined>(paramsThreadId);
 
-  // Sync with chat_data when threadId changes
   useEffect(() => {
     if (paramsThreadId) {
-      const threadIndex = Number(paramsThreadId) - 1;
-      if (chat_data[threadIndex]) {
-        const thread = chat_data[threadIndex];
-        setMessages(thread.chat);
-        setActiveFlow(thread.chat);
-        setIsNewChat(false); // Loading history
-      }
+      setIsNewChat(false);
     } else {
-      setMessages([]);
-      setActiveFlow(null);
-      setIsNewChat(true); // New chat
+      setIsNewChat(true);
     }
   }, [paramsThreadId]);
 
@@ -61,77 +48,13 @@ const ChatPage = () => {
     }
   }, [paramsThreadId, activeThreadId, setActiveThread, resetChat]);
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
     if (!content.trim()) return;
-    setIsNewChat(true); // User is actively chatting, mark as new
-
-    // Add user message immediately
-    const userMsg = {
-      id: Date.now().toString(),
-      role: 'user',
-      content,
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      let mock: any = null;
-
-      // 1. Check if we're already in a specific conversation flow
-      if (activeFlow) {
-        const normalizedSearch = content.toLowerCase().trim();
-        const currentIndex = activeFlow.findIndex(
-          (m) =>
-            m.content.toLowerCase().includes(normalizedSearch) ||
-            normalizedSearch.includes(m.content.toLowerCase()),
-        );
-
-        if (currentIndex !== -1) {
-          // Look for the next message from the assistant in this flow
-          for (let i = currentIndex + 1; i < activeFlow.length; i++) {
-            if (activeFlow[i].role === 'assistant') {
-              mock = { answer: activeFlow[i] };
-              break;
-            }
-          }
-        }
-      }
-
-      // 2. If no matching flow response found, search all conversation data
-      if (!mock) {
-        const result = findMockResponse(content);
-        if (result) {
-          setActiveFlow(result.fullChat);
-          mock = { answer: result.answer };
-          // Optionally update URL if we found a new thread match
-          // navigate(`/chat/${result.id}`);
-        }
-      }
-
-      // 3. Update messages with the found response or a fallback
-      if (mock) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            ...mock.answer,
-            id: (Date.now() + 1).toString(),
-            created_at: new Date().toISOString(),
-          },
-        ]);
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: (Date.now() + 1).toString(),
-            role: 'assistant',
-            content:
-              "I've analyzed your request. Based on current market benchmarks, I suggest refining your audience parameters. Would you like to proceed with a draft campaign plan?",
-            created_at: new Date().toISOString(),
-          },
-        ]);
-      }
-      setIsLoading(false);
-    }, 800);
+    setIsNewChat(true);
+    const newThreadId = await sendMessage(content);
+    if (newThreadId && newThreadId !== paramsThreadId) {
+      navigate(`/chat/${newThreadId}`);
+    }
   };
 
   const trendingPrompts = [
@@ -140,6 +63,8 @@ const ChatPage = () => {
     'I manage a punk rock band. We are going on tour in a few months.',
     "I'm a real estate agent, I run free home valuation ads at home sellers.",
   ];
+
+  const hasMessages = conversation?.blocks && conversation.blocks.length > 0;
 
   return (
     <div
@@ -168,7 +93,7 @@ const ChatPage = () => {
                 <Loader2 className="w-8 h-8 text-slate-400 animate-spin" />
               </div>
             </div>
-          ) : messages.length === 0 ? (
+          ) : !hasMessages ? (
             <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-12 pb-12 px-6">
               <div className="flex items-center gap-4 mb-10">
                 <img src="/logo.png" alt="Punk Logo" className="w-14 h-14" />
@@ -180,7 +105,7 @@ const ChatPage = () => {
               <div className="w-full max-w-2xl">
                 <ChatInput
                   onSendMessage={handleSendMessage}
-                  disabled={isLoading}
+                  disabled={streaming}
                 />
               </div>
 
@@ -208,10 +133,9 @@ const ChatPage = () => {
             </div>
           ) : (
             <div className="flex-1 flex flex-col overflow-hidden min-h-0 relative">
-              <div className="flex-1 overflow-y-auto custom-scrollbar  pt-4">
+              <div className="flex-1 overflow-y-auto custom-scrollbar pt-4">
                 <MessageList
-                  messages={messages}
-                  streaming={isLoading}
+                  streaming={streaming}
                   isNewChat={isNewChat}
                   onSendMessage={handleSendMessage}
                 />
@@ -219,7 +143,7 @@ const ChatPage = () => {
 
               <ChatInput
                 onSendMessage={handleSendMessage}
-                disabled={isLoading}
+                disabled={streaming}
               />
             </div>
           )}

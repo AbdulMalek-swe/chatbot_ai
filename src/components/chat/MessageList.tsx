@@ -1,41 +1,49 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useChat } from "../../contexts/ChatContext";
 import { useAuth } from "../../contexts/AuthContext";
-import MessageBubble from "./MessageBubble";
+import { MessageBlockUI } from "./blocks/MessageBlockUI";
+import { SplitLayout } from "./blocks/SplitLayout";
+import { FormRenderer } from "./blocks/FormRenderer";
+import { CampaignCard } from "./blocks/CampaignCard";
+import CampaignDirection from "./widgets/WidgetPinPoint";
 
 interface MessageListProps {
-  messages: any[];
   streaming: boolean;
   isNewChat?: boolean;
   onSendMessage?: (content: string) => void;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
-  messages,
   streaming,
   isNewChat = true,
   onSendMessage,
 }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const { sendMessage } = useChat();
+  const { conversation, sendMessage } = useChat();
+
+  const blocks = conversation?.blocks || [];
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, streaming]);
+  }, [blocks, streaming]);
 
   const handleQuickAction = (text: string) => {
-    sendMessage(text);
+    if (onSendMessage) {
+      onSendMessage(text);
+    } else {
+      sendMessage(text);
+    }
   };
-  const steps = ["loading", "thinking", "generating"] as const;
 
+  const steps = ["loading", "thinking", "generating"] as const;
   const [step, setStep] = useState<(typeof steps)[number]>("loading");
 
   useEffect(() => {
     if (!streaming) return;
 
     let index = 0;
-    const stepTime = 2000 / steps.length; // ≈ 666ms
+    const stepTime = 2000 / steps.length;
 
     setStep("loading");
 
@@ -43,19 +51,20 @@ const MessageList: React.FC<MessageListProps> = ({
       index++;
 
       if (index >= steps.length) {
-        clearInterval(interval); // ✅ stop after 2 sec
+        clearInterval(interval);
         return;
       }
 
       setStep(steps[index]);
     }, stepTime);
 
-    return () => clearInterval(interval); // ✅ stop if streaming false
+    return () => clearInterval(interval);
   }, [streaming]);
+
   return (
     <div className="w-full font-body">
       <div className="flex flex-col">
-        {messages.length === 0 ? (
+        {blocks.length === 0 ? (
           <div className="flex-1 flex flex-col items-start justify-end pb-12 text-left max-w-4xl mx-auto animate-fade-in w-full">
             <div className="flex items-center gap-3 sm:gap-4 mb-6">
               <div className="w-8 h-8 transition-transform hover:scale-110 duration-500">
@@ -101,96 +110,36 @@ const MessageList: React.FC<MessageListProps> = ({
           </div>
         ) : (
           <div className="w-full mx-auto">
-            {(() => {
-              const renderedElements: React.ReactNode[] = [];
-
-              interface SplitGroup {
-                msg: any;
-                children: React.ReactNode[];
-              }
-
-              let currentSplitWidget: SplitGroup | null = null;
-
-              const finalizeSplitGroup = () => {
-                if (!currentSplitWidget) return;
-                const groupToFinalize = currentSplitWidget as SplitGroup;
-                renderedElements.push(
-                  <MessageBubble
-                    key={groupToFinalize.msg.id}
-                    message={groupToFinalize.msg}
-                    allMessages={messages}
-                    isNewChat={isNewChat}
-                    onSendMessage={onSendMessage}
-                  >
-                    {groupToFinalize.children}
-                  </MessageBubble>,
-                );
-                currentSplitWidget = null;
-              };
-
-              messages.forEach((msg) => {
-                const isSplit =
-                  msg.role === "assistant" &&
-                  (msg.widget === "radius_selection" ||
-                    msg.widget === "radius_heatmap" ||
-                    msg.widget === "competitor_selection" ||
-                    msg.widget === "selected_locations");
-
-                const shouldStayInsideSplit =
-                  msg.role === "assistant" && !msg.widget;
-
-                if (isSplit) {
-                  // If we already have a split widget, finalize it and start a new one.
-                  finalizeSplitGroup();
-                  currentSplitWidget = { msg, children: [] };
-                } else if (currentSplitWidget) {
-                  if (shouldStayInsideSplit) {
-                    currentSplitWidget.children.push(
-                      <MessageBubble
-                        key={msg.id}
-                        message={msg}
-                        allMessages={messages}
-                        isNewChat={isNewChat}
-                        onSendMessage={onSendMessage}
-                      />,
-                    );
-                  } else {
-                    // End split layout when message context changes (user turn or another widget).
-                    finalizeSplitGroup();
-                    renderedElements.push(
-                      <MessageBubble
-                        key={msg.id}
-                        message={msg}
-                        allMessages={messages}
-                        isNewChat={isNewChat}
-                        onSendMessage={onSendMessage}
-                      />,
-                    );
-                  }
-                } else {
-                  renderedElements.push(
-                    <MessageBubble
-                      key={msg.id}
-                      message={msg}
-                      allMessages={messages}
-                      isNewChat={isNewChat}
-                      onSendMessage={onSendMessage}
-                    />,
+            {blocks.map((block) => {
+              switch (block.type) {
+                case "message":
+                  return <MessageBlockUI key={block.id} block={block} />;
+                case "split-map":
+                  return (
+                    <SplitLayout
+                      key={`${block.id}-${block.version}`}
+                      chat={block.chat}
+                      map={block.map}
+                    />
                   );
-                }
-              });
-
-              // Finalize last group
-              finalizeSplitGroup();
-
-              return renderedElements;
-            })()}
+                case "form":
+                  return <FormRenderer key={block.id} block={block} />;
+                case "campaign-preview":
+                  return <CampaignCard key={block.id} block={block} />;
+                case "campaign-direction":
+                  return <CampaignDirection key={block.id} widget={(block as any).widget} />;
+                default:
+                  return null;
+              }
+            })}
+            
             <div ref={bottomRef} className="h-24" />
+            
             {streaming && (
-              <div className="max-w-4xl px-2 mx-auto">
-                {step === "loading" && <p>⏳ Loading...</p>}
-                {step === "thinking" && <p>🤔 Thinking...</p>}
-                {step === "generating" && <p>✍️ Generating...</p>}
+              <div className="max-w-4xl px-2 mx-auto mt-4 text-slate-500 text-sm font-medium">
+                {step === "loading" && <p className="animate-pulse">⏳ Analyzing request...</p>}
+                {step === "thinking" && <p className="animate-pulse">🤔 Drafting strategy...</p>}
+                {step === "generating" && <p className="animate-pulse">✍️ Generating response...</p>}
               </div>
             )}
           </div>

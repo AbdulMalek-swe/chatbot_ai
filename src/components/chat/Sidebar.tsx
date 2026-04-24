@@ -18,7 +18,7 @@ import { useChat } from '../../contexts/ChatContext';
 import PrimaryBtn from '../shared/PrimaryBtn';
 
 const Sidebar = () => {
-  const { activeThreadId, createNewChat, setActiveThread, deleteThread } =
+  const { activeThreadId, createNewChat, setActiveThread, deleteThread, threads } =
     useChat();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -69,10 +69,6 @@ const Sidebar = () => {
       .map((n) => n[0])
       .join('')
       .toUpperCase() || 'B';
-  const threads = chat_data.map((item) => ({
-    thread_id: item.id.toString(),
-    title: item.title,
-  }));
 
   return (
     <aside

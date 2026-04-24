@@ -1,5 +1,4 @@
 import PrimaryBtn from '../../shared/PrimaryBtn';
-import WidgetLayout from './WidgetLayout';
 
 // --- Simple Card & Button Components (no shadcn needed) ---
 function Card({
@@ -74,7 +73,7 @@ export default function CampaignDirection({
   onConfirm?: () => void 
 }) {
   return (
-    <WidgetLayout mode="single">
+    <div className="w-full max-w-4xl mx-auto px-4 mb-10">
       <Card className="w-full border rounded-xl shadow-md">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
@@ -122,6 +121,6 @@ export default function CampaignDirection({
           </div>
         </CardContent>
       </Card>
-    </WidgetLayout>
+    </div>
   );
 }

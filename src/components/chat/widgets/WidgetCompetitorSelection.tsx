@@ -133,6 +133,8 @@ export default function WidgetCompetitorSelection({
     points.length > 0
       ? points.map((p) => ({
           ...p,
+          type: p.name || p.type || 'Competitor',
+          content: p.content || `${(Math.random() * 1.5 + 0.1).toFixed(1)} km away`,
           lat: p.lat || center[0] + (Math.random() - 0.5) * 0.01,
           lng: p.lng || center[1] + (Math.random() - 0.5) * 0.01,
         }))
