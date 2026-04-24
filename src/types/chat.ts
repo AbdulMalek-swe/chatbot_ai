@@ -1,3 +1,5 @@
+import { WidgetMapSelection } from "../components/chat";
+
 export type Conversation = {
   id: string;
   blocks: Block[];
@@ -8,7 +10,8 @@ export type Block =
   | SplitMapBlock
   | FormBlock
   | CampaignBlock
-  | CampaignDirectionWidget;
+  | CampaignDirectionWidget
+  | QuickQuestionWidget;
 
 export type MessageBlock = {
   id: string;
@@ -33,8 +36,9 @@ export type ChatBlock =
   | CompetitorListWidget
   | StatsWidget
   | ActionWidget
-  | CampaignDirectionWidget;
-
+  | CampaignDirectionWidget
+  | QuickQuestionWidget;
+  
 export type CampaignDirectionWidget = {
   id: string;
   type: "campaign-direction";
@@ -79,6 +83,16 @@ export type ActionWidget = {
     label: string;
     actionId: ActionId;
     payload?: any;
+  }[];
+};
+
+export type QuickQuestionWidget = {
+  id: string;
+  type: "quick-question";
+  widget: {
+    id: string;
+    type: string;
+    content: string;
   }[];
 };
 
