@@ -6,6 +6,7 @@ import { SplitLayout } from "./blocks/SplitLayout";
 import { FormRenderer } from "./blocks/FormRenderer";
 import { CampaignCard } from "./blocks/CampaignCard";
 import CampaignDirection from "./widgets/WidgetPinPoint";
+import WIdgetQuickQuestion from "./widgets/WIdgetQuickQuestion";
 
 interface MessageListProps {
   streaming: boolean;
@@ -127,19 +128,37 @@ const MessageList: React.FC<MessageListProps> = ({
                 case "campaign-preview":
                   return <CampaignCard key={block.id} block={block} />;
                 case "campaign-direction":
-                  return <CampaignDirection key={block.id} widget={(block as any).widget} />;
+                  return (
+                    <CampaignDirection
+                      key={block.id}
+                      widget={(block as any).widget}
+                    />
+                  );
+                case "quick-question":
+                  return (
+                    <WIdgetQuickQuestion
+                      key={block.id}
+                      widget={(block as any).widget}
+                    />
+                  );
                 default:
                   return null;
               }
             })}
-            
+
             <div ref={bottomRef} className="h-24" />
-            
+
             {streaming && (
               <div className="max-w-4xl px-2 mx-auto mt-4 text-slate-500 text-sm font-medium">
-                {step === "loading" && <p className="animate-pulse">⏳ Analyzing request...</p>}
-                {step === "thinking" && <p className="animate-pulse">🤔 Drafting strategy...</p>}
-                {step === "generating" && <p className="animate-pulse">✍️ Generating response...</p>}
+                {step === "loading" && (
+                  <p className="animate-pulse">⏳ Analyzing request...</p>
+                )}
+                {step === "thinking" && (
+                  <p className="animate-pulse">🤔 Drafting strategy...</p>
+                )}
+                {step === "generating" && (
+                  <p className="animate-pulse">✍️ Generating response...</p>
+                )}
               </div>
             )}
           </div>
