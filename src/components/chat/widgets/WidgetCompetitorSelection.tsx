@@ -1,11 +1,18 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Check, Minus, Plus, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
-import WidgetLayout from './WidgetLayout';
-import SecondaryBtn from '../../shared/secondaryBtn';
-import PrimaryBtn from '../../shared/PrimaryBtn';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Check, Minus, Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
+import WidgetLayout from "./WidgetLayout";
+import SecondaryBtn from "../../shared/secondaryBtn";
+import PrimaryBtn from "../../shared/PrimaryBtn";
 
 const competitorIcon = new L.DivIcon({
   html: `
@@ -13,13 +20,14 @@ const competitorIcon = new L.DivIcon({
             <div class="w-3 h-3 bg-slate-400 rounded-full border-2 border-white shadow-sm"></div>
         </div>
     `,
-  className: 'competitor-marker-icon',
+  className: "competitor-marker-icon",
   iconSize: [12, 12],
   iconAnchor: [6, 6],
 });
 
-const createMainIcon = (name: string, address: string) => new L.DivIcon({
-  html: `
+const createMainIcon = (name: string, address: string) =>
+  new L.DivIcon({
+    html: `
         <div class="relative flex items-center justify-center">
             <div class="absolute w-12 h-12 bg-[#D62575]/20 rounded-full animate-ping"></div>
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Main Marker" />
@@ -29,10 +37,10 @@ const createMainIcon = (name: string, address: string) => new L.DivIcon({
             </div>
         </div>
     `,
-  className: 'main-marker-icon',
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
+    className: "main-marker-icon",
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
 
 function MapBoundsUpdater({
   center,
@@ -48,7 +56,7 @@ function MapBoundsUpdater({
       const bounds = L.latLng(center).toBounds(radius * 2000);
       map.fitBounds(bounds, { animate: true, padding: [20, 20] });
     } catch (e) {
-      console.warn('MapBoundsUpdater error', e);
+      console.warn("MapBoundsUpdater error", e);
     }
   }, [center, radius, map]);
   return null;
@@ -77,53 +85,53 @@ interface WidgetCompetitorSelectionProps {
 
 export default function WidgetCompetitorSelection({
   points = [],
-  title = 'Competitors in 1km Radius',
-  suggestions = ['Local Shop', 'Regional Chain', 'Dine-in', 'Takeaway'],
+  title = "Competitors in 1km Radius",
+  suggestions = ["Local Shop", "Regional Chain", "Dine-in", "Takeaway"],
   aiText,
   showLogo = false,
   children,
   onConfirm,
-  businessName = 'Shawarma Palace',
-  businessAddress = '456 Elm Street.',
+  businessName = "Shawarma Palace",
+  businessAddress = "456 Elm Street.",
   center = [47.6062, -122.3321],
 }: WidgetCompetitorSelectionProps) {
   const [radius, setRadius] = useState(1);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const fillRedOptions = {
-    color: '#D62575',
-    fillColor: '#D6257530',
+    color: "#D62575",
+    fillColor: "#D6257530",
     fillOpacity: 0.4,
     weight: 2,
   };
 
   const defaultCompetitors: Competitor[] = [
     {
-      id: '1',
-      type: 'Shawarma King',
-      content: '0.3 km away (Seattle Downtown)',
+      id: "1",
+      type: "Shawarma King",
+      content: "0.3 km away (Seattle Downtown)",
       lat: center[0] + 0.002,
       lng: center[1] - 0.003,
     },
     {
-      id: '2',
-      type: 'Falafel Palace',
-      content: '0.6 km away (Seattle Downtown)',
+      id: "2",
+      type: "Falafel Palace",
+      content: "0.6 km away (Seattle Downtown)",
       lat: center[0] - 0.002,
       lng: center[1] + 0.003,
     },
     {
-      id: '3',
-      type: 'Mediterranean Grill',
-      content: '0.9 km away (Seattle Downtown)',
+      id: "3",
+      type: "Mediterranean Grill",
+      content: "0.9 km away (Seattle Downtown)",
       lat: center[0] + 0.004,
       lng: center[1] + 0.002,
     },
     {
-      id: '4',
-      type: 'Gyro Spot',
-      content: '0.4 km away (Seattle Downtown)',
+      id: "4",
+      type: "Gyro Spot",
+      content: "0.4 km away (Seattle Downtown)",
       lat: center[0] - 0.004,
       lng: center[1] - 0.002,
     },
@@ -133,8 +141,9 @@ export default function WidgetCompetitorSelection({
     points.length > 0
       ? points.map((p) => ({
           ...p,
-          type: p.name || p.type || 'Competitor',
-          content: p.content || `${(Math.random() * 1.5 + 0.1).toFixed(1)} km away`,
+          type: p.name || p.type || "Competitor",
+          content:
+            p.content || `${(Math.random() * 1.5 + 0.1).toFixed(1)} km away`,
           lat: p.lat || center[0] + (Math.random() - 0.5) * 0.01,
           lng: p.lng || center[1] + (Math.random() - 0.5) * 0.01,
         }))
@@ -155,7 +164,7 @@ export default function WidgetCompetitorSelection({
       lng: center[1] + (Math.random() - 0.5) * 0.02,
     };
     setSelectedCompetitors((prev) => [...prev, newComp]);
-    setSearchValue('');
+    setSearchValue("");
     setShowSuggestions(false);
   };
 
@@ -212,10 +221,10 @@ export default function WidgetCompetitorSelection({
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-slate-900" />
                 <span className="text-[15px] text-slate-700 font-bold">
-                  {competitor.type}{' '}
+                  {competitor.type}{" "}
                   <span className="text-slate-400 font-medium ml-1">
-                    ({competitor.content.split(' ')[0]}{' '}
-                    {competitor.content.split(' ')[1]})
+                    ({competitor.content.split(" ")[0]}{" "}
+                    {competitor.content.split(" ")[1]})
                   </span>
                 </span>
               </div>
@@ -244,7 +253,7 @@ export default function WidgetCompetitorSelection({
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="Add Competitor"
               className="flex-1 bg-transparent border-none outline-none text-[15px] text-slate-800 font-medium placeholder:text-slate-300"
-              onKeyDown={(e) => e.key === 'Enter' && handleAdd(searchValue)}
+              onKeyDown={(e) => e.key === "Enter" && handleAdd(searchValue)}
             />
             <button
               onClick={() => handleAdd(searchValue)}
@@ -274,7 +283,7 @@ export default function WidgetCompetitorSelection({
         {/* Confirm Selection Button */}
         <div className="flex items-center justify-end mt-8">
           <PrimaryBtn
-            className={`px-8! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`}
+            className={`px-8! ${!onConfirm ? "opacity-50 cursor-not-allowed!" : ""}`}
             onClick={() => onConfirm?.()}
           >
             Confirm Selection
@@ -285,7 +294,7 @@ export default function WidgetCompetitorSelection({
   );
 
   const rightContent = (
-    <div className="w-[90%] h-[76vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
+    <div className="w-full h-full relative rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={15}
@@ -300,7 +309,10 @@ export default function WidgetCompetitorSelection({
         <ZoomControl position="bottomright" />
         <MapBoundsUpdater center={center} radius={radius} />
 
-        <Marker position={center} icon={createMainIcon(businessName, businessAddress)} />
+        <Marker
+          position={center}
+          icon={createMainIcon(businessName, businessAddress)}
+        />
 
         <Circle
           center={center}

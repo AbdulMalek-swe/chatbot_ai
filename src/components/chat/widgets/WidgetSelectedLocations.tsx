@@ -89,20 +89,20 @@ interface WidgetSelectedLocationsProps {
 
 export default function WidgetSelectedLocations({
   locations = [],
-  businessName = 'Your Business',
-  businessAddress = 'Address',
+  businessName = "Your Business",
+  businessAddress = "Address",
   center = [47.6062, -122.3321],
   aiText,
   showLogo = false,
   onConfirm,
 }: WidgetSelectedLocationsProps) {
   const [radius, setRadius] = useState(1);
-  const mainLocation = locations[0] || { 
-    id: '0', 
-    name: businessName, 
-    address: businessAddress, 
-    lat: center[0], 
-    lng: center[1] 
+  const mainLocation = locations[0] || {
+    id: "0",
+    name: businessName,
+    address: businessAddress,
+    lat: center[0],
+    lng: center[1],
   };
   const competitorCount = Math.max(0, locations.length - 1);
 
@@ -203,7 +203,7 @@ export default function WidgetSelectedLocations({
 
       {/* CTA Button */}
       <button
-        className={`w-full mt-8 px-6 py-4 bg-slate-900 text-white rounded-2xl text-[15px] font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98] ${!onConfirm ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`w-full mt-8 px-6 py-4 bg-slate-900 text-white rounded-2xl text-[15px] font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98] ${!onConfirm ? "opacity-50 cursor-not-allowed" : ""}`}
         onClick={() => onConfirm?.()}
       >
         Run Target People mode on Meta...
@@ -212,7 +212,7 @@ export default function WidgetSelectedLocations({
   );
 
   const rightContent = (
-    <div className="w-[90%] h-[76vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
+    <div className="w-full h-full relative rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={[mainLocation.lat, mainLocation.lng]}
         zoom={14}

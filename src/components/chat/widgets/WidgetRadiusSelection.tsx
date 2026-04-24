@@ -16,8 +16,9 @@ import WidgetLayout from "./WidgetLayout";
 import SecondaryBtn from "../../shared/secondaryBtn";
 
 // Custom Marker to match the screenshot style
-const createCustomIcon = (name: string, address: string) => new L.DivIcon({
-  html: `
+const createCustomIcon = (name: string, address: string) =>
+  new L.DivIcon({
+    html: `
         <div class="relative flex items-center justify-center">
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Marker" />
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
@@ -26,10 +27,10 @@ const createCustomIcon = (name: string, address: string) => new L.DivIcon({
             </div>
         </div>
     `,
-  className: "custom-marker-icon",
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
+    className: "custom-marker-icon",
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
 
 function MapRadiusUpdater({
   center,
@@ -76,8 +77,8 @@ interface WidgetRadiusSelectionProps {
 }
 
 export default function WidgetRadiusSelection({
-  address = '456 Elm Street.',
-  businessName = 'Your Business',
+  address = "456 Elm Street.",
+  businessName = "Your Business",
   center = [47.6062, -122.3321],
   onConfirm,
   initialRadius = 1,
@@ -156,9 +157,16 @@ export default function WidgetRadiusSelection({
           </div>
 
           <div className="flex items-center gap-3">
-            <SecondaryBtn className={!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}>No</SecondaryBtn>
+            <SecondaryBtn
+              className={!onConfirm ? "opacity-50 cursor-not-allowed!" : ""}
+            >
+              No
+            </SecondaryBtn>
 
-            <PrimaryBtn className={`px-6! ${!onConfirm ? 'opacity-50 cursor-not-allowed!' : ''}`} onClick={() => onConfirm?.(radius)}>
+            <PrimaryBtn
+              className={`px-6! ${!onConfirm ? "opacity-50 cursor-not-allowed!" : ""}`}
+              onClick={() => onConfirm?.(radius)}
+            >
               Yes
             </PrimaryBtn>
           </div>
@@ -168,7 +176,7 @@ export default function WidgetRadiusSelection({
   );
 
   const rightContent = (
-    <div className="w-[90%] h-[76vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
+    <div className="w-full h-full relative rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={14}
@@ -182,7 +190,10 @@ export default function WidgetRadiusSelection({
         />
         <ZoomControl position="bottomright" />
         <MapRadiusUpdater center={center} radius={radius} />
-        <Marker position={center} icon={createCustomIcon(businessName, address)} />
+        <Marker
+          position={center}
+          icon={createCustomIcon(businessName, address)}
+        />
         <Circle
           center={center}
           pathOptions={fillRedOptions}

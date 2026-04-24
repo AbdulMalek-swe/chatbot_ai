@@ -1,14 +1,22 @@
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Check, Minus, Plus } from 'lucide-react';
-import React, { useState } from 'react';
-import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
-import PrimaryBtn from '../../shared/PrimaryBtn';
-import WidgetLayout from './WidgetLayout';
-import SecondaryBtn from '../../shared/secondaryBtn';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Check, Minus, Plus } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Circle,
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMap,
+  ZoomControl,
+} from "react-leaflet";
+import PrimaryBtn from "../../shared/PrimaryBtn";
+import WidgetLayout from "./WidgetLayout";
+import SecondaryBtn from "../../shared/secondaryBtn";
 
-const createMainIcon = (name: string, address: string) => new L.DivIcon({
-  html: `
+const createMainIcon = (name: string, address: string) =>
+  new L.DivIcon({
+    html: `
          <div class="relative flex items-center justify-center">
             <div class="absolute w-12 h-12 bg-[#D62575]/20 rounded-full animate-ping"></div>
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Main Marker" />
@@ -18,10 +26,10 @@ const createMainIcon = (name: string, address: string) => new L.DivIcon({
             </div>
         </div>
     `,
-  className: 'main-marker-icon',
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
+    className: "main-marker-icon",
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
 
 function HeatmapCircles({ center }: { center: [number, number] }) {
   const map = useMap();
@@ -62,15 +70,15 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
           blur: 15,
           maxZoom: 17,
           gradient: {
-            0.1: '#313695',
-            0.2: '#4575b4',
-            0.3: '#74add1',
-            0.4: '#abd9e9',
-            0.5: '#fee090',
-            0.6: '#fdae61',
-            0.7: '#f46d43',
-            0.8: '#d73027',
-            1.0: '#a50026',
+            0.1: "#313695",
+            0.2: "#4575b4",
+            0.3: "#74add1",
+            0.4: "#abd9e9",
+            0.5: "#fee090",
+            0.6: "#fdae61",
+            0.7: "#f46d43",
+            0.8: "#d73027",
+            1.0: "#a50026",
           },
         });
 
@@ -85,11 +93,11 @@ function HeatmapCircles({ center }: { center: [number, number] }) {
         'script[src*="leaflet-heat"]',
       );
       if (existingScript) {
-        existingScript.addEventListener('load', addHeatLayers);
+        existingScript.addEventListener("load", addHeatLayers);
       } else {
-        const script = document.createElement('script');
+        const script = document.createElement("script");
         script.src =
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js";
         script.async = true;
         script.onload = addHeatLayers;
         document.head.appendChild(script);
@@ -129,7 +137,7 @@ function MapBoundsUpdater({
       const bounds = L.latLng(center).toBounds(radius * 2000); // radius is in km, toBounds takes meters
       map.fitBounds(bounds, { animate: true, padding: [20, 20] });
     } catch (e) {
-      console.warn('MapBoundsUpdater error', e);
+      console.warn("MapBoundsUpdater error", e);
     }
   }, [center, radius, map]);
   return null;
@@ -147,8 +155,8 @@ interface WidgetRadiusHeatmapProps {
 }
 
 export default function WidgetRadiusHeatmap({
-  businessName = 'Your Business',
-  businessAddress = '456 Elm Street.',
+  businessName = "Your Business",
+  businessAddress = "456 Elm Street.",
   center = [47.6062, -122.3321],
   onConfirm,
   initialRadius = 1,
@@ -160,8 +168,8 @@ export default function WidgetRadiusHeatmap({
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const fillRedOptions = {
-    color: '#D62575',
-    fillColor: '#D6257530',
+    color: "#D62575",
+    fillColor: "#D6257530",
     fillOpacity: 0.4,
     weight: 2,
   };
@@ -169,7 +177,7 @@ export default function WidgetRadiusHeatmap({
   const handleConfirm = () => {
     setIsConfirmed(true);
     setTimeout(() => {
-        onConfirm?.(radius);
+      onConfirm?.(radius);
     }, 800);
   };
 
@@ -199,7 +207,11 @@ export default function WidgetRadiusHeatmap({
           Location Confirmed
         </div>
         <div className="flex items-center gap-3 text-slate-900 font-bold text-[15px]">
-          <Check size={18} className={isConfirmed ? "text-primary-500" : "text-slate-900"} strokeWidth={3} />
+          <Check
+            size={18}
+            className={isConfirmed ? "text-primary-500" : "text-slate-900"}
+            strokeWidth={3}
+          />
           Targeting Area Identified
         </div>
       </div>
@@ -220,7 +232,7 @@ export default function WidgetRadiusHeatmap({
         </div>
 
         <p className="text-[15px] text-slate-600 leading-relaxed font-medium mb-8">
-          {isConfirmed 
+          {isConfirmed
             ? `Excellent. A ${Math.round(radius)}km radius has been set around ${businessName}. Heat zones have been synchronized with your campaign plan.`
             : "Select the radius around your shop to identify potential customers. The heat zones indicate areas with high visitor density from your competitors."}
         </p>
@@ -229,7 +241,9 @@ export default function WidgetRadiusHeatmap({
         <div className="flex items-center justify-between mt-auto pb-4">
           <div className="flex items-center gap-2">
             <SecondaryBtn
-              onClick={() => !isConfirmed && setRadius((prev) => Math.max(1, prev - 1))}
+              onClick={() =>
+                !isConfirmed && setRadius((prev) => Math.max(1, prev - 1))
+              }
               disabled={isConfirmed}
               className={isConfirmed ? "opacity-50" : ""}
             >
@@ -239,7 +253,9 @@ export default function WidgetRadiusHeatmap({
               {Math.round(radius)} km
             </div>
             <SecondaryBtn
-              onClick={() => !isConfirmed && setRadius((prev) => Math.min(20, prev + 1))}
+              onClick={() =>
+                !isConfirmed && setRadius((prev) => Math.min(20, prev + 1))
+              }
               disabled={isConfirmed}
               className={isConfirmed ? "opacity-50" : ""}
             >
@@ -248,9 +264,9 @@ export default function WidgetRadiusHeatmap({
           </div>
 
           <div className="flex items-center gap-3">
-            <PrimaryBtn 
-                className={`px-8! ${(!onConfirm || isConfirmed) ? 'opacity-50 cursor-not-allowed!' : ''} ${isConfirmed ? 'bg-primary-500! border-primary-500!' : ''}`} 
-                onClick={() => !isConfirmed && handleConfirm()}
+            <PrimaryBtn
+              className={`px-8! ${!onConfirm || isConfirmed ? "opacity-50 cursor-not-allowed!" : ""} ${isConfirmed ? "bg-primary-500! border-primary-500!" : ""}`}
+              onClick={() => !isConfirmed && handleConfirm()}
             >
               {isConfirmed ? "Confirmed" : "Confirm Radius"}
             </PrimaryBtn>
@@ -261,7 +277,7 @@ export default function WidgetRadiusHeatmap({
   );
 
   const rightContent = (
-    <div className="w-[90%] h-[76vh] relative min-h-125 rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
+    <div className="w-full h-full relative rounded-xl overflow-hidden shadow-[0_0_0_4px_#CCCBC0]">
       <MapContainer
         center={center}
         zoom={15}
@@ -276,7 +292,10 @@ export default function WidgetRadiusHeatmap({
         <ZoomControl position="bottomright" />
         <MapBoundsUpdater center={center} radius={radius} />
         <HeatmapCircles center={center} />
-        <Marker position={center} icon={createMainIcon(businessName, businessAddress)} />
+        <Marker
+          position={center}
+          icon={createMainIcon(businessName, businessAddress)}
+        />
 
         <Circle
           center={center}
