@@ -1,17 +1,22 @@
 export { default as WidgetLayout } from "./WidgetLayout";
 export { default as WidgetLocationMap } from "./WidgetLocationMap";
 export { default as WidgetMessageMap } from "./WidgetMessageMap";
-export { default as WidgetAudienceSetup } from "./WidgetAudienceSetup";
 export { default as WidgetCompetitorSelection } from "./WidgetCompetitorSelection";
-export { default as WidgetMapSelection } from "./WidgetMapSelection";
-export { default as WidgetPinPoint } from "./WidgetPinPoint";
-export { default as WidgetRadiusSelection } from "./WidgetRadiusSelection";
-export { default as WidgetRadiusHeatmap } from "./WidgetRadiusHeatmap";
-export { default as WidgetSelectedLocations } from "./WidgetSelectedLocations";
-export { default as WidgetAccountConnect } from "./WidgetAccountConnect";
-export { default as WidgetUploadCreative } from "./WidgetUploadCreative";
-export { default as WidgetQuickQuestion } from "./WIdgetQuickQuestion";
 
-// Aliases for backward compatibility or preferred naming
+// Renamed/New widgets based on STREAMING_API.md
+export { default as WidgetTextInput } from "./WidgetTextInput";
+export { default as WidgetOptionSelection } from "./WidgetOptionSelection";
+export { default as WidgetPermission } from "./WidgetPermission";
+export { default as WidgetMapInteraction } from "./WidgetMapInteraction";
+export { default as WidgetFileUpload } from "./WidgetFileUpload";
+export { default as WidgetOauthConnect } from "./WidgetOauthConnect";
+export { default as WidgetStepperInput } from "./WidgetStepperInput";
+
+export { default as WidgetRadiusPicker } from "./WidgetRadiusPicker";
+export { default as WidgetConfirmLocations } from "./WidgetConfirmLocations";
+export { default as WidgetMaidSplitView } from "./WidgetMaidSplitView";
+export { default as WidgetPoiRadiusPicker } from "./WidgetPoiRadiusPicker";
+
+// Aliases for convenience
 export { default as MessageMap } from "./WidgetMessageMap";
 export { default as LocationMapWidget } from "./WidgetLocationMap";

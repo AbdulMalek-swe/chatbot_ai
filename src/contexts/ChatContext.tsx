@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { useAuth } from './AuthContext';
-import type { Conversation, Block, ActionId, ChatMessage, SplitMapBlock } from '../types/chat';
-import { findMockResponse, chat_data, findNextUserMessage } from '../constant/data';
+import type { Conversation, Block } from '../types/chat';
+import { findMockResponse, chat_data } from '../constant/data';
 
 interface ChatThread {
     thread_id: string;
@@ -18,7 +18,6 @@ interface ChatContextType {
     streaming: boolean;
     currentStepLabel: string | null;
     updateBlock: (blockId: string, updater: (b: Block) => Block) => void;
-    handleAction: (actionId: ActionId, payload?: any) => void;
     sendMessage: (content: string) => Promise<string | null>;
     createNewChat: () => Promise<string>;
     setActiveThread: (threadId: string) => Promise<void>;
@@ -72,7 +71,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (mockThread) {
                 setConversation({
                     id: threadId,
-                    blocks: mockThread.chat
+                    blocks: mockThread.chat as Block[]
                 });
             } else {
                 setConversation({ id: threadId, blocks: [] });
@@ -122,46 +121,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (!prev) return prev;
             return {
                 ...prev,
-                blocks: prev.blocks.map(b => {
-                    if (b.id === blockId) return updater(b);
-                    if (b.type === 'split-map') {
-                        if (b.chat.some(cb => cb.id === blockId)) {
-                            return {
-                                ...b,
-                                chat: b.chat.map(cb => cb.id === blockId ? updater(cb as any) as any : cb)
-                            };
-                        }
-                    }
-                    return b;
-                }),
+                blocks: prev.blocks.map(b => b.id === blockId ? updater(b) : b),
             };
         });
     }, []);
-
-    const handleAction = useCallback((actionId: ActionId, payload?: any) => {
-        if (!conversation) return;
-
-        switch (actionId) {
-            case "SET_LOCATION":
-                // Handle updating map center + mainLocation
-                break;
-            case "SET_RADIUS":
-                // update radius layer
-                break;
-            case "TOGGLE_COMPETITOR":
-                // toggle selected
-                break;
-            case "NEXT_STAGE":
-                // move map.stage forward
-                break;
-            case "OPEN_FORM":
-                // push FormBlock
-                break;
-            case "GENERATE_CAMPAIGN":
-                // push CampaignBlock
-                break;
-        }
-    }, [conversation]);
 
     const sendMessage = useCallback(async (content: string): Promise<string | null> => {
         if (!content.trim()) return null;
@@ -186,8 +149,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const userBlockId = crypto.randomUUID();
         setConversation(prev => {
             const blocks = [...prev!.blocks];
-            const lastBlock = blocks[blocks.length - 1];
-            
             const userMsg: Block = {
                 id: userBlockId,
                 type: 'message',
@@ -196,12 +157,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 status: 'complete',
                 createdAt: new Date().toISOString(),
             };
-
-            if (lastBlock?.type === 'split-map') {
-                lastBlock.chat = [...lastBlock.chat, userMsg as any];
-            } else {
-                blocks.push(userMsg);
-            }
+            blocks.push(userMsg);
             return { id: prev!.id, blocks };
         });
 
@@ -216,9 +172,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 const result = findMockResponse(content);
                 const mockResponse = result?.answer || { 
                     role: 'assistant', 
-                    content: "I've analyzed that parameter. Let's proceed with the optimization. Is there anything else you'd like to adjust?" 
+                    content: "I've analyzed that parameter. Let's proceed with the optimization." 
                 };
-                const parentBlock = result?.parent;
 
                 const assistantMsgId = crypto.randomUUID();
                 const assistantMsg: Block = {
@@ -233,27 +188,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 
                 setConversation(prev => {
                     const blocks = [...prev!.blocks];
-                    const lastBlock = blocks[blocks.length - 1];
-
-                    if (parentBlock && parentBlock.type === 'split-map') {
-                        if (lastBlock?.type === 'split-map' && lastBlock.id === parentBlock.id) {
-                            // Append to existing split map
-                            lastBlock.chat = [...lastBlock.chat, assistantMsg as any];
-                        } else {
-                            // Start new split map stage
-                            const newSplitMap: SplitMapBlock = {
-                                ...parentBlock,
-                                chat: [assistantMsg as any] // Only insert the assistant msg for now
-                            };
-                            blocks.push(newSplitMap);
-                        }
-                    } else if (lastBlock?.type === 'split-map') {
-                        // Keep appending to active split-map
-                        lastBlock.chat = [...lastBlock.chat, assistantMsg as any];
-                    } else {
-                        // Normal top level append
-                        blocks.push(assistantMsg);
-                    }
+                    blocks.push(assistantMsg);
                     return { id: prev!.id, blocks };
                 });
 
@@ -277,17 +212,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                             status: 'complete'
                         }));
                         setStreaming(false);
-
-                        // If the mock response wasn't a text message (e.g. a widget), we need to handle it.
-                        // Currently streaming assumes text. 
-                        // To keep it simple, we just leave it for now.
-                        
-                        const nextUserMsg = findNextUserMessage(fullText);
-                        if (nextUserMsg) {
-                            setTimeout(() => {
-                                sendMessage(nextUserMsg);
-                            }, 1000);
-                        }
                     }
                 }, 30);
             }, 1000);
@@ -305,7 +229,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             streaming,
             currentStepLabel,
             updateBlock,
-            handleAction,
             sendMessage,
             createNewChat,
             setActiveThread,

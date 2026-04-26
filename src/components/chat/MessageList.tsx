@@ -1,12 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useChat } from "../../contexts/ChatContext";
 import { useAuth } from "../../contexts/AuthContext";
-import { MessageBlockUI } from "./blocks/MessageBlockUI";
-import { SplitLayout } from "./blocks/SplitLayout";
-import { FormRenderer } from "./blocks/FormRenderer";
-import { CampaignCard } from "./blocks/CampaignCard";
-import CampaignDirection from "./widgets/WidgetPinPoint";
-import WIdgetQuickQuestion from "./widgets/WIdgetQuickQuestion";
+import { BlockRenderer } from "./blocks/BlockRenderer";
 
 interface MessageListProps {
   streaming: boolean;
@@ -16,7 +11,6 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({
   streaming,
-  isNewChat = true,
   onSendMessage,
 }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -111,40 +105,9 @@ const MessageList: React.FC<MessageListProps> = ({
           </div>
         ) : (
           <div className="w-full mx-auto">
-            {blocks.map((block) => {
-              switch (block.type) {
-                case "message":
-                  return <MessageBlockUI key={block.id} block={block} />;
-                case "split-map":
-                  return (
-                    <SplitLayout
-                      key={`${block.id}-${block.version}`}
-                      chat={block.chat}
-                      map={block.map}
-                    />
-                  );
-                case "form":
-                  return <FormRenderer key={block.id} block={block} />;
-                case "campaign-preview":
-                  return <CampaignCard key={block.id} block={block} />;
-                case "campaign-direction":
-                  return (
-                    <CampaignDirection
-                      key={block.id}
-                      widget={(block as any).widget}
-                    />
-                  );
-                case "quick-question":
-                  return (
-                    <WIdgetQuickQuestion
-                      key={block.id}
-                      widget={(block as any).widget}
-                    />
-                  );
-                default:
-                  return null;
-              }
-            })}
+            {blocks.map((block) => (
+              <BlockRenderer key={block.id} block={block} />
+            ))}
 
             <div ref={bottomRef} className="h-24" />
 

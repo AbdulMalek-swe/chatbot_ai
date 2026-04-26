@@ -5,14 +5,15 @@ import React, { useState } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap, ZoomControl } from 'react-leaflet';
 import Upload from '../../shared/Upload';
 import WidgetLayout from './WidgetLayout';
+import type { RadiusPickerData } from '../../../types/chat';
 
 // Custom Marker to match the screenshot style
-const createCustomIcon = (name: string, address: string) => new L.DivIcon({
+const createCustomIcon = (name: string, address?: string) => new L.DivIcon({
   html: `
         <div class="relative flex items-center justify-center">
             <img src="/indicator.svg" class="w-8 h-8 relative z-10" alt="Marker" />
             <div class="absolute -top-10 whitespace-nowrap bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-[12px] font-bold text-slate-800">
-                ${name} at ${address}
+                ${name} ${address ? 'at ' + address : ''}
                 <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/90 border-r border-b border-slate-200 rotate-45"></div>
             </div>
         </div>
@@ -37,7 +38,6 @@ function MapRadiusUpdater({
       const timeoutId = setTimeout(() => {
         if (!map) return;
         try {
-          // Ensure map has a valid size and is ready
           map.invalidateSize();
           const bounds = circle.getBounds();
           if (bounds.isValid()) {
@@ -55,66 +55,77 @@ function MapRadiusUpdater({
   return null;
 }
 
-interface WidgetPotentialCustomerProps {
-  businessName?: string;
-  address?: string;
-  center?: [number, number];
+interface WidgetRadiusPickerProps {
+  content: RadiusPickerData;
   onConfirm?: (radius: number) => void;
-  initialRadius?: number;
   aiText?: React.ReactNode;
   showLogo?: boolean;
   children?: React.ReactNode;
 }
 
-export default function WidgetPotentialCustomer({
-  businessName = 'Your Business',
-  address = '456 Elm Street.',
-  center = [47.6062, -122.3321],
+export default function WidgetRadiusPicker({
+  content,
   onConfirm,
-  initialRadius = 1,
   aiText,
   showLogo = false,
   children,
-}: WidgetPotentialCustomerProps) {
-  const [radius, setRadius] = useState(initialRadius);
+}: WidgetRadiusPickerProps) {
+  const [radius, setRadius] = useState(content.default_radius_km || content.default_radius_miles || 1);
+  const center: [number, number] = [content.center.lat, content.center.lng];
 
   const leftContent = (
     <div className="p-6 h-full flex flex-col bg-white">
       <div className="flex flex-col gap-4">
-        <Upload
-          imgSrc="/locationIcon.png"
-          title="Shawarma Palace"
-          text="456 Elm Street. (1 km zone)"
-          className=""
-        />
+        {content.locations?.map((loc, idx) => (
+          <Upload
+            key={idx}
+            imgSrc="/locationIcon.png"
+            title={loc.location_name || loc.name || "Location"}
+            text={loc.formatted_address || `${radius} km zone`}
+            className=""
+          />
+        ))}
 
         <div className="flex flex-col gap-4 bg-[#F7F7F7] rounded-xl pt-3 pb-6 px-2 w-100">
-          <Upload
-            imgSrc="/locationIcon.png"
-            title={businessName}
-            text={`${address} (${radius} km zone)`}
-            btnLabel="Edit"
-            btnOnClick={() => console.log('clicked')}
-            btnLeftSection={<Edit size={16} />}
-            btnClassName="text-[12px] text-[#151515]! bg-white font-medium"
-          />
+           <div className="px-3 py-2 flex items-center justify-between">
+              <span className="text-sm font-bold text-slate-900">Adjust Radius</span>
+              <button className="text-[12px] text-slate-500 hover:text-slate-900 font-medium flex items-center gap-1">
+                <Edit size={14} /> Edit
+              </button>
+           </div>
 
           <div className="px-3 flex gap-2 items-end justify-start">
             <h3 className="text-4xl font-semibold text-[#151515] font-inter">
-              8,400
+              {Math.round(radius * 8400)} 
             </h3>
             <p className="text-sm font-semibold text-[#6C6C6C] pb-1">
               Potential customers
             </p>
           </div>
+          
+          <div className="px-3 mt-2">
+            <input 
+              type="range" 
+              min="1" 
+              max="50" 
+              value={radius} 
+              onChange={(e) => setRadius(parseInt(e.target.value))}
+              className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
+            />
+            <div className="flex justify-between mt-1 text-[10px] text-slate-400 font-bold">
+              <span>1 KM</span>
+              <span>{radius} KM</span>
+              <span>50 KM</span>
+            </div>
+          </div>
         </div>
-
-        <Upload
-          imgSrc="/locationIcon.png"
-          title="Shawarma Palace"
-          text="456 Elm Street. (1 km zone)"
-          className=""
-        />
+        
+        <button 
+          onClick={() => onConfirm?.(radius)}
+          className="w-full mt-4 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-all active:scale-95 shadow-lg"
+        >
+          Confirm Radius
+        </button>
       </div>
     </div>
   );
@@ -134,7 +145,7 @@ export default function WidgetPotentialCustomer({
         />
         <ZoomControl position="bottomright" />
         <MapRadiusUpdater center={center} radius={radius} />
-        <Marker position={center} icon={createCustomIcon(businessName, address)} />
+        <Marker position={center} icon={createCustomIcon("Center", "")} />
         <Circle
           center={center}
           radius={radius * 1000}
@@ -144,25 +155,6 @@ export default function WidgetPotentialCustomer({
             fillOpacity: 0.1,
             weight: 1,
             dashArray: '5, 5',
-          }}
-        />
-        {/* Inner shadow simulation circles */}
-        <Circle
-          center={center}
-          radius={radius * 1000}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.05,
-          }}
-        />
-        <Circle
-          center={center}
-          radius={radius * 950}
-          pathOptions={{
-            stroke: false,
-            fillColor: '#D62575',
-            fillOpacity: 0.03,
           }}
         />
       </MapContainer>

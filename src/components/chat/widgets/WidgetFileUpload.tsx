@@ -1,14 +1,17 @@
 import { Check, Image as ImageIcon, Video } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import Upload from '../../shared/Upload';
+import type { PendingActionBlock } from '../../../types/chat';
 
-interface WidgetUploadCreativeProps {
-  onConfirm?: () => void;
+interface WidgetFileUploadProps {
+  content: PendingActionBlock['content'];
+  onConfirm?: (value: string) => void;
 }
 
-export default function WidgetUploadCreative({
+export default function WidgetFileUpload({
+  content,
   onConfirm,
-}: WidgetUploadCreativeProps) {
+}: WidgetFileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isUploaded, setIsUploaded] = useState(false);
@@ -25,10 +28,13 @@ export default function WidgetUploadCreative({
       setFiles(selectedFiles);
       setIsUploaded(true);
 
-      // Auto-confirm after a short delay to show success state
+      // In a real app, we would upload to POST /media/upload and get a path
+      // For now, we simulate the path
+      const simulatedPath = "uploads/creative_" + Date.now();
+      
       setTimeout(() => {
         if (onConfirm) {
-          onConfirm();
+          onConfirm(simulatedPath);
         }
       }, 1500);
     }
@@ -83,7 +89,7 @@ export default function WidgetUploadCreative({
       />
       <Upload
         imgSrc="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='17 8 12 3 7 8'/><line x1='12' x2='12' y1='3' y2='15'/></svg>"
-        title="Upload Creatives"
+        title={content.prompt || "Upload Creatives"}
         text="Images or Videos"
         btnLabel="Upload"
         btnOnClick={handleUploadClick}

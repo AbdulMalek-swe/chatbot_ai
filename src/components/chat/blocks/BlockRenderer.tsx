@@ -1,47 +1,74 @@
 import React from "react";
 import { MessageBlockUI } from "./MessageBlockUI";
-import { CompetitorListBlock } from "./CompetitorListBlock";
-import { CampaignCard } from "./CampaignCard";
-import { FormRenderer } from "./FormRenderer";
-import CampaignDirection from "../widgets/WidgetPinPoint";
-import WIdgetQuickQuestion from "../widgets/WIdgetQuickQuestion";
-import type { Block, ChatBlock } from "../../../types/chat";
+import {
+  WidgetTextInput,
+  WidgetOptionSelection,
+  WidgetPermission,
+  WidgetMapInteraction,
+  WidgetFileUpload,
+  WidgetOauthConnect,
+  WidgetStepperInput,
+  WidgetRadiusPicker,
+  WidgetConfirmLocations,
+  WidgetMaidSplitView,
+  WidgetPoiRadiusPicker,
+} from "../widgets";
+import type { Block, PendingActionBlock, MapDataBlock } from "../../../types/chat";
+import { useChat } from "../../../contexts/ChatContext";
 
 interface BlockRendererProps {
-  block: Block | ChatBlock;
+  block: Block;
 }
 
 export const BlockRenderer: React.FC<BlockRendererProps> = ({ block }) => {
+  const { sendMessage } = useChat();
+
+  const handleConfirm = (value: string | number) => {
+    sendMessage(value.toString());
+  };
+
   switch (block.type) {
     case "message":
-      return <MessageBlockUI key={block.id} block={block as any} />;
-    case "competitor-list":
-      return <CompetitorListBlock key={block.id} block={block as any} />;
-    case "action":
-      return (
-        <div key={block.id} className="flex gap-3 flex-wrap">
-          {(block as any).actions.map((action: any) => (
-            <button
-              key={action.label}
-              className="px-4 py-2 bg-primary-500 text-white rounded-lg text-sm font-medium"
-            >
-              {action.label}
-            </button>
-          ))}
-        </div>
-      );
-    case "form":
-      return <FormRenderer key={block.id} block={block as any} />;
-    case "campaign-preview":
-      return <CampaignCard key={block.id} block={block as any} />;
-    case "campaign-direction":
-      return (
-        <CampaignDirection key={block.id} widget={(block as any).widget} />
-      );
-    case "quick-question":
-      return (
-        <WIdgetQuickQuestion key={block.id} widget={(block as any).widget} />
-      );
+      return <MessageBlockUI key={block.id} block={block} />;
+
+    case "pending_action": {
+      const { action_type } = block.content;
+      switch (action_type) {
+        case "text_input":
+          return <WidgetTextInput key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "option_selection":
+          return <WidgetOptionSelection key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "permission":
+          return <WidgetPermission key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "map_interaction":
+          return <WidgetMapInteraction key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "file_upload":
+          return <WidgetFileUpload key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "oauth_connect":
+          return <WidgetOauthConnect key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "stepper_input":
+          return <WidgetStepperInput key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        default:
+          return <div key={block.id}>Unknown action type: {action_type}</div>;
+      }
+    }
+
+    case "map_data": {
+      const { action_type } = block.content;
+      switch (action_type) {
+        case "radius_picker":
+          return <WidgetRadiusPicker key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        case "confirm_locations":
+          return <WidgetConfirmLocations key={block.id} content={block.content} onConfirm={() => handleConfirm("confirmed")} />;
+        case "maid_split_view":
+          return <WidgetMaidSplitView key={block.id} content={block.content} onConfirm={() => handleConfirm("confirmed")} />;
+        case "poi_radius_picker":
+          return <WidgetPoiRadiusPicker key={block.id} content={block.content} onConfirm={handleConfirm} />;
+        default:
+          return <div key={block.id}>Unknown map data type: {action_type}</div>;
+      }
+    }
+
     default:
       return null;
   }

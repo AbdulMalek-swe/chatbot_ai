@@ -1,4 +1,3 @@
-import { WidgetMapSelection } from "../components/chat";
 
 export type Conversation = {
   id: string;
@@ -7,11 +6,8 @@ export type Conversation = {
 
 export type Block =
   | MessageBlock
-  | SplitMapBlock
-  | FormBlock
-  | CampaignBlock
-  | CampaignDirectionWidget
-  | QuickQuestionWidget;
+  | PendingActionBlock
+  | MapDataBlock;
 
 export type MessageBlock = {
   id: string;
@@ -23,157 +19,121 @@ export type MessageBlock = {
   thinking?: string;
 };
 
-export type SplitMapBlock = {
+// --- Pending Actions ---
+
+export type PendingActionType =
+  | "text_input"
+  | "option_selection"
+  | "permission"
+  | "map_interaction"
+  | "file_upload"
+  | "oauth_connect"
+  | "stepper_input"
+  | "question_collection";
+
+export type PendingActionBlock = {
   id: string;
-  type: "split-map";
-  version: number;
-  chat: ChatBlock[];
-  map: MapBlock;
-};
-
-export type ChatBlock =
-  | ChatMessage
-  | CompetitorListWidget
-  | StatsWidget
-  | ActionWidget
-  | CampaignDirectionWidget
-  | QuickQuestionWidget;
-  
-export type CampaignDirectionWidget = {
-  id: string;
-  type: "campaign-direction";
-  widget: {
-    id: string;
-    type: string;
-    content: string;
-  }[];
-};
-
-export type ChatMessage = {
-  id: string;
-  type: "message";
-  role: "user" | "assistant" | "system";
-  content: string;
-};
-
-export type CompetitorListWidget = {
-  id: string;
-  type: "competitor-list";
-  items: {
-    id: string;
-    name: string;
-    distance: string;
-    selected: boolean;
-  }[];
-};
-
-export type StatsWidget = {
-  id: string;
-  type: "stats";
-  items: {
-    label: string;
-    value: string | number;
-  }[];
-};
-
-export type ActionWidget = {
-  id: string;
-  type: "action";
-  actions: {
-    label: string;
-    actionId: ActionId;
-    payload?: any;
-  }[];
-};
-
-export type QuickQuestionWidget = {
-  id: string;
-  type: "quick-question";
-  widget: {
-    id: string;
-    type: string;
-    content: string;
-  }[];
-};
-
-export type ActionId =
-  | "SET_LOCATION"
-  | "SET_RADIUS"
-  | "TOGGLE_COMPETITOR"
-  | "CONFIRM_COMPETITORS"
-  | "NEXT_STAGE"
-  | "OPEN_FORM"
-  | "SUBMIT_FORM"
-  | "GENERATE_CAMPAIGN";
-
-export type MapStage =
-  | "select-location"
-  | "radius-selection"
-  | "competitor-selection"
-  | "audience-result";
-
-export type MapBlock = {
-  id: string;
-  type: "map";
-  stage: MapStage;
-  center: {
-    lat: number;
-    lng: number;
-  };
-  zoom?: number;
-  layers: {
-    mainLocation?: LatLng;
-    radius?: {
-      lat: number;
-      lng: number;
-      value: number;
-    };
-    competitors?: Competitor[];
-    heatmap?: HeatPoint[];
+  type: "pending_action";
+  content: {
+    action_type: PendingActionType;
+    field?: string;
+    prompt: string;
+    options?: string[];
+    prefill?: string | null;
+    stepper?: StepperConfig | null;
+    progress?: ProgressItem[] | null;
   };
 };
+
+export type StepperConfig = {
+  default: number;
+  min: number;
+  max: number;
+  step: number;
+  unit: string;
+};
+
+export type ProgressItem = {
+  label: string;
+  value: string;
+};
+
+// --- Map Data ---
+
+export type MapDataType =
+  | "radius_picker"
+  | "confirm_locations"
+  | "maid_split_view"
+  | "poi_radius_picker";
+
+export type MapDataBlock = {
+  id: string;
+  type: "map_data";
+  content: RadiusPickerData | ConfirmLocationsData | MaidSplitViewData | PoiRadiusPickerData;
+};
+
+export type RadiusPickerData = {
+  action_type: "radius_picker";
+  center: LatLng;
+  locations?: LocationItem[];
+  default_radius_miles?: number | null;
+  default_radius_km?: number | null;
+};
+
+export type ConfirmLocationsData = {
+  action_type: "confirm_locations";
+  locations: LocationItem[];
+  editable?: boolean;
+};
+
+export type MaidSplitViewData = {
+  action_type: "maid_split_view";
+  pois: PoiItem[];
+  maid_observations: LatLng[];
+  center: LocationItem;
+  maid_count: number;
+  radius_km?: number | null;
+  lookback_days?: number | null;
+  event_date_ranges?: string[] | null;
+};
+
+export type PoiRadiusPickerData = {
+  action_type: "poi_radius_picker";
+  pois: PoiItem[];
+  center: LocationItem;
+  default_radius_km: number;
+};
+
+// --- Shared Types ---
 
 export type LatLng = {
   lat: number;
   lng: number;
 };
 
-export type Competitor = {
-  id: string;
+export type LocationItem = {
+  id?: string;
+  location_name?: string;
+  name?: string; // Some events use 'name' instead of 'location_name'
+  formatted_address?: string;
+  latitude?: number;
+  longitude?: number;
+  lat?: number; // Some events use 'lat'/'lng'
+  lng?: number;
+  is_city?: boolean;
+  radius_km?: number | null;
+  parent_location?: string;
+};
+
+export type PoiItem = {
+  id?: string;
   name: string;
   lat: number;
   lng: number;
-  selected: boolean;
-};
-
-export type HeatPoint = {
-  lat: number;
-  lng: number;
-  intensity?: number;
-};
-
-export type FormBlock = {
-  id: string;
-  type: "form";
-  formType:
-    | "meta-connect"
-    | "budget"
-    | "demographics"
-    | "creative-upload"
-    | "confirmation";
-  data?: Record<string, any>;
-};
-
-export type CampaignBlock = {
-  id: string;
-  type: "campaign-preview";
-  campaign: {
-    name: string;
-    objective: string;
-    audienceSize: number;
-    targeting: string;
-    format: string;
-    business: string;
-    budget?: number;
-  };
+  radius_km?: number | null;
+  parent_location?: string;
+  types?: string[];
+  brand?: string | null;
+  event_start_date?: string | null;
+  event_end_date?: string | null;
 };
